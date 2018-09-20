@@ -7,113 +7,252 @@
     <x>0</x>
     <y>0</y>
     <width>1208</width>
-    <height>583</height>
+    <height>665</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QLineEdit" name="lineEdit_port_num">
-    <property name="geometry">
-     <rect>
-      <x>84</x>
-      <y>11</y>
-      <width>108</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>8322</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>21</x>
-      <y>11</y>
-      <width>57</width>
-      <height>18</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Port Num:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>198</x>
-      <y>11</y>
-      <width>16</width>
-      <height>18</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>IP:</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit_host_ip">
-    <property name="geometry">
-     <rect>
-      <x>219</x>
-      <y>11</y>
-      <width>108</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="readOnly">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_set">
-    <property name="geometry">
-     <rect>
-      <x>333</x>
-      <y>11</y>
-      <width>80</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>setup</string>
-    </property>
-   </widget>
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>50</y>
-      <width>1161</width>
-      <height>461</height>
+      <x>300</x>
+      <y>10</y>
+      <width>891</width>
+      <height>581</height>
      </rect>
     </property>
     <property name="title">
-     <string>GroupBox</string>
+     <string>绘图区域</string>
     </property>
     <widget class="QCustomPlot" name="plot" native="true">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>40</y>
-       <width>1131</width>
-       <height>411</height>
+       <x>12</x>
+       <y>33</y>
+       <width>887</width>
+       <height>541</height>
       </rect>
      </property>
     </widget>
    </widget>
-   <widget class="QPushButton" name="pushButton_disconnect">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>420</x>
-      <y>10</y>
-      <width>80</width>
-      <height>26</height>
+      <x>11</x>
+      <y>12</y>
+      <width>282</width>
+      <height>588</height>
      </rect>
     </property>
-    <property name="text">
-     <string>disconnect</string>
-    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <item>
+      <widget class="QGroupBox" name="groupBox_2">
+       <property name="title">
+        <string>网络配置</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>本地IP：</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit_host_ip">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>服务器IP：</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit_server_ip">
+            <property name="text">
+             <string>192.168.1.176</string>
+            </property>
+            <property name="readOnly">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>端口号：</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit_port_num">
+            <property name="text">
+             <string>8322</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QPushButton" name="pushButton_set">
+            <property name="text">
+             <string>连接</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_disconnect">
+            <property name="text">
+             <string>断开连接</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QPushButton" name="pushButton_close_remote">
+            <property name="text">
+             <string>关闭远程服务</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_close_test">
+            <property name="text">
+             <string>测试按钮</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBox_3">
+       <property name="title">
+        <string>控制信息配置</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <item>
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>频率(KHz):</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit_freq">
+            <property name="text">
+             <string>50</string>
+            </property>
+            <property name="readOnly">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_freq_set">
+            <property name="text">
+             <string>设定</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>增益：</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit_gain">
+            <property name="text">
+             <string>40</string>
+            </property>
+            <property name="readOnly">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_gain_set">
+            <property name="text">
+             <string>设定</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_8">
+          <item>
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>采样率kHz):</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit_fs">
+            <property name="text">
+             <string>100</string>
+            </property>
+            <property name="readOnly">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_fs_set">
+            <property name="text">
+             <string>设定</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QTextBrowser" name="textBrowser"/>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_clear">
+          <property name="text">
+           <string>清空接收区</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -145,6 +284,14 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>pushButton_disconnect</tabstop>
+  <tabstop>pushButton_set</tabstop>
+  <tabstop>lineEdit_host_ip</tabstop>
+  <tabstop>lineEdit_port_num</tabstop>
+  <tabstop>lineEdit_server_ip</tabstop>
+  <tabstop>textBrowser</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
