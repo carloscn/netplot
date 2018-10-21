@@ -22,18 +22,23 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+INCLUDEPATH += /usr/local/qwt-6.1.3/include
+LIBS += -L"/usr/local/qwt-6.1.3/lib/" -lqwt
+LIBS += "/home/delvis/fftw/lib/libfftw3f.a"
 
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    qcustomplot.cpp \
-    netclientthread.cpp
+    netclientthread.cpp \
+    ringbuffer.cpp \
+    filemanager.cpp
 
 HEADERS += \
     mainwindow.h \
-    qcustomplot.h \
     netclientthread.h \
-    com.h
+    com.h \
+    ringbuffer.h \
+    filemanager.h
 
 FORMS += \
         mainwindow.ui

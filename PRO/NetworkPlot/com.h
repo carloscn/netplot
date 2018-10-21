@@ -52,13 +52,13 @@ for example:
 
 */
 
-
-#define         CMD_SET_FREQ            0xA0
-#define         CMD_SET_FS              0xA1
-#define         CMD_SET_GAIN            0xA2
 #define         CMD_HEADER_1            0xAA
 #define         CMD_HEADER_2            0xBB
+#define         CMD_SET_FREQ            0x01
+#define         CMD_SET_GAIN            0x03
+#define         CMD_ALL_START           0x04
+#define         CMD_ALL_STOP            0x08
 #define         CMD_CLOSE_REMOTE        0xFF
-
+#define         CMD_SET_FS              0xA1
 
 #endif // COM_H
