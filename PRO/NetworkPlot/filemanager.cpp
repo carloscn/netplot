@@ -65,6 +65,7 @@ void FileManager::write(QByteArray data) {
         // preWriteExam only run once!
         this->preWriteExam();
         prewriteexame = true;
+        qDebug() << "pre write eamm";
     }
 
     // Determine if the hex file full with FILE_SIZE_MAX, if true, then, create another file
@@ -90,13 +91,14 @@ void FileManager::write(QByteArray data) {
 }
 
 void FileManager::write(quint8* buffer, quint64 length) {
+    double percent;
 
     if(prewriteexame == false) {
         // preWriteExam only run once!
-        this->preWriteExam();
+        preWriteExam();
+        prewriteexame = true;
 
     }
-
     // Determine if the hex file full with FILE_SIZE_MAX, if true, then, create another file
     if(isFileFull(qFilePath)==true) {
 
@@ -104,19 +106,27 @@ void FileManager::write(quint8* buffer, quint64 length) {
             file->close();
             fileopen = false;
         }
+        emit file_manager_add_file_name(currenttime+".hex");
         currenttime = datetime->currentDateTime().toString("yyyyMMddHHmmss");
         qFilePath = qFileDirPath + currenttime + ".hex";
         qDebug() << "Create another hex file ....................";
     }
 
-    if(fileopen == false) {
+    if(file->isOpen() == false) {
         file->setFileName(qFilePath);
         file->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text);
         fileclose = false;
         fileopen = true;
     }
+    QFileInfo fileInfo(qFilePath);
+    filesize = fileInfo.size();
+
+    percent = ((double)filesize)/512.0/1024.0/1024.0;
+
     file->write((char*)buffer, length);
-    qDebug() << "Writing data to hex file ... ...";
+
+    emit file_manager_file_size(percent);
+    //qDebug() << "Writing data to hex file ... ...";
 }
 bool FileManager::isDirExist(QString fileDirPath) {
 
@@ -164,7 +174,7 @@ void FileManager::preWriteExam() {
         qDebug() << "Create the file dir";
     }
     // Give file a name
-    qFilePath = qFileDirPath + currenttime + "_First.hex";
+    qFilePath = qFileDirPath + currenttime + ".hex";
     qDebug() << "Create the data file";
     prewriteexame = true;
 }
@@ -195,6 +205,17 @@ void FileManager::run()
 
 void FileManager::on_save_data_to_disk(quint8 *buffer, quint64 length)
 {
-    qDebug() << "slot on save data to disk..";
+    //qDebug() << "slot on save data to disk..";
     this->write(buffer, length);
+}
+
+void FileManager::fileClose()
+{
+    file->close();
+    prewriteexame = false;
+    emit file_manager_add_file_name(currenttime+".hex");
+}
+void FileManager::file_size()
+{
+
 }

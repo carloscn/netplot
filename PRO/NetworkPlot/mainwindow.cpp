@@ -49,7 +49,7 @@
 #define             CUSTOM_PLOT     0
 #define             QWT_PLOT        1
 #define             N               1024
-double ss[N];
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -76,15 +76,15 @@ MainWindow::MainWindow(QWidget *parent) :
     connect( (QObject*)this->net_socket, SIGNAL(net_data_ready(QByteArray)),this,SLOT(on_net_data_read(QByteArray)));
     connect( (QObject*)this->net_socket, SIGNAL(net_data_plot(quint32*,quint32) ),this,SLOT(on_net_plot_read(quint32*,quint32)));
     connect( (QObject*)this->net_socket, SIGNAL(net_close_file() ),this,SLOT(on_net_close_file()));
+    connect( (QObject*)this->net_socket, SIGNAL(net_add_doc_list(QString) ),this ,SLOT(on_net_add_doc_list(QString)));
+    connect( this, SIGNAL(net_enable_save(bool) ),(QObject*)this->net_socket ,SLOT(on_net_enable_save(bool)));
+    connect( (QObject*)this->net_socket, SIGNAL(net_file_size(double)), this, SLOT(on_net_file_size(double)));
+
     /*
     * Init qwt plugin.
     */
-    this->init_qwt();
 
-    this->ch01_file = new QFile(this->get_doc_name());
-    this->ch02_file = new QFile(this->get_doc_name());
-    this->ch03_file = new QFile(this->get_doc_name());
-    this->ch03_file = new QFile(this->get_doc_name());
+
     ui->lineEdit_host_ip->setText( this->get_local_ip() );
 
     /*
@@ -99,6 +99,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->pushButton_fs_set->setEnabled(false);
     ui->pushButton_gain_set->setEnabled(false);
     ui->pushButton_sample->setEnabled(false);
+    ui->checkBox_ch1_time->setChecked(true);
+    ui->checkBox_ch1_fft->setChecked(true);
+    ui->pushButton_close_test->setEnabled(false);
+    ui->progressBar->setValue(0);
+
+    this->init_qwt();
+    isSaveEnable = true;
+    on_pushButton_close_test_clicked();
+
 }
 
 MainWindow::~MainWindow()
@@ -116,64 +125,38 @@ void MainWindow::init_qwt()
     QFont font;
     double sin_table[1024];
     QBrush brush2(QColor(128,128,128));
-    QwtPlotGrid* grid_ch1 = new QwtPlotGrid();
-    QwtPlotGrid* grid_ch2 = new QwtPlotGrid();
-    QwtPlotGrid* grid_ch3 = new QwtPlotGrid();
-    QwtPlotGrid* grid_ch4 = new QwtPlotGrid();
-    QwtPlotGrid* grid_ch1_fft = new QwtPlotGrid();
-    QwtPlotGrid* grid_ch2_fft = new QwtPlotGrid();
-    QwtPlotGrid* grid_ch3_fft = new QwtPlotGrid();
-    QwtPlotGrid* grid_ch4_fft = new QwtPlotGrid();
+    QwtPlotGrid* grid_ch = new QwtPlotGrid();
+    QwtPlotGrid* grid_fft = new QwtPlotGrid();
 
     brush2.setStyle(Qt::NoBrush);
     font.setBold(true);
     font.setItalic(false);
     title.setFont(font);
     title.setColor(QColor(25,25,112));
-    title.setText("Channel 1");
-    ui->qwt_ch1->setTitle(title);
-    title.setText("Channel 2");
-    ui->qwt_ch2->setTitle(title);
-    title.setText("Channel 3");
-    ui->qwt_ch3->setTitle(title);
-    title.setText("Channel 4");
-    ui->qwt_ch4->setTitle(title);
-    ui->qwt_ch1_fft->setTitle("ch01 fft");
-    ui->qwt_ch2_fft->setTitle("ch02 fft");
-    ui->qwt_ch3_fft->setTitle("ch03 fft");
-    ui->qwt_ch4_fft->setTitle("ch04 fft");
-    ui->qwt_ch1->enableAxis(QwtPlot::yRight,true);
-    ui->qwt_ch1->enableAxis(QwtPlot::xTop,true);
-    ui->qwt_ch1_fft->enableAxis(QwtPlot::yRight,true);
-    ui->qwt_ch1_fft->enableAxis(QwtPlot::xTop,true);
-    ui->qwt_ch2->enableAxis(QwtPlot::yRight,true);
-    ui->qwt_ch2->enableAxis(QwtPlot::xTop,true);
-    ui->qwt_ch2_fft->enableAxis(QwtPlot::yRight,true);
-    ui->qwt_ch2_fft->enableAxis(QwtPlot::xTop,true);
-    ui->qwt_ch3->enableAxis(QwtPlot::yRight,true);
-    ui->qwt_ch3->enableAxis(QwtPlot::xTop,true);
-    ui->qwt_ch3_fft->enableAxis(QwtPlot::yRight,true);
-    ui->qwt_ch3_fft->enableAxis(QwtPlot::xTop,true);
-    ui->qwt_ch4->enableAxis(QwtPlot::yRight,true);
-    ui->qwt_ch4->enableAxis(QwtPlot::xTop,true);
-    ui->qwt_ch4_fft->enableAxis(QwtPlot::yRight,true);
-    ui->qwt_ch4_fft->enableAxis(QwtPlot::xTop,true);
-    this->qwt_curve1_ch1 = new QwtPlotCurve("Curve 1");
-    this->qwt_curve1_ch2 = new QwtPlotCurve("Curve 2");
-    this->qwt_curve1_ch3 = new QwtPlotCurve("Curve 3");
-    this->qwt_curve1_ch4 = new QwtPlotCurve("Curve 4");
-    this->qwt_curve1_ch1_fft = new QwtPlotCurve("Curve FFT1");
-    this->qwt_curve1_ch2_fft = new QwtPlotCurve("Curve FFT2");
-    this->qwt_curve1_ch3_fft = new QwtPlotCurve("Curve FFT3");
-    this->qwt_curve1_ch4_fft = new QwtPlotCurve("Curve FFT4");
-    this->qwt_curve1_ch1->setPen(QColor(0,0,128),2,Qt::SolidLine);
-    this->qwt_curve1_ch1_fft->setPen(QColor(0,0,128),2,Qt::SolidLine);
-    this->qwt_curve1_ch2->setPen(QColor(0,0,128),2,Qt::SolidLine);
-    this->qwt_curve1_ch2_fft->setPen(QColor(0,0,128),2,Qt::SolidLine);
-    this->qwt_curve1_ch3->setPen(QColor(0,0,128),2,Qt::SolidLine);
-    this->qwt_curve1_ch3_fft->setPen(QColor(0,0,128),2,Qt::SolidLine);
-    this->qwt_curve1_ch4->setPen(QColor(0,0,128),2,Qt::SolidLine);
-    this->qwt_curve1_ch4_fft->setPen(QColor(0,0,128),2,Qt::SolidLine);
+    title.setText("Channel Time Domain");
+    //ui->qwt_ch->setTitle(title);
+    title.setText("Channel Freqency Domain");
+    //ui->qwt_fft->setTitle("Channel 01 FFT");
+    ui->qwt_fft->setAxisTitle(2,"Hz");
+    ui->qwt_ch->insertLegend(new QwtLegend(), QwtPlot::TopLegend);
+    ui->qwt_fft->insertLegend(new QwtLegend(), QwtPlot::TopLegend);
+
+    this->qwt_curve1_ch1 = new QwtPlotCurve("CH1");
+    this->qwt_curve1_ch2 = new QwtPlotCurve("CH2");
+    this->qwt_curve1_ch3 = new QwtPlotCurve("CH3");
+    this->qwt_curve1_ch4 = new QwtPlotCurve("CH4");
+    this->qwt_curve1_ch1_fft = new QwtPlotCurve("CH1 FFT");
+    this->qwt_curve1_ch2_fft = new QwtPlotCurve("CH2 FFT");
+    this->qwt_curve1_ch3_fft = new QwtPlotCurve("CH3 FFT");
+    this->qwt_curve1_ch4_fft = new QwtPlotCurve("CH4 FFT");
+    this->qwt_curve1_ch1->setPen(QColor(75,0,130),2,Qt::SolidLine);
+    this->qwt_curve1_ch1_fft->setPen(QColor(75,0,130),2,Qt::SolidLine);
+    this->qwt_curve1_ch2->setPen(QColor(124,205,124),2,Qt::SolidLine);
+    this->qwt_curve1_ch2_fft->setPen(QColor(124,205,124),2,Qt::SolidLine);
+    this->qwt_curve1_ch3->setPen(QColor(220,20,60),2,Qt::SolidLine);
+    this->qwt_curve1_ch3_fft->setPen(QColor(220,20,60),2,Qt::SolidLine);
+    this->qwt_curve1_ch4->setPen(QColor(0,0,0),2,Qt::SolidLine);
+    this->qwt_curve1_ch4_fft->setPen(QColor(0,0,0),2,Qt::SolidLine);
     this->qwt_curve1_ch1->setBrush(brush2);
     this->qwt_curve1_ch2->setBrush(brush2);
     this->qwt_curve1_ch3->setBrush(brush2);
@@ -190,30 +173,18 @@ void MainWindow::init_qwt()
     this->qwt_curve1_ch2_fft->setCurveAttribute(QwtPlotCurve::Fitted, true);
     this->qwt_curve1_ch3_fft->setCurveAttribute(QwtPlotCurve::Fitted, true);
     this->qwt_curve1_ch4_fft->setCurveAttribute(QwtPlotCurve::Fitted, true);
-    this->qwt_curve1_ch1->attach(ui->qwt_ch1);
-    this->qwt_curve1_ch2->attach(ui->qwt_ch2);
-    this->qwt_curve1_ch3->attach(ui->qwt_ch3);
-    this->qwt_curve1_ch4->attach(ui->qwt_ch4);
-    this->qwt_curve1_ch1_fft->attach(ui->qwt_ch1_fft);
-    this->qwt_curve1_ch2_fft->attach(ui->qwt_ch2_fft);
-    this->qwt_curve1_ch3_fft->attach(ui->qwt_ch3_fft);
-    this->qwt_curve1_ch4_fft->attach(ui->qwt_ch4_fft);
-    grid_ch1->setPen(QColor(222,222,222),1);
-    grid_ch2->setPen(QColor(222,222,222),1);
-    grid_ch3->setPen(QColor(222,222,222),1);
-    grid_ch4->setPen(QColor(222,222,222),1);
-    grid_ch1_fft->setPen(QColor(222,222,222),1);
-    grid_ch2_fft->setPen(QColor(222,222,222),1);
-    grid_ch3_fft->setPen(QColor(222,222,222),1);
-    grid_ch4_fft->setPen(QColor(222,222,222),1);
-    grid_ch1->attach(ui->qwt_ch1);
-    grid_ch2->attach(ui->qwt_ch2);
-    grid_ch3->attach(ui->qwt_ch3);
-    grid_ch4->attach(ui->qwt_ch4);
-    grid_ch1_fft->attach(ui->qwt_ch1_fft);
-    grid_ch2_fft->attach(ui->qwt_ch2_fft);
-    grid_ch3_fft->attach(ui->qwt_ch3_fft);
-    grid_ch4_fft->attach(ui->qwt_ch4_fft);
+    this->qwt_curve1_ch1->attach(ui->qwt_ch);
+    this->qwt_curve1_ch2->attach(ui->qwt_ch);
+    this->qwt_curve1_ch3->attach(ui->qwt_ch);
+    this->qwt_curve1_ch4->attach(ui->qwt_ch);
+    this->qwt_curve1_ch1_fft->attach(ui->qwt_fft);
+    this->qwt_curve1_ch2_fft->attach(ui->qwt_fft);
+    this->qwt_curve1_ch3_fft->attach(ui->qwt_fft);
+    this->qwt_curve1_ch4_fft->attach(ui->qwt_fft);
+    grid_ch->setPen(QColor(220,220,220),1);
+    grid_fft->setPen(QColor(220,220,220),1);
+    grid_ch->attach(ui->qwt_ch);
+    grid_fft->attach(ui->qwt_ch);
     for( int i = 0; i < N; i ++ )
         sin_table[i] = 50* sin(2*M_PI*(5.0/N)*i) + 20 * cos(2*M_PI*(10.0/N)*i) + 60 * cos(2*M_PI*(15.0/N)*i);
     qwt_plot_wave(CHANNEL_0,sin_table,N);
@@ -231,7 +202,6 @@ void MainWindow::init_qwt()
     qwt_plot_wave(CHANNEL_3,sin_table,N);
     qwt_plot_fft(CHANNEL_3, sin_table, N);
 
-    ui->tabWidget->setCurrentIndex(0);
 }
 QString MainWindow::get_doc_name()
 {
@@ -257,31 +227,53 @@ void MainWindow::qwt_plot_wave(unsigned int channel, double *data, unsigned long
     switch (channel) {
 
     case CHANNEL_0:
-        this->qwt_curve1_ch1->setData(series);
-        ui->qwt_ch1->replot();
-        ui->qwt_ch1->show();
+
+        if (ui->checkBox_ch1_time->isChecked()) {
+            qwt_curve1_ch1->attach(ui->qwt_ch);
+            qwt_curve1_ch1->setData(series);
+        }
+        else {
+            qwt_curve1_ch1->detach();
+        }
+
         break;
     case CHANNEL_1:
-        this->qwt_curve1_ch2->setData(series);
-        ui->qwt_ch2->replot();
-        ui->qwt_ch2->show();
+        if (ui->checkBox_ch2_time->isChecked()) {
+            qwt_curve1_ch2->attach(ui->qwt_ch);
+            qwt_curve1_ch2->setData(series);
+        }
+        else {
+            qwt_curve1_ch2->detach();
+        }
+
         break;
     case CHANNEL_2:
-        this->qwt_curve1_ch3->setData(series);
-        ui->qwt_ch3->replot();
-        ui->qwt_ch3->show();
+        if (ui->checkBox_ch3_time->isChecked()) {
+            qwt_curve1_ch3->attach(ui->qwt_ch);
+            qwt_curve1_ch3->setData(series);
+        }
+        else {
+            qwt_curve1_ch3->detach();
+        }
+
         break;
     case CHANNEL_3:
-        this->qwt_curve1_ch4->setData(series);
-        ui->qwt_ch4->replot();
-        ui->qwt_ch4->show();
+        if (ui->checkBox_ch4_time->isChecked()) {
+            qwt_curve1_ch4->attach(ui->qwt_ch);
+            qwt_curve1_ch4->setData(series);
+        }
+        else {
+            qwt_curve1_ch4->detach();
+        }
+
         break;
 
     default:
 
         break;
     }
-
+    ui->qwt_ch->replot();
+    ui->qwt_ch->show();
 }
 
 void MainWindow::on_pushButton_set_clicked()
@@ -299,14 +291,15 @@ void MainWindow::on_pushButton_set_clicked()
         QMessageBox::information(this,"Info","Remote server connected.");
         ui->pushButton_set->setEnabled(false);
         ui->pushButton_disconnect->setEnabled(true);
+        ui->pushButton_close_remote->setEnabled(true);
+        ui->pushButton_close_sample->setEnabled(true);
+        ui->pushButton_close_test->setEnabled(true);
+        ui->pushButton_freq_set->setEnabled(true);
+        ui->pushButton_fs_set->setEnabled(true);
+        ui->pushButton_gain_set->setEnabled(true);
+        ui->pushButton_sample->setEnabled(true);
     }
-    ui->pushButton_close_remote->setEnabled(true);
-    ui->pushButton_close_sample->setEnabled(true);
-    ui->pushButton_close_test->setEnabled(true);
-    ui->pushButton_freq_set->setEnabled(true);
-    ui->pushButton_fs_set->setEnabled(true);
-    ui->pushButton_gain_set->setEnabled(true);
-    ui->pushButton_sample->setEnabled(true);
+
 
 }
 
@@ -345,7 +338,7 @@ void MainWindow::on_double_data_prepared( float* array_datas, uint length)
     out << '&' << endl;
     this->file->close();
     byte_nums = byte_nums + length;
-    qDebug() <<  "write: " << length << " double datas to hard disk.";
+    //qDebug() <<  "write: " << length << " double datas to hard disk.";
     ui->textBrowser->append("recv double data :" + QString::number(byte_nums));
     this->mutex.unlock();
 }
@@ -408,14 +401,20 @@ QString MainWindow::get_local_ip()
 
 void MainWindow::on_pushButton_close_test_clicked()
 {
+    if (isSaveEnable == true) {
+        isSaveEnable = false;
+        ui->pushButton_close_test->setText("打开存储");
+        ui->textBrowser->append("@System: 系统关闭存储功能\n");
+        ui->pushButton_close_test->setStyleSheet("background-color: rgb(170,0,255)");
 
-    float data = 155.6f;
-    float res = 0.0;
-    uint8_t test[4];
+    }else{
+        isSaveEnable = true;
+        ui->pushButton_close_test->setText("关闭存储");
+        ui->textBrowser->append("@System: 系统开启存储功能\n");
+        ui->pushButton_close_test->setStyleSheet("background-color: rgb(255,0,0)");
+    }
 
-    this->net_socket->bcdCode.fd = 66.12f;
-    res = this->net_socket->bcd_decoding(&this->net_socket->bcdCode.bcdSperUint8.bit24_32);
-    qDebug() << "data is " << res;
+    emit net_enable_save(isSaveEnable);
 
 }
 
@@ -490,6 +489,9 @@ void MainWindow::on_pushButton_sample_clicked()
 
     cmd[0] = CMD_ALL_START;
     this->net_socket->send_cmd_to_remote( cmd , 1);
+    ui->statusBar->clearMessage();
+    ui->statusBar->showMessage("Write speed : 3.3MB/s...",0);
+
 }
 
 void MainWindow::on_pushButton_close_sample_clicked()
@@ -497,6 +499,8 @@ void MainWindow::on_pushButton_close_sample_clicked()
     uint8_t   cmd[5];
     cmd[0] = CMD_ALL_STOP;
     this->net_socket->send_cmd_to_remote( cmd , 1);
+    ui->statusBar->clearMessage();
+    ui->statusBar->showMessage("Closed sample...",0);
     emit net_close_file();
 }
 
@@ -506,7 +510,12 @@ void MainWindow::on_net_plot_read(quint32 *block, quint32 length)
     qint32 channel_b[500];
     qint32 channel_c[500];
     qint32 channel_d[500];
-    qDebug() << "slot plot!";
+
+    double channel_a_d[500];
+    double channel_b_d[500];
+    double channel_c_d[500];
+    double channel_d_d[500];
+    //qDebug() << "slot plot!";
 
     for (quint32 i = 0; i < 500; i ++) {
 #if 0
@@ -526,10 +535,7 @@ void MainWindow::on_net_plot_read(quint32 *block, quint32 length)
         channel_d[i] = (qint32) block[3*500+i] << 8;// & (0xFFFFFF))* (((block[3*500+i] & 0x800000) >> 23)?1:-1);
     }
 
-    double channel_a_d[500];
-    double channel_b_d[500];
-    double channel_c_d[500];
-    double channel_d_d[500];
+
 
     for (quint32 i = 0; i < 500; i ++) {
 
@@ -539,6 +545,7 @@ void MainWindow::on_net_plot_read(quint32 *block, quint32 length)
         channel_d_d[i] = channel_d[i] / 100000;
         //qDebug() << "sample: " << channel_a_d[i];
     }
+
 
     qwt_plot_wave(CHANNEL_0, channel_a_d, 500);
     qwt_plot_fft(CHANNEL_0, channel_a_d, 500);
@@ -569,30 +576,66 @@ void MainWindow::qwt_plot_fft(int channel, double *rom, int NP)
     fftwf_destroy_plan(p);
     fftwf_cleanup();
     memset(draw_buffer, 0, NP);
-    for( quint64 i = 0; i < NP/4-1 ; i++ ){
+    for( quint64 i = 0; i < NP/6-1 ; i++ ){
         QPointF point;
         current_fft_value = sqrt(out1_c[i][0] * out1_c[i][0] + out1_c[i][1] * out1_c[i][1]);
-        point.setX(i);
-        point.setY(current_fft_value);
+        point.setX((210000/500)*i);
+        if ( i < 2 )
+            point.setY(0);
+        else
+            point.setY(current_fft_value);
         vector.append(point);
     }
     QwtPointSeriesData* series = new QwtPointSeriesData(vector);
     if (channel == CHANNEL_0) {
-        qwt_curve1_ch1_fft->setData(series);
-        ui->qwt_ch1_fft->replot();
-        ui->qwt_ch1_fft->show();
+
+        if (ui->checkBox_ch1_fft->isChecked()) {
+            qwt_curve1_ch1_fft->attach(ui->qwt_fft);
+            qwt_curve1_ch1_fft->setData(series);
+        }
+        else {
+            qwt_curve1_ch1_fft->detach();
+        }
+
     } else if (channel == CHANNEL_1) {
-        qwt_curve1_ch2_fft->setData(series);
-        ui->qwt_ch2_fft->replot();
-        ui->qwt_ch2_fft->show();
+
+        if (ui->checkBox_ch2_fft->isChecked()) {
+            qwt_curve1_ch2_fft->attach(ui->qwt_fft);
+            qwt_curve1_ch2_fft->setData(series);
+        }
+        else {
+            qwt_curve1_ch2_fft->detach();
+        }
     } else if (channel == CHANNEL_2) {
-        qwt_curve1_ch3_fft->setData(series);
-        ui->qwt_ch3_fft->replot();
-        ui->qwt_ch3_fft->show();
+
+        if (ui->checkBox_ch3_fft->isChecked()) {
+            qwt_curve1_ch3_fft->attach(ui->qwt_fft);
+            qwt_curve1_ch3_fft->setData(series);
+        }
+        else {
+            qwt_curve1_ch3_fft->detach();
+        }
     } else if (channel == CHANNEL_3) {
-        qwt_curve1_ch4_fft->setData(series);
-        ui->qwt_ch4_fft->replot();
-        ui->qwt_ch4_fft->show();
+
+        if (ui->checkBox_ch4_fft->isChecked()) {
+            qwt_curve1_ch4_fft->attach(ui->qwt_fft);
+            qwt_curve1_ch4_fft->setData(series);
+        }
+        else {
+            qwt_curve1_ch4_fft->detach();
+        }
+
     }
+    ui->qwt_fft->replot();
+    ui->qwt_fft->show();
 }
 
+void MainWindow::on_net_add_doc_list(QString filename)
+{
+    ui->listWidget_file->addItem(filename);
+}
+
+void MainWindow::on_net_file_size(double percent)
+{
+    ui->progressBar->setValue((int)(percent*100));
+}

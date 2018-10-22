@@ -58,6 +58,9 @@ protected:
 private slots:
     void on_read_message();
     void on_net_close_file();
+    void on_net_enable_save(bool);
+    void on_file_manager_add_doc_list(QString);
+    void on_file_manager_file_size(double);
 
 signals:
 
@@ -72,6 +75,10 @@ signals:
     void net_data_plot(quint32 *block, quint32 length);
 
     void net_data_save_to_disk(quint8*, quint64);
+
+    void net_add_doc_list(QString);
+
+    void net_file_size(double);
 
 private :
     struct data_packet_t *data_packet;
@@ -109,6 +116,8 @@ private :
     quint64 left_length;
     quint64 right_length;
     FileManager *file_ctr;
+    quint64 kcount;
+    bool isEnableSave;
 
 private:
 

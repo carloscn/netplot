@@ -74,11 +74,15 @@ private slots:
 
     void on_net_plot_read(quint32 *block, quint32 length);
 
+    void on_net_add_doc_list(QString);
+
+    void on_net_file_size(double);
 
 
 signals:
 
     void net_close_file();
+    void net_enable_save(bool);
 
 public:
     QCustomPlot *plot;
@@ -90,11 +94,7 @@ private:
     QTcpServer *listener;
     QTcpSocket *socket;
     QFile *file;
-
-    QFile *ch01_file;
-    QFile *ch02_file;
-    QFile *ch03_file;
-    QFile *ch04_file;
+    bool isSaveEnable;
     QDateTime current_time;
     quint32 plot_count;
     double max_value;
@@ -103,6 +103,7 @@ private:
     NetClientThread *net_socket;
     unsigned long long byte_nums;
     QMutex mutex;
+
     QwtPlotCurve* qwt_curve1_ch1;
     QwtPlotCurve* qwt_curve1_ch2;
     QwtPlotCurve* qwt_curve1_ch3;

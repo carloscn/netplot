@@ -59,7 +59,7 @@
 #define             MB              1048576l
 #define             KB              1024l
 
-#define             FILE_SIZE_MAX   1*GB
+#define             FILE_SIZE_MAX   (512*MB)
 
 class FileManager : public QThread{
     Q_OBJECT
@@ -73,8 +73,10 @@ public:
     bool isDirExist(QString);
     bool isFileExist(QString);
     bool isFileFull(QString);
+    void fileClose();
     QFile *file;
     QString qFilePath;
+    bool prewriteexame;
 
 private slots:
     void on_save_data_to_disk(quint8*, quint64);
@@ -82,14 +84,18 @@ private slots:
 protected:
     void run();
 
+signals:
+    void file_manager_file_size(double);
+    void file_manager_add_file_name(QString);
+
 private:
     bool dir_flag;
     qint64 filesize;
     bool fileopen;
     bool fileclose;
-    bool prewriteexame;
-    QString qFileDirPath;
 
+    QString qFileDirPath;
+    void file_size();
     QDateTime *datetime;
     QString currenttime;
 //    QMutex *mutex;

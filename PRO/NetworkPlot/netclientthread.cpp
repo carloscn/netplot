@@ -17,12 +17,11 @@ NetClientThread::NetClientThread( QString server_ip, int server_port )
     is_packet_num = false;
     packet_number = 0;
     file_ctr = new FileManager();
-    //qDebug() << "connect to svae dask";
+    kcount = 0;
+    isEnableSave = false;
     connect( this, SIGNAL(net_data_save_to_disk(quint8*,quint64) ),(QObject*)this->file_ctr ,SLOT(on_save_data_to_disk(quint8*,quint64)));
-
-
-
-
+    connect( (QObject*)this->file_ctr, SIGNAL(file_manager_add_file_name(QString)), this, SLOT(on_file_manager_add_doc_list(QString)) );
+    connect( (QObject*)this->file_ctr, SIGNAL(file_manager_file_size(double)), this, SLOT(on_file_manager_file_size(double)));
 }
 
 bool NetClientThread::set_connect(QString server_ip, int server_port)
@@ -122,7 +121,6 @@ void NetClientThread::run()
     uint8_t i = 0;
     uint8_t* k_buffer = new uint8_t[ONE_PACKET_LENGTH*10];
     while (1) {
-
         if (ring_buffer->get_length() > 2) {
             head[i++] = ring_buffer->pop();
             head[i++] = ring_buffer->pop();
@@ -131,9 +129,7 @@ void NetClientThread::run()
             if ((head[0] & 0xFF) == 0xAD && (head[1] & 0xFF) == 0xAC ) {
                 is_head = true;
             }
-
         }
-
     }
 }
 
@@ -145,68 +141,71 @@ void NetClientThread::case_1(quint8 *buffer,  quint64 length, quint32 vector_cou
 void NetClientThread::case_1(quint8 *buffer,  quint64 length)
 {
     quint64 count = 0;
-#if TEST_DEBUG
-    QFile *file = new QFile("adc.hex");
-    file->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text);
-    file->write((char*)buffer,length);
-    file->close();
-#endif
+
     count = length / ONE_PACKET_LENGTH;
     //qDebug() << "emit net data save to disk singal.";
-    emit net_data_save_to_disk(buffer, length);
+    if (isEnableSave == true) {
+        emit net_data_save_to_disk(buffer, length);
+    }
+
+    kcount ++;
     //qDebug() << "@case_1 : count is :" << count;
     // plot data
-    quint8 plot_buffer[ONE_PACKET_LENGTH];
-    quint32 channel_data[2000];
-    quint32 uh = 0, h = 0, l = 0, ul = 0;
+    if (kcount % 12 == 0) {
+        kcount = 0;
+        quint8 plot_buffer[ONE_PACKET_LENGTH];
+        quint32 channel_data[2000];
+        quint32 uh = 0, h = 0, l = 0, ul = 0;
 
-    for (quint64 i = 0 ; i < 500*16; i ++) {
-        plot_buffer[i] = buffer[i+6];
-    }
-/*
+        for (quint64 i = 0 ; i < 500*16; i ++) {
+            plot_buffer[i] = buffer[i+6];
+        }
+        /*
     uh = (plot_buffer[2] << 24) & 0xFF000000;
     h  = (plot_buffer[3] << 16) & 0x00FF0000;
     l  = (plot_buffer[4] << 8)  & 0x0000FF00;
     ul = (plot_buffer[5] << 0)  & 0X000000FF;
     data_packet->number = uh | h | l | ul;
 */
-    for (quint64 i = 0; i < 500; i ++) {
+        for (quint64 i = 0; i < 500; i ++) {
 
-        uh = (plot_buffer[16*i + 2] << 16) & 0x00FF0000;
-        h  = (plot_buffer[16*i + 1] << 8)  & 0x0000FF00;
-        l  = (plot_buffer[16*i + 0] << 0)  & 0x000000FF;
-        ul = (plot_buffer[16*i + 3] << 0)  & 0X000000FF;
+            uh = (plot_buffer[16*i + 2] << 16) & 0x00FF0000;
+            h  = (plot_buffer[16*i + 1] << 8)  & 0x0000FF00;
+            l  = (plot_buffer[16*i + 0] << 0)  & 0x000000FF;
+            ul = (plot_buffer[16*i + 3] << 0)  & 0X000000FF;
 
-        data_packet->da = uh | h | l;
+            data_packet->da = uh | h | l;
 
-        uh = (plot_buffer[16*i + 6] << 16) & 0x00FF0000;
-        h  = (plot_buffer[16*i + 5] << 8)  & 0x0000FF00;
-        l  = (plot_buffer[16*i + 4] << 0)  & 0x000000FF;
-        ul = (plot_buffer[16*i + 7] << 0)  & 0X000000FF;
+            uh = (plot_buffer[16*i + 6] << 16) & 0x00FF0000;
+            h  = (plot_buffer[16*i + 5] << 8)  & 0x0000FF00;
+            l  = (plot_buffer[16*i + 4] << 0)  & 0x000000FF;
+            ul = (plot_buffer[16*i + 7] << 0)  & 0X000000FF;
 
-        data_packet->db = uh | h | l;
+            data_packet->db = uh | h | l;
 
-        uh = (plot_buffer[16*i + 10] << 16) & 0x00FF0000;
-        h  = (plot_buffer[16*i + 9] << 8)  & 0x0000FF00;
-        l  = (plot_buffer[16*i + 8] << 0)  & 0x000000FF;
-        ul = (plot_buffer[16*i + 11] << 0)  & 0X000000FF;
+            uh = (plot_buffer[16*i + 10] << 16) & 0x00FF0000;
+            h  = (plot_buffer[16*i + 9] << 8)  & 0x0000FF00;
+            l  = (plot_buffer[16*i + 8] << 0)  & 0x000000FF;
+            ul = (plot_buffer[16*i + 11] << 0)  & 0X000000FF;
 
-        data_packet->dc = uh | h | l;
+            data_packet->dc = uh | h | l;
 
-        uh = (plot_buffer[16*i + 14] << 16) & 0x00FF0000;
-        h  = (plot_buffer[16*i + 13] << 8)  & 0x0000FF00;
-        l  = (plot_buffer[16*i + 12] << 0)  & 0x000000FF;
-        ul = (plot_buffer[16*i + 15] << 0)  & 0X000000FF;
+            uh = (plot_buffer[16*i + 14] << 16) & 0x00FF0000;
+            h  = (plot_buffer[16*i + 13] << 8)  & 0x0000FF00;
+            l  = (plot_buffer[16*i + 12] << 0)  & 0x000000FF;
+            ul = (plot_buffer[16*i + 15] << 0)  & 0X000000FF;
 
-        data_packet->dd = uh | h | l;
+            data_packet->dd = uh | h | l;
 
-        channel_data[i] = data_packet->da;
-        channel_data[500 + i] = data_packet->db;
-        channel_data[1000 + i] = data_packet->dc;
-        channel_data[1500 + i] = data_packet->dd;
+            channel_data[i] = data_packet->da;
+            channel_data[500 + i] = data_packet->db;
+            channel_data[1000 + i] = data_packet->dc;
+            channel_data[1500 + i] = data_packet->dd;
+        }
+        //qDebug() << "emit net data plot signal.";
+        emit net_data_plot(channel_data, 2000);
     }
-    qDebug() << "emit net data plot signal.";
-    emit net_data_plot(channel_data, 2000);
+
 
 
 }
@@ -295,156 +294,7 @@ void NetClientThread::case_4(quint8 *socket_buffer, quint64 length)
 }
 void NetClientThread::on_read_message()
 {
-#if 0
-    char c;
-    float *fd;
-    QByteArray block;
-    block.clear();
-    block.append(socket->readAll());
-    //qDebug() << block;
-    //qDebug() << "send size = " << block.size();
-    //emit net_data_ready(block);
-    //emit net_data_ready(emit_data, block.size());
-    //ring_buffer->push(block.data(), block.size());
-    int ret;
-    QFile *file = new QFile("../adc.hex");
-    QDataStream out(&block, QIODevice::ReadWrite);
-    QDataStream in(file);
-    ret = file->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text);
-    qDebug() << "write size : " << block.length();
-    if (!ret) {
-        qDebug() << "Open failed\n";
-        return;
-    }
 
-    in << block;
-    file->close();
-    block.clear();
-#elif 0
-    uint32_t read_buffer[4];
-    QByteArray left_packet_buffer;
-    //qDebug() << "slot times : " << read_counter ++;
-    array_length = socket->bytesAvailable();
-    array_rom.append(socket->readAll());
-    array_length = array_rom.length();
-    //ring_buffer->push(array_rom.data(), array_length);
-    //qDebug() << "Push in ring buffer :" << array_length ;
-    if (array_length <= 5*ONE_PACKET_LENGTH) {
-        return;
-    }
-    qDebug() << "length is :" << array_length;
-    // acceculate ONE_PACKET_LENGTH*5 datas.
-
-
-
-    if ( (array_rom.contains(0xAD) && array_rom.contains(0xAC)) ) {
-        vector_counter = 0;
-        // Traverse the array_rom save index of headers.
-        for (quint32 i = 0; i <= array_length; i ++) {
-            if ( ((array_rom.at(i) & 0xFF)  == 0xad) && (((array_rom.at(i+1) & 0xFF) == 0xac))) {
-                head_index_vector[vector_counter++] = i;
-            }
-        }
-        qDebug() << "Find headers : " << vector_counter << "First header postion:" << head_index_vector[0] << "Finally header postion:" << head_index_vector[vector_counter];
-        if (head_index_vector[0] != 0) {
-            last_rom_b.clear();
-            last_rom_b.append(array_rom.mid(0,head_index_vector[0]));
-            qDebug() << "Get left header: " << last_rom_b.length();
-        }
-
-        //Deal tail data and new header left.
-        if (!pre_rom_a.isEmpty()) {
-            left_packet_buffer.append(pre_rom_a);
-            left_packet_buffer.append(last_rom_b);
-            if ( (left_packet_buffer.at(0) & 0xFF) == 0xAD ) {
-                qDebug() << "Left data checked succussful";
-            }else {
-                qDebug() << "Left data checked failed and it index of = " << left_packet_buffer.indexOf(0xAD);
-            }
-            for (int j = 0; j < 4; j++) {
-                read_buffer[j] = left_packet_buffer.at( j + 2 ) & 0xFF;
-            }
-            quint32 uh = 0;
-            quint32 h = 0;
-            quint32 l = 0;
-            quint32 ul = 0;
-            quint32 temp = (read_buffer[0] << 24) | (read_buffer[1] << 16) | (read_buffer[2] << 8) | read_buffer[3];
-            data_packet->number = temp;
-            for (int k = 0; k < 500; k++) {
-                data_packet->da = (left_packet_buffer.at( (k-1)*16 + 7) & 0xFF) << 16 + \
-                                                                                   (left_packet_buffer.at( (k-1)*16 + 6) & 0xFF) << 8 + \
-                                                                                   (left_packet_buffer.at( (k-1)*16 + 5) & 0xFF) << 0;
-                data_packet->db = (left_packet_buffer.at( (k-1)*16 + 11) & 0xFF) << 16 + \
-                                                                                    (left_packet_buffer.at( (k-1)*16 + 10) & 0xFF) << 8 + \
-                                                                                    (left_packet_buffer.at( (k-1)*16 + 9) & 0xFF) << 0;
-                data_packet->dc = (left_packet_buffer.at( (k-1)*16 + 15) & 0xFF) << 16 + \
-                                                                                    (left_packet_buffer.at( (k-1)*16 + 14) & 0xFF) << 8 + \
-                                                                                    (left_packet_buffer.at( (k-1)*16 + 13) & 0xFF) << 0;
-                data_packet->dd = (left_packet_buffer.at( (k-1)*16 + 19) & 0xFF) << 16 + \
-                                                                                    (left_packet_buffer.at( (k-1)*16 + 18) & 0xFF) << 8 + \
-                                                                                    (left_packet_buffer.at( (k-1)*16 + 17) & 0xFF) << 0;
-            }
-            channel_a_buffer[packet_number] = data_packet->da;
-            channel_b_buffer[packet_number] = data_packet->db;
-            channel_c_buffer[packet_number] = data_packet->dc;
-            channel_d_buffer[packet_number] = data_packet->dd;
-            packet_number ++;
-            qDebug() << "leftpacket enbale.";
-        }
-        // deal with the mid big packets.
-        for (quint32 i = 0; i < vector_counter - 1; i ++) {
-            for (int j = 0; j < 4; j++) {
-                read_buffer[j] = array_rom.at( head_index_vector[i] + j + 2) & 0xFF;
-            }
-            quint32 temp = (read_buffer[0] << 24) | (read_buffer[1] << 16) | (read_buffer[2] << 8) | read_buffer[3];
-            data_packet->number = temp;
-            qDebug() << "packet num is :" << data_packet->number;
-            for (int k = 0; k < 500; k ++) {
-                data_packet->da = (array_rom.at( head_index_vector[i] + (k-1)*16 + 7) & 0xFF) << 16 + \
-                                                                                                 (array_rom.at( head_index_vector[i] + (k-1)*16 + 6) & 0xFF) << 8 + \
-                                                                                                 (array_rom.at( head_index_vector[i] + (k-1)*16 + 5) & 0xFF) << 0;
-                data_packet->db = (array_rom.at( head_index_vector[i] + (k-1)*16 + 11) & 0xFF) << 16 + \
-                                                                                                  (array_rom.at( head_index_vector[i] + (k-1)*16 + 10) & 0xFF) << 8 + \
-                                                                                                  (array_rom.at( head_index_vector[i] + (k-1)*16 + 9) & 0xFF) << 0;
-                data_packet->dc = (array_rom.at( head_index_vector[i] + (k-1)*16 + 15) & 0xFF) << 16 + \
-                                                                                                  (array_rom.at( head_index_vector[i] + (k-1)*16 + 14) & 0xFF) << 8 + \
-                                                                                                  (array_rom.at( head_index_vector[i] + (k-1)*16 + 13) & 0xFF) << 0;
-                data_packet->dd = (array_rom.at( head_index_vector[i] + (k-1)*16 + 19) & 0xFF) << 16 + \
-                                                                                                  (array_rom.at( head_index_vector[i] + (k-1)*16 + 18) & 0xFF) << 8 + \
-                                                                                                  (array_rom.at( head_index_vector[i] + (k-1)*16 + 17) & 0xFF) << 0;
-            }
-            channel_a_buffer[packet_number] = data_packet->da;
-            channel_b_buffer[packet_number] = data_packet->db;
-            channel_c_buffer[packet_number] = data_packet->dc;
-            channel_d_buffer[packet_number] = data_packet->dd;
-            packet_number ++;
-        }
-        pre_rom_a.clear();
-
-        if (array_length -  head_index_vector[vector_counter] < ONE_PACKET_LENGTH) {
-            pre_rom_a.append(array_rom.mid(head_index_vector[vector_counter], array_length -  head_index_vector[vector_counter]));
-            qDebug() << "@pre_rom_a: Left :" << array_length -  head_index_vector[vector_counter];
-            if ((pre_rom_a.at(0) & 0xFF) == 0xAD) {
-                qDebug() << "@pre_rom_a: Left : left is ok!";
-            }else{
-                qDebug() << "@pre_rom_a: Left : index of = " << pre_rom_a.indexOf(0xAD);
-            }
-        }else{
-            qDebug() << "@pre_rom_a: No left.";
-        }
-
-    }
-
-    qDebug() << "current pakcet number is:" << packet_number;
-    if ( packet_number > 88000) {
-        packet_number = 0;
-    }
-    packet_num = 0;
-    array_rom.clear();
-    array_length = 0;
-    memset(head_index_vector,0,20);
-
-#elif 1
     QByteArray left_packet_buffer;
     quint32 vector_counter = 0;
     qint8 ret;
@@ -461,7 +311,9 @@ void NetClientThread::on_read_message()
     }
     ret = check_packet(socket_buffer, array_length, &vector_counter);
     //1qDebug() << "Checked packet : length = " << vector_counter  ;
-
+    if ( ret == -1 ) {
+        qDebug() << "Checked failed..........................................................";
+    }
     switch(ret) {
 
     case 1:
@@ -488,7 +340,6 @@ void NetClientThread::on_read_message()
     vector_counter = 0;
     array_rom.clear();
 
-#endif
 }
 qint8 NetClientThread::check_packet(quint8* array, quint64 length, quint32 *vec_con)
 {
@@ -530,8 +381,30 @@ qint8 NetClientThread::check_packet(quint8* array, quint64 length, quint32 *vec_
 void NetClientThread::on_net_close_file()
 {
     if (file_ctr->file->isOpen()) {
-        file_ctr->file->close();
+        file_ctr->fileClose();
     }
+}
+
+void NetClientThread::on_net_enable_save(bool state)
+{
+    isEnableSave = state;
+    if (file_ctr->file->isOpen() && isEnableSave == false) {
+        file_ctr->fileClose();
+    }
+
+    if (!file_ctr->file->isOpen() && isEnableSave == true) {
+    }
+}
+
+void NetClientThread::on_file_manager_add_doc_list(QString filename)
+{
+    emit net_add_doc_list(filename);
+}
+
+void NetClientThread::on_file_manager_file_size(double percent)
+{
+    qDebug() << "@net client:" << percent;
+    emit net_file_size(percent);
 }
 
 void NetClientThread::stop()
