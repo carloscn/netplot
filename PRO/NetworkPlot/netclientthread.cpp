@@ -403,7 +403,6 @@ void NetClientThread::on_file_manager_add_doc_list(QString filename)
 
 void NetClientThread::on_file_manager_file_size(double percent)
 {
-    qDebug() << "@net client:" << percent;
     emit net_file_size(percent);
 }
 
