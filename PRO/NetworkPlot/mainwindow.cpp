@@ -234,40 +234,7 @@ QString MainWindow::get_doc_name()
     name.append(".hex");
     return name;
 }
-void MainWindow::qwt_plot_wave(unsigned int channel, double *data, unsigned long length)
-{
 
-    QVector<QPointF> vector;
-    for( quint64 i = 0; i < length ; i++ ){
-        QPointF point;
-        point.setX( i );
-        point.setY( data[i] );
-        vector.append(point);
-    }
-    QwtPointSeriesData* series = new QwtPointSeriesData(vector);
-
-    switch (channel) {
-
-    case CHANNEL_0:
-        qwt_curve1_ch1->setData(series);
-        break;
-    case CHANNEL_1:
-        qwt_curve1_ch2->setData(series);
-        break;
-    case CHANNEL_2:
-        qwt_curve1_ch3->setData(series);
-        break;
-    case CHANNEL_3:
-        qwt_curve1_ch4->setData(series);
-        break;
-
-    default:
-
-        break;
-    }
-    ui->qwt_ch->replot();
-    ui->qwt_ch->show();
-}
 
 void MainWindow::on_pushButton_set_clicked()
 {
@@ -529,14 +496,63 @@ void MainWindow::on_net_plot_read(quint32 *block, quint32 length)
         channel_d_d[i] = channel_d[i] / 100000;
         //qDebug() << "sample: " << channel_a_d[i];
     }
-    qwt_plot_wave(CHANNEL_0, channel_a_d, 500);
-    qwt_plot_fft(CHANNEL_0, channel_a_d, 500);
-    qwt_plot_wave(CHANNEL_1, channel_b_d, 500);
-    qwt_plot_fft(CHANNEL_1, channel_b_d, 500);
-    qwt_plot_wave(CHANNEL_2, channel_c_d, 500);
-    qwt_plot_fft(CHANNEL_2, channel_c_d, 500);
-    qwt_plot_wave(CHANNEL_3, channel_d_d, 500);
-    qwt_plot_fft(CHANNEL_3, channel_d_d, 500);
+    if (ui->checkBox_ch1_time->isChecked()) {
+        this->qwt_curve1_ch1->attach(ui->qwt_ch);
+        qwt_plot_wave(CHANNEL_0, channel_a_d, 500);
+    }else{
+        this->qwt_curve1_ch1->detach();
+    }
+    if (ui->checkBox_ch2_time->isChecked()) {
+        this->qwt_curve1_ch2->attach(ui->qwt_ch);
+        qwt_plot_wave(CHANNEL_1, channel_b_d, 500);
+    }else{
+        this->qwt_curve1_ch2->detach();
+    }
+
+    if (ui->checkBox_ch3_time->isChecked()) {
+        this->qwt_curve1_ch3->attach(ui->qwt_ch);
+        qwt_plot_wave(CHANNEL_2, channel_c_d, 500);
+    }else{
+        this->qwt_curve1_ch3->detach();
+    }
+
+
+    if (ui->checkBox_ch4_time->isChecked()) {
+        this->qwt_curve1_ch4->attach(ui->qwt_ch);
+        qwt_plot_wave(CHANNEL_3, channel_d_d, 500);
+    }else{
+        this->qwt_curve1_ch4->detach();
+    }
+
+
+    if (ui->checkBox_ch1_fft->isChecked()) {
+        this->qwt_curve1_ch1_fft->attach(ui->qwt_fft);
+        qwt_plot_fft(CHANNEL_0, channel_a_d, 500);
+    }else{
+        this->qwt_curve1_ch1_fft->detach();
+    }
+
+    if (ui->checkBox_ch2_fft->isChecked()) {
+        this->qwt_curve1_ch2_fft->attach(ui->qwt_fft);
+        qwt_plot_fft(CHANNEL_1, channel_b_d, 500);
+    }else{
+        this->qwt_curve1_ch2_fft->detach();
+    }
+
+    if (ui->checkBox_ch3_fft->isChecked()) {
+        this->qwt_curve1_ch3_fft->attach(ui->qwt_fft);
+        qwt_plot_fft(CHANNEL_2, channel_c_d, 500);
+    }else{
+        this->qwt_curve1_ch3_fft->detach();
+    }
+
+    if (ui->checkBox_ch4_fft->isChecked()) {
+        this->qwt_curve1_ch4_fft->attach(ui->qwt_fft);
+        qwt_plot_fft(CHANNEL_3, channel_d_d, 500);
+    }else{
+        this->qwt_curve1_ch4_fft->detach();
+    }
+
 }
 
 void MainWindow::qwt_plot_fft(int channel, double *rom, int NP)
@@ -557,7 +573,7 @@ void MainWindow::qwt_plot_fft(int channel, double *rom, int NP)
     fftwf_destroy_plan(p);
     fftwf_cleanup();
     memset(draw_buffer, 0, NP);
-    for( quint64 i = 0; i < NP/6-1 ; i++ ){
+    for( quint64 i = 0; i < NP/2-1 ; i++ ){
         QPointF point;
         current_fft_value = sqrt(out1_c[i][0] * out1_c[i][0] + out1_c[i][1] * out1_c[i][1]);
         point.setX((210000/500)*i);
@@ -580,7 +596,40 @@ void MainWindow::qwt_plot_fft(int channel, double *rom, int NP)
     ui->qwt_fft->replot();
     ui->qwt_fft->show();
 }
+void MainWindow::qwt_plot_wave(unsigned int channel, double *data, unsigned long length)
+{
 
+    QVector<QPointF> vector;
+    for( quint64 i = 0; i < length ; i++ ){
+        QPointF point;
+        point.setX( i );
+        point.setY( data[i] );
+        vector.append(point);
+    }
+    QwtPointSeriesData* series = new QwtPointSeriesData(vector);
+
+    switch (channel) {
+
+    case CHANNEL_0:
+        qwt_curve1_ch1->setData(series);
+        break;
+    case CHANNEL_1:
+        qwt_curve1_ch2->setData(series);
+        break;
+    case CHANNEL_2:
+        qwt_curve1_ch3->setData(series);
+        break;
+    case CHANNEL_3:
+        qwt_curve1_ch4->setData(series);
+        break;
+
+    default:
+
+        break;
+    }
+    ui->qwt_ch->replot();
+    ui->qwt_ch->show();
+}
 void MainWindow::on_net_add_doc_list(QString filename)
 {
     QProgressBar *bar = new QProgressBar();
