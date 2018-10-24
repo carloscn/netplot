@@ -51,6 +51,7 @@ public:
     float bcd_decoding( uint8_t * );
     union bcd_code_t bcdCode;
     void send_cmd_to_remote( uint8_t *cmd, quint16 length );
+    void enable_socket_read(bool);
 
 protected:
     void run();
@@ -86,30 +87,17 @@ private :
     QTcpServer *server;
     QTcpSocket *socket;
     bool data_prepared_flag;
-    double *data_buffer;
-    double *data_draw_buffer;
     unsigned long count;
-    ringbuffer *ring_buffer;
     bool is_head;
     bool is_packet_num;
     QByteArray buffer;
     quint32 buffer_index;
     quint64 packet_number;
-
     QByteArray array_rom;
     quint32 array_length = 0;
-    quint32 head_index_vector[5000];
     quint32 head_index = 0;
-    quint32 packet_num = 0;
     quint32 vector_counter = 0;
-    quint32 buffer_current_len = 0;
-    QByteArray last_rom_a;
-    QByteArray pre_rom_a;
-    QByteArray last_rom_b;
-    QByteArray pre_rom_b;
-    QByteArray tail_array_rom;
     quint64 read_counter = 0;
-    quint8  rom_buffer[5000][ONE_PACKET_LENGTH];
     quint8* socket_buffer;
     quint8 left_rom[8010];
     quint8 right_rom[8010];
@@ -118,15 +106,19 @@ private :
     FileManager *file_ctr;
     quint64 kcount;
     bool isEnableSave;
+    quint8 plot_buffer[ONE_PACKET_LENGTH];
+    quint32 channel_data[2000];
+    bool is_enable_socket_read;
 
 private:
 
-    qint8 check_packet(quint8* array, quint64 length, quint32 *vec_con);
+    qint8 check_packet(quint8* array, quint64 length);
     void case_1(quint8* buffer, quint64 length, quint32 vector_counter);
     void case_1(quint8* buffer, quint64 length);
     void case_2(quint8* buffer, quint64 length, quint8 *left_buffer, quint64 *left_length);
     void case_3(quint8 *socket_buffer, quint64 length, quint8 *right_buffer, quint64 right_length);
     void case_4(quint8* buffer, quint64 length);
+
 
 };
 

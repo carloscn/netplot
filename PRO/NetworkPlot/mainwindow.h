@@ -26,6 +26,8 @@
 #include <qwt_plot_magnifier.h>
 #include <qwt_plot_grid.h>
 #include <qwt_scale_draw.h>
+#include <QProgressBar>
+#include <QTableWidget>
 #include <QDateTime>
 #include "fftw3.h"
 #define         CHANNEL_0           0
@@ -79,6 +81,8 @@ private slots:
     void on_net_file_size(double);
 
 
+    void on_pushButton_clear_clicked();
+
 signals:
 
     void net_close_file();
@@ -91,9 +95,6 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    QTcpServer *listener;
-    QTcpSocket *socket;
-    QFile *file;
     bool isSaveEnable;
     QDateTime current_time;
     quint32 plot_count;
@@ -119,8 +120,10 @@ private:
     QString get_local_ip();
     void qwt_plot_fft( int, double *, int);
 
-
-
+    QTableWidget *table_widget;
+    quint32 file_count;
+    QProgressBar *c_bar;
+    bool is_start_read_socket;
 };
 
 #endif // MAINWINDOW_H

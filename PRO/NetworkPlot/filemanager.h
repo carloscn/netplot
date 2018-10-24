@@ -93,7 +93,6 @@ private:
     qint64 filesize;
     bool fileopen;
     bool fileclose;
-
     QString qFileDirPath;
     void file_size();
     QDateTime *datetime;

@@ -130,7 +130,7 @@
            <item>
             <widget class="QPushButton" name="pushButton_close_remote">
              <property name="text">
-              <string>关闭远程服务</string>
+              <string>Start</string>
              </property>
             </widget>
            </item>
@@ -246,10 +246,10 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>100</string>
+              <string>210</string>
              </property>
              <property name="readOnly">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -527,7 +527,7 @@
      <widget class="QGroupBox" name="groupBox_4">
       <property name="minimumSize">
        <size>
-        <width>200</width>
+        <width>260</width>
         <height>0</height>
        </size>
       </property>
@@ -542,7 +542,7 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
-        <widget class="QListWidget" name="listWidget_file"/>
+        <layout class="QGridLayout" name="gridLayout"/>
        </item>
        <item>
         <widget class="QProgressBar" name="progressBar">

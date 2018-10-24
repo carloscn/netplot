@@ -14,12 +14,12 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
+#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
-#include <QtWidgets/QListWidget>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
@@ -97,7 +97,7 @@ public:
     QwtPlot *qwt_fft;
     QGroupBox *groupBox_4;
     QVBoxLayout *verticalLayout_6;
-    QListWidget *listWidget_file;
+    QGridLayout *gridLayout;
     QProgressBar *progressBar;
     QMenuBar *menuBar;
     QMenu *menu;
@@ -276,7 +276,7 @@ public:
         lineEdit_fs->setObjectName(QStringLiteral("lineEdit_fs"));
         sizePolicy1.setHeightForWidth(lineEdit_fs->sizePolicy().hasHeightForWidth());
         lineEdit_fs->setSizePolicy(sizePolicy1);
-        lineEdit_fs->setReadOnly(false);
+        lineEdit_fs->setReadOnly(true);
 
         horizontalLayout_8->addWidget(lineEdit_fs);
 
@@ -464,16 +464,17 @@ public:
 
         groupBox_4 = new QGroupBox(centralWidget);
         groupBox_4->setObjectName(QStringLiteral("groupBox_4"));
-        groupBox_4->setMinimumSize(QSize(200, 0));
+        groupBox_4->setMinimumSize(QSize(260, 0));
         groupBox_4->setMaximumSize(QSize(200, 16777215));
         verticalLayout_6 = new QVBoxLayout(groupBox_4);
         verticalLayout_6->setSpacing(6);
         verticalLayout_6->setContentsMargins(11, 11, 11, 11);
         verticalLayout_6->setObjectName(QStringLiteral("verticalLayout_6"));
-        listWidget_file = new QListWidget(groupBox_4);
-        listWidget_file->setObjectName(QStringLiteral("listWidget_file"));
+        gridLayout = new QGridLayout();
+        gridLayout->setSpacing(6);
+        gridLayout->setObjectName(QStringLiteral("gridLayout"));
 
-        verticalLayout_6->addWidget(listWidget_file);
+        verticalLayout_6->addLayout(gridLayout);
 
         progressBar = new QProgressBar(groupBox_4);
         progressBar->setObjectName(QStringLiteral("progressBar"));
@@ -531,7 +532,7 @@ public:
         lineEdit_freq->setText(QApplication::translate("MainWindow", "50", nullptr));
         pushButton_freq_set->setText(QApplication::translate("MainWindow", "\350\256\276\345\256\232", nullptr));
         label_6->setText(QApplication::translate("MainWindow", "\351\207\207\346\240\267\347\216\207kHz):", nullptr));
-        lineEdit_fs->setText(QApplication::translate("MainWindow", "100", nullptr));
+        lineEdit_fs->setText(QApplication::translate("MainWindow", "210", nullptr));
         pushButton_fs_set->setText(QApplication::translate("MainWindow", "\350\256\276\345\256\232", nullptr));
         label_4->setText(QApplication::translate("MainWindow", "\345\242\236\347\233\212(1,2): ", nullptr));
         lineEdit_gain_1->setText(QApplication::translate("MainWindow", "40", nullptr));

@@ -55,7 +55,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
     this->setWindowTitle("Network Plot");
     /*
     *  init the values of class
@@ -66,10 +65,13 @@ MainWindow::MainWindow(QWidget *parent) :
     xcount = 0;
     xrange = 1024;
     this->byte_nums = 0;
+
     /*
      *  init network
     */
     this->net_socket = new NetClientThread( ui->lineEdit_server_ip->text(), ui->lineEdit_port_num->text().toInt() );
+    is_start_read_socket = false;
+    net_socket->enable_socket_read(is_start_read_socket);
     connect( (QObject*)this->net_socket, SIGNAL( data_prepared(float*,uint) ), this, SLOT( on_double_data_prepared(float*,uint) ));
     connect( (QObject*)this->net_socket, SIGNAL(data_plot(double*)),this,SLOT(on_plot_picture(double*)));
     connect( (QObject*)this->net_socket, SIGNAL(net_data_ready(char*,quint32)),this,SLOT(on_net_data_read(char*,quint32)));
@@ -80,13 +82,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect( this, SIGNAL(net_enable_save(bool) ),(QObject*)this->net_socket ,SLOT(on_net_enable_save(bool)));
     connect( (QObject*)this->net_socket, SIGNAL(net_file_size(double)), this, SLOT(on_net_file_size(double)));
 
-    /*
-    * Init qwt plugin.
-    */
-
-
     ui->lineEdit_host_ip->setText( this->get_local_ip() );
-
     /*
      * ui state.
      **/
@@ -103,11 +99,38 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->checkBox_ch1_fft->setChecked(true);
     ui->pushButton_close_test->setEnabled(false);
     ui->progressBar->setValue(0);
-
-    this->init_qwt();
     isSaveEnable = true;
     on_pushButton_close_test_clicked();
+    table_widget = new QTableWidget();
+    table_widget->setRowCount(1000);
+    table_widget->setColumnCount(2);
+    table_widget->setHorizontalHeaderLabels(QStringList()<<tr("文件名")<<tr("进度"));
+    table_widget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    table_widget->verticalHeader()->hide();
+    for (int i = 0; i < 1000; i ++) {
+        //table_widget->setColumnWidth(i,80);
+        table_widget->setRowHeight(i,20);
+    }
+    table_widget->horizontalHeader()->setStyleSheet("QHeaderView::section{background-color:rgb(40,143,218);font:10pt;}");
+    file_count = 0;
+    c_bar = new QProgressBar();
+    ui->gridLayout->addWidget(table_widget);
 
+    QProcess process;
+    process.start("free -m");
+    process.waitForFinished();
+    process.readLine();
+    QString str = process.readLine();
+    str.replace("\n","");
+    str.replace(QRegExp("( ){1,}")," ");
+    auto lst = str.split(" ");
+    double sum = lst[1].toDouble();
+    double free = lst[6].toDouble();
+    ui->progressBar->setValue((int)(free/sum));
+    /*
+    * Init qwt plugin.
+    */
+    init_qwt();
 }
 
 MainWindow::~MainWindow()
@@ -140,7 +163,6 @@ void MainWindow::init_qwt()
     ui->qwt_fft->setAxisTitle(2,"Hz");
     ui->qwt_ch->insertLegend(new QwtLegend(), QwtPlot::TopLegend);
     ui->qwt_fft->insertLegend(new QwtLegend(), QwtPlot::TopLegend);
-
     this->qwt_curve1_ch1 = new QwtPlotCurve("CH1");
     this->qwt_curve1_ch2 = new QwtPlotCurve("CH2");
     this->qwt_curve1_ch3 = new QwtPlotCurve("CH3");
@@ -227,45 +249,16 @@ void MainWindow::qwt_plot_wave(unsigned int channel, double *data, unsigned long
     switch (channel) {
 
     case CHANNEL_0:
-
-        if (ui->checkBox_ch1_time->isChecked()) {
-            qwt_curve1_ch1->attach(ui->qwt_ch);
-            qwt_curve1_ch1->setData(series);
-        }
-        else {
-            qwt_curve1_ch1->detach();
-        }
-
+        qwt_curve1_ch1->setData(series);
         break;
     case CHANNEL_1:
-        if (ui->checkBox_ch2_time->isChecked()) {
-            qwt_curve1_ch2->attach(ui->qwt_ch);
-            qwt_curve1_ch2->setData(series);
-        }
-        else {
-            qwt_curve1_ch2->detach();
-        }
-
+        qwt_curve1_ch2->setData(series);
         break;
     case CHANNEL_2:
-        if (ui->checkBox_ch3_time->isChecked()) {
-            qwt_curve1_ch3->attach(ui->qwt_ch);
-            qwt_curve1_ch3->setData(series);
-        }
-        else {
-            qwt_curve1_ch3->detach();
-        }
-
+        qwt_curve1_ch3->setData(series);
         break;
     case CHANNEL_3:
-        if (ui->checkBox_ch4_time->isChecked()) {
-            qwt_curve1_ch4->attach(ui->qwt_ch);
-            qwt_curve1_ch4->setData(series);
-        }
-        else {
-            qwt_curve1_ch4->detach();
-        }
-
+        qwt_curve1_ch4->setData(series);
         break;
 
     default:
@@ -299,8 +292,6 @@ void MainWindow::on_pushButton_set_clicked()
         ui->pushButton_gain_set->setEnabled(true);
         ui->pushButton_sample->setEnabled(true);
     }
-
-
 }
 
 void MainWindow::on_pushButton_disconnect_clicked()
@@ -324,63 +315,37 @@ void MainWindow::on_pushButton_disconnect_clicked()
 void MainWindow::on_pushButton_close_remote_clicked()
 {
 
+    net_socket->enable_socket_read(is_start_read_socket);
+    if (is_start_read_socket == true) {
+        ui->textBrowser->append("@System: start read socket..");
+    }else {
+        ui->textBrowser->append("@system: stop read socket..");
+    }
+    is_start_read_socket = !is_start_read_socket;
+
+
 }
 
 void MainWindow::on_double_data_prepared( float* array_datas, uint length)
 {
-    this->mutex.lock();
-    //qDebug() << "MainWindow@on_double_data_prepared() :> data_prepared...";
-    this->file->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
-    QTextStream out( this->file );
-    for( int i = 0; i < length; i ++ ) {
-        out << QString::number(*(array_datas + i)) << ',';
-    }
-    out << '&' << endl;
-    this->file->close();
-    byte_nums = byte_nums + length;
-    //qDebug() <<  "write: " << length << " double datas to hard disk.";
-    ui->textBrowser->append("recv double data :" + QString::number(byte_nums));
-    this->mutex.unlock();
+
 }
 
 void MainWindow::on_net_data_read(QByteArray block)
 {
-    int ret;
-    QFile *file = new QFile("../adc.hex");
-    QDataStream out(&block, QIODevice::ReadWrite);
-    QDataStream in(file);
-    ret = file->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text);
-    qDebug() << "write size : " << block.size();
-    if (!ret) {
-        qDebug() << "Open failed\n";
-        return;
-    }
-    in << block;
-    file->close();
+
 }
 
 void MainWindow::on_net_data_read(char *block, quint32 length)
 {
 
-    int ret;
-    QFile *file = new QFile("../adc.hex");
-    QDataStream in(file);
-
-    ret = file->open(QIODevice::WriteOnly | QIODevice::Append);
-    if (!ret) {
-        qDebug() << "Open failed\n";
-        return;
-    }
-    for (int i = 0; i < length - 4; i ++) {
-        in << *(block + i);
-    }
-    file->close();
 }
 
 void MainWindow::on_plot_picture(double *array_datas)
 {
 
 }
+
 QString MainWindow::get_local_ip()
 {
     QString host_ip;
@@ -396,6 +361,7 @@ QString MainWindow::get_local_ip()
             break;
         }
     }
+
     return host_ip;
 }
 
@@ -437,12 +403,18 @@ void MainWindow::on_pushButton_close_test_clicked()
 void MainWindow::on_pushButton_freq_set_clicked()
 {
     QString lineStr;
-    uint8_t   cmd[5];
-
+    uint8_t cmd[5];
     lineStr = ui->lineEdit_freq->text();
+    uint8_t value = lineStr.toUInt();
+    if (value > 50) {
+        value = 50;
+        QMessageBox::warning(this, "Warning", "设置失败，频率最高值为50KHz");
+        return;
+    }
     cmd[0] = CMD_SET_FREQ;
-    cmd[1] = lineStr.toUInt();
+    cmd[1] = value;
     this->net_socket->send_cmd_to_remote( cmd , 2);
+    ui->textBrowser->append("@System: 设定频率为" + QString::number(value) + ".");
 }
 
 void MainWindow::on_pushButton_gain_set_clicked()
@@ -456,11 +428,25 @@ void MainWindow::on_pushButton_gain_set_clicked()
     lineStr2 = ui->lineEdit_gain_2->text();
     gain1 = lineStr1.toUInt();
     gain2 = lineStr2.toUInt();
+
+    if (gain1 > 40) {
+        gain1 = 40;
+        QMessageBox::warning(this, "Warning", "设置失败，一级增益最大值为40");
+        return;
+    }
+
+    if (gain2 > 40) {
+        gain2 = 40;
+        QMessageBox::warning(this, "Warning", "设置失败，二级增益最大值为40");
+        return;
+    }
+
     cmd[0] = CMD_SET_GAIN;
     cmd[1] = gain1;
     cmd[2] = gain2;
     qDebug("Gain1 : 0x%x, Gain2: 0x%x", gain1, gain2);
     this->net_socket->send_cmd_to_remote( cmd , 3);
+    ui->textBrowser->append("@System: 设定一二级增益分别为" + QString::number(gain1) + ", " + QString::number(gain2));
 }
 
 void MainWindow::on_pushButton_fs_set_clicked()
@@ -491,6 +477,7 @@ void MainWindow::on_pushButton_sample_clicked()
     this->net_socket->send_cmd_to_remote( cmd , 1);
     ui->statusBar->clearMessage();
     ui->statusBar->showMessage("Write speed : 3.3MB/s...",0);
+    ui->textBrowser->append("@System: Start Sample..");
 
 }
 
@@ -501,6 +488,7 @@ void MainWindow::on_pushButton_close_sample_clicked()
     this->net_socket->send_cmd_to_remote( cmd , 1);
     ui->statusBar->clearMessage();
     ui->statusBar->showMessage("Closed sample...",0);
+    ui->textBrowser->append("@System: Stop Sample..");
     emit net_close_file();
 }
 
@@ -534,19 +522,13 @@ void MainWindow::on_net_plot_read(quint32 *block, quint32 length)
         channel_c[i] = (qint32) block[2*500+i] << 8;// & (0xFFFFFF))* (((block[2*500+i] & 0x800000) >> 23)?1:-1);
         channel_d[i] = (qint32) block[3*500+i] << 8;// & (0xFFFFFF))* (((block[3*500+i] & 0x800000) >> 23)?1:-1);
     }
-
-
-
     for (quint32 i = 0; i < 500; i ++) {
-
         channel_a_d[i] = channel_a[i] / 100000;
         channel_b_d[i] = channel_b[i] / 100000;
         channel_c_d[i] = channel_c[i] / 100000;
         channel_d_d[i] = channel_d[i] / 100000;
         //qDebug() << "sample: " << channel_a_d[i];
     }
-
-
     qwt_plot_wave(CHANNEL_0, channel_a_d, 500);
     qwt_plot_fft(CHANNEL_0, channel_a_d, 500);
     qwt_plot_wave(CHANNEL_1, channel_b_d, 500);
@@ -555,7 +537,6 @@ void MainWindow::on_net_plot_read(quint32 *block, quint32 length)
     qwt_plot_fft(CHANNEL_2, channel_c_d, 500);
     qwt_plot_wave(CHANNEL_3, channel_d_d, 500);
     qwt_plot_fft(CHANNEL_3, channel_d_d, 500);
-
 }
 
 void MainWindow::qwt_plot_fft(int channel, double *rom, int NP)
@@ -588,43 +569,13 @@ void MainWindow::qwt_plot_fft(int channel, double *rom, int NP)
     }
     QwtPointSeriesData* series = new QwtPointSeriesData(vector);
     if (channel == CHANNEL_0) {
-
-        if (ui->checkBox_ch1_fft->isChecked()) {
-            qwt_curve1_ch1_fft->attach(ui->qwt_fft);
-            qwt_curve1_ch1_fft->setData(series);
-        }
-        else {
-            qwt_curve1_ch1_fft->detach();
-        }
-
+        qwt_curve1_ch1_fft->setData(series);
     } else if (channel == CHANNEL_1) {
-
-        if (ui->checkBox_ch2_fft->isChecked()) {
-            qwt_curve1_ch2_fft->attach(ui->qwt_fft);
-            qwt_curve1_ch2_fft->setData(series);
-        }
-        else {
-            qwt_curve1_ch2_fft->detach();
-        }
+        qwt_curve1_ch2_fft->setData(series);
     } else if (channel == CHANNEL_2) {
-
-        if (ui->checkBox_ch3_fft->isChecked()) {
-            qwt_curve1_ch3_fft->attach(ui->qwt_fft);
-            qwt_curve1_ch3_fft->setData(series);
-        }
-        else {
-            qwt_curve1_ch3_fft->detach();
-        }
+        qwt_curve1_ch3_fft->setData(series);
     } else if (channel == CHANNEL_3) {
-
-        if (ui->checkBox_ch4_fft->isChecked()) {
-            qwt_curve1_ch4_fft->attach(ui->qwt_fft);
-            qwt_curve1_ch4_fft->setData(series);
-        }
-        else {
-            qwt_curve1_ch4_fft->detach();
-        }
-
+        qwt_curve1_ch4_fft->setData(series);
     }
     ui->qwt_fft->replot();
     ui->qwt_fft->show();
@@ -632,10 +583,31 @@ void MainWindow::qwt_plot_fft(int channel, double *rom, int NP)
 
 void MainWindow::on_net_add_doc_list(QString filename)
 {
-    ui->listWidget_file->addItem(filename);
+    QProgressBar *bar = new QProgressBar();
+    QString str_file_name = filename.mid(8,10);
+    QLabel *label = new QLabel(".."+str_file_name);
+
+    ui->textBrowser->append("@System: 已建立"+ filename + "文件");
+    table_widget->setCellWidget(file_count,0,label);
+    table_widget->setCellWidget(file_count,1,bar);
+
+    c_bar = bar;
+
+
+    file_count++;
+    if (file_count == 1000) {
+        file_count = 0;
+    }
+
 }
 
 void MainWindow::on_net_file_size(double percent)
 {
-    ui->progressBar->setValue((int)(percent*100));
+    //ui->progressBar->setValue((int)(percent*100));
+    c_bar->setValue((int)(percent*100));
+}
+
+void MainWindow::on_pushButton_clear_clicked()
+{
+    ui->textBrowser->clear();
 }

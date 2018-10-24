@@ -23,8 +23,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 INCLUDEPATH += /usr/local/qwt-6.1.3/include
+INCLUDEPATH += /usr/local/fftw/include
 LIBS += -L"/usr/local/qwt-6.1.3/lib/" -lqwt
-LIBS += "/home/delvis/fftw/lib/libfftw3f.a"
+LIBS += "/usr/local/fftw/lib/libfftw3f.a"
 
 SOURCES += \
         main.cpp \

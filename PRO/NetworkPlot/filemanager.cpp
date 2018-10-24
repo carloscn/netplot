@@ -77,6 +77,7 @@ void FileManager::write(QByteArray data) {
         }
         currenttime = datetime->currentDateTime().toString("yyyyMMddHHmmss");
         qFilePath = qFileDirPath + currenttime + ".hex";
+        emit file_manager_add_file_name(currenttime+".hex");
         qDebug() << "Create another hex file";
     }
 
@@ -106,9 +107,9 @@ void FileManager::write(quint8* buffer, quint64 length) {
             file->close();
             fileopen = false;
         }
-        emit file_manager_add_file_name(currenttime+".hex");
         currenttime = datetime->currentDateTime().toString("yyyyMMddHHmmss");
         qFilePath = qFileDirPath + currenttime + ".hex";
+        emit file_manager_add_file_name(currenttime+".hex");
         qDebug() << "Create another hex file ....................";
     }
 
@@ -177,6 +178,8 @@ void FileManager::preWriteExam() {
     qFilePath = qFileDirPath + currenttime + ".hex";
     qDebug() << "Create the data file";
     prewriteexame = true;
+    emit file_manager_add_file_name(currenttime+".hex");
+
 }
 
 void FileManager::run()
@@ -213,7 +216,8 @@ void FileManager::fileClose()
 {
     file->close();
     prewriteexame = false;
-    emit file_manager_add_file_name(currenttime+".hex");
+
+
 }
 void FileManager::file_size()
 {
