@@ -71,6 +71,7 @@ MainWindow::MainWindow(QWidget *parent) :
     */
     this->net_socket = new NetClientThread( ui->lineEdit_server_ip->text(), ui->lineEdit_port_num->text().toInt() );
     is_start_read_socket = false;
+    on_pushButton_close_remote_clicked();
     net_socket->enable_socket_read(is_start_read_socket);
     connect( (QObject*)this->net_socket, SIGNAL( data_prepared(float*,uint) ), this, SLOT( on_double_data_prepared(float*,uint) ));
     connect( (QObject*)this->net_socket, SIGNAL(data_plot(double*)),this,SLOT(on_plot_picture(double*)));
@@ -115,10 +116,9 @@ MainWindow::MainWindow(QWidget *parent) :
     file_count = 0;
     c_bar = new QProgressBar();
     ui->gridLayout->addWidget(table_widget);
-
+    /*
     QProcess process;
     process.start("free -m");
-    process.waitForFinished();
     process.readLine();
     QString str = process.readLine();
     str.replace("\n","");
@@ -127,6 +127,7 @@ MainWindow::MainWindow(QWidget *parent) :
     double sum = lst[1].toDouble();
     double free = lst[6].toDouble();
     ui->progressBar->setValue((int)(free/sum));
+    */
     /*
     * Init qwt plugin.
     */
@@ -396,14 +397,14 @@ void MainWindow::on_pushButton_gain_set_clicked()
     gain1 = lineStr1.toUInt();
     gain2 = lineStr2.toUInt();
 
-    if (gain1 > 40) {
-        gain1 = 40;
+    if (gain1 > 100) {
+        gain1 = 100;
         QMessageBox::warning(this, "Warning", "设置失败，一级增益最大值为40");
         return;
     }
 
-    if (gain2 > 40) {
-        gain2 = 40;
+    if (gain2 > 100) {
+        gain2 = 100;
         QMessageBox::warning(this, "Warning", "设置失败，二级增益最大值为40");
         return;
     }
@@ -652,8 +653,9 @@ void MainWindow::on_net_add_doc_list(QString filename)
 
 void MainWindow::on_net_file_size(double percent)
 {
-    //ui->progressBar->setValue((int)(percent*100));
-    c_bar->setValue((int)(percent*100));
+    ui->progressBar->setValue((int)(percent*100));
+    c_bar->setValue((int)(percent*100)+1);
+
 }
 
 void MainWindow::on_pushButton_clear_clicked()

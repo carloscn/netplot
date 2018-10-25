@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Version=1.0.0
+Name=NetworkPlot 
+Comment=
+Icon=/opt/netplot/netplot.ico
+Exec=/opt/netplot/netplot.sh
+Terminal=true

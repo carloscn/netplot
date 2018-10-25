@@ -130,7 +130,7 @@
            <item>
             <widget class="QPushButton" name="pushButton_close_remote">
              <property name="text">
-              <string>Start</string>
+              <string>开启接收</string>
              </property>
             </widget>
            </item>
@@ -184,7 +184,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>频率(KHz):</string>
+              <string>低通频率(KHz):</string>
              </property>
             </widget>
            </item>
@@ -295,7 +295,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>40</string>
+              <string>1</string>
              </property>
              <property name="readOnly">
               <bool>false</bool>
@@ -311,7 +311,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>40</string>
+              <string>1</string>
              </property>
              <property name="readOnly">
               <bool>false</bool>

@@ -26,15 +26,15 @@ NetClientThread::NetClientThread( QString server_ip, int server_port )
 
 bool NetClientThread::set_connect(QString server_ip, int server_port)
 {
-    //1qDebug() << "netclientread@set_connect() >: seting the connection...." ;
+    //1//xqDebug() << "netclientread@set_connect() >: seting the connection...." ;
     socket->connectToHost( server_ip, server_port , QIODevice::ReadWrite );
 
     QObject::connect((QObject*) socket,SIGNAL(readyRead()),(QObject*)this,SLOT(on_read_message()));
     if( !socket->waitForConnected(30000) ) {
-        //1qDebug("netclientread@set_connect() >: socket Connection failed!!");
+        //1//xqDebug("netclientread@set_connect() >: socket Connection failed!!");
         return false;
     }else {
-        //1qDebug("netclientread@set_connect() >: socket conncetion succussful.");
+        //1//xqDebug("netclientread@set_connect() >: socket conncetion succussful.");
         return true;
     }
 }
@@ -80,7 +80,7 @@ void NetClientThread::send_cmd_close_app()
     cmd.append(0xAA^0xBB^0x01^0x01^0xFF);
     socket->write(cmd);
     socket->flush();
-    //1qDebug() << "netclientread@send_cmd_close_app() >: close remote...." ;
+    //1//xqDebug() << "netclientread@send_cmd_close_app() >: close remote...." ;
 }
 
 void NetClientThread::send_cmd_to_remote(uint8_t *users, quint16 length)
@@ -104,10 +104,10 @@ void NetClientThread::send_cmd_to_remote(uint8_t *users, quint16 length)
     cmd.append( lengthCmd.bits.bit0_8);
     for (int i = 0; i < length; i ++)
         cmd.append(users[i]);
-    //1qDebug() << "send :" << cmd;
+    //1//xqDebug() << "send :" << cmd;
     socket->write(cmd);
     socket->flush();
-    //1qDebug() << "netclientread@send_cmd_close_app() >: send to remote...." ;
+    //1//xqDebug() << "netclientread@send_cmd_close_app() >: send to remote...." ;
 }
 // socket ascii stream.
 // [0xAD 0xAC] : 2bytes frame heads.
@@ -120,17 +120,21 @@ void NetClientThread::run()
 }
 void NetClientThread::on_read_message()
 {
-    if (is_enable_socket_read == false)
+    if (is_enable_socket_read == false) {
+        socket->readAll();
+        socket->flush();
         return;
+    }
     qint8 ret = 7;
 
     array_rom.append(socket->readAll());
     array_length = array_rom.length();
-    //qDebug() << "on read message" << array_length;
+
+    ////xqDebug() << "on read message" << array_length;
     if (array_length < 5*ONE_PACKET_LENGTH)
         return;
     if (array_length > 10*8010) {
-        qDebug() << "data over size" << array_length;
+        //xqDebug() << "data over size" << array_length;
         //array_rom.clear();
         vector_counter = 0;
     }
@@ -138,31 +142,34 @@ void NetClientThread::on_read_message()
     for (quint32 i = 0; i < array_length; i ++) {
         socket_buffer[i] = array_rom.at(i)&0xFF;
     }
+    if (isEnableSave == true) {
+        emit net_data_save_to_disk(socket_buffer, array_length);
+    }
     array_rom.clear();
     ret = check_packet(socket_buffer, array_length);
-    //qDebug() << "Checked packet : length = " << vector_counter  ;
+    ////xqDebug() << "Checked packet : length = " << vector_counter  ;
     if ( ret == -1 ) {
-        qDebug() << "Checked failed..........................................................";
+        //xqDebug() << "Checked failed..........................................................";
     }
     switch(ret) {
 
     case 1:
-        //qDebug() << "case 1: ";
+        ////xqDebug() << "case 1: ";
         case_1(socket_buffer, array_length);
         break;
 
     case 2:
-        //qDebug() << "case 2: ";
+        ////xqDebug() << "case 2: ";
         case_2(socket_buffer, array_length, left_rom, &left_length);
         break;
 
     case 3:
-        //qDebug() << "case 3: ";
+        ////xqDebug() << "case 3: ";
         case_3(socket_buffer, array_length, left_rom, left_length);
         break;
 
     case 4:
-        //qDebug() << "case 4: ";
+        ////xqDebug() << "case 4: ";
         case_4(socket_buffer, array_length);
         break;
     }
@@ -186,11 +193,10 @@ qint8 NetClientThread::check_packet(quint8* array, quint64 length)
         if ( ((array[i] & 0xFF)  == 0xad) && (((array[i+1] & 0xFF) == 0xac)) ) {
             header_vector_table[vec_counter] = i;
             vec_counter ++;
-
         }
     }
     if (vec_counter > 9999) {
-        qDebug() << "@check_packet: over the length "<< vec_counter;
+        //xqDebug() << "@check_packet: over the length "<< vec_counter;
     }
     // case 1;
     if ((header_vector_table[0] == 0) && (length%ONE_PACKET_LENGTH == 0)) {
@@ -222,19 +228,17 @@ void NetClientThread::case_1(quint8 *buffer,  quint64 length, quint32 vector_cou
 void NetClientThread::case_1(quint8 *buffer,  quint64 length)
 {
 
-    //qDebug() << "do case 1";
+    //xqDebug() << "do case 1";
     qint64 count = 0;
     qint32 length_d = (qint32)length;
     qint32 pac_num = 8010;
     quint32 da,db,dc,dd,d_len;
     count = (length_d / 8010);
-    ////1qDebug() << "emit net data save to disk singal.";
-    if (isEnableSave == true) {
-        emit net_data_save_to_disk(buffer, length);
-    }
+    ////1//xqDebug() << "emit net data save to disk singal.";
+
 
     kcount ++;
-    //1qDebug() << "@case_1 : count is :" << count;
+    //1//xqDebug() << "@case_1 : count is :" << count;
     // plot data
     if (kcount % 12 == 0) {
         kcount = 0;
@@ -286,7 +290,7 @@ void NetClientThread::case_1(quint8 *buffer,  quint64 length)
             channel_data[1000 + i] = dc;
             channel_data[1500 + i] = dd;
         }
-        ////1qDebug() << "emit net data plot signal.";
+        ////1//xqDebug() << "emit net data plot signal.";
        emit net_data_plot(channel_data, 2000);
     }
 
@@ -294,76 +298,114 @@ void NetClientThread::case_1(quint8 *buffer,  quint64 length)
 }
 void NetClientThread::case_2(quint8 *socket_buffer, quint64 length, quint8 *left_buffer, quint64 *left_length)
 {
-    //qDebug() << "do case 2";
+    //xqDebug() << "do case 2";
     quint32 final_head_index = 0;
     // step 1: save left buffer data.
 
     for (quint64 i = length; i > 0; i --) {
-        if ( socket_buffer[i] == 0xAC && socket_buffer[i-1] == 0xAD ) {
-            final_head_index = i - 1;
+        if ( socket_buffer[i-1] == 0xAC && socket_buffer[i-2] == 0xAD ) {
+            final_head_index = i - 2;
             break;
         }
     }
-
-    *left_length = length - final_head_index + 1;
+    *left_length = length - final_head_index;
     // positive direction save.
     for (quint64 i = 0; i < *left_length; i ++) {
         *(left_buffer + i) = *(socket_buffer + final_head_index + i);
     }
 
     // step 2: save complete data packet.
-    //qDebug() << "join case 1";
+    //xqDebug() << "case 2 join case 1";
     case_1(left_buffer, final_head_index);
 }
 
 void NetClientThread::case_3(quint8 *socket_buffer, quint64 length, quint8 *right_buffer, quint64 right_length)
 {
-   // qDebug() << "do case 3";
+    //xqDebug() << "do case 3";
     quint64 first_header_index = 0;
     quint32 header_vector_table[100];
-    quint64 vector_count = 0;
+    quint64 header_number = 0;
     quint8 *unknown_buffer = new quint8[ONE_PACKET_LENGTH*100];
     quint32 unknown_length = 0;
+    quint32 surplus_len = 0;
+    quint32 refresh_len = 0;
+
+    quint8 *fresh_buffer = (quint8* )malloc(sizeof(quint8) * (100*ONE_PACKET_LENGTH + 1));
+    quint8 *a_full_packet_buffer = new quint8[ONE_PACKET_LENGTH*5];
+    // STEP1 : abstract the the data in front of the first head.
     memset(header_vector_table,0,100);
-    //1qDebug() << "case prosss";
     for (quint64 i = 0; i < length; i ++) {
         if ( (*(socket_buffer + i) == 0xAD) && (*(socket_buffer + i + 1) == 0xAC) ) {
-            first_header_index = i;
-            header_vector_table[vector_count++] = i;
+            header_vector_table[header_number] = i;
+            header_number ++;
         }
     }
-    qDebug() << "@case3:vector:" << vector_count;
-    quint8 *all_buffer = (quint8* )malloc(sizeof(quint8) * (100*ONE_PACKET_LENGTH + 1));
+    header_number -= 1;
+    memcpy(a_full_packet_buffer, right_buffer, right_length);
+    memcpy(a_full_packet_buffer, socket_buffer, header_vector_table[0]);
+    // now a full packet mix succuss, the length is 8010.
+    // save the a_full_packet_buffer.
+    case_1(a_full_packet_buffer, ONE_PACKET_LENGTH);
+
+    // STEP2 : give the surplus data to check.
+    refresh_len =  length - header_vector_table[0];
+    memcpy(fresh_buffer, socket_buffer + header_vector_table[0], refresh_len);
+    int ret = check_packet(fresh_buffer, refresh_len);
+
+    if (ret == 1) {
+        //xqDebug() << "case 3 join case 1";
+        case_1(fresh_buffer, refresh_len);
+    }else if( ret == 2 ) {
+        //xqDebug() << "case 3 join case 2";
+        case_2(fresh_buffer, refresh_len, left_rom, &left_length);
+    }else{
+        //xqDebug() << "You are wrong about case not 1 or 2 what else?";
+    }
+#if 0
+    // deal with last right surplus.
+    ////xqDebug() << "@case3:vector:" << vector_count;
 
     memcpy(all_buffer, right_buffer, right_length);
-    /*
-    for (quint64 i = 0; i < vector_count*ONE_PACKET_LENGTH; i ++) {
-        all_buffer[i] = socket_buffer[header_vector_table[0] + i];
+    memcpy(all_buffer + right_length, socket_buffer, length);
+    unknown_length = length + right_length;
+    memcpy(unknown_buffer, all_buffer, unknown_length);
+
+    memcpy(all_buffer + right_length, socket_buffer, header_vector_table[vector_count]);
+    finish_len = right_length + header_vector_table[vector_count];
+    // deal with right surplus
+    surplus_len = length - (header_vector_table[vector_count] + 1) - 1;
+
+    if ((surplus_len < ONE_PACKET_LENGTH - 2)) {
+        // the case 3 packet right data is not full.
+        memcpy(right_buffer, socket_buffer + (header_vector_table[vector_count]), surplus_len);
+    }else if (surplus_len == ONE_PACKET_LENGTH - 2){
+        memcpy(all_buffer + right_length + surplus_len, socket_buffer + header_vector_table[vector_count], ONE_PACKET_LENGTH);
+        finish_len += ONE_PACKET_LENGTH;
+    }else {
+        //xqDebug() << "@case 3: error no case;";
     }
-    */
-    memcpy(all_buffer + right_length, socket_buffer, first_header_index);
-    //qDebug() << "join case1!";
-    case_1(all_buffer, length);
-    unknown_length = length - first_header_index;
-    memcpy(unknown_buffer, socket_buffer + first_header_index, unknown_length);
+
+    ////xqDebug() << "join case1!";
+    case_1(all_buffer, finish_len);
 
     int ret = check_packet(unknown_buffer,unknown_length);
     if (ret == 1) {
-        qDebug() << "join case 1";
+        //xqDebug() << "join case 1";
         case_1(unknown_buffer,unknown_length);
     }else if( ret == 2 ) {
-        qDebug() << "join case 2";
+        //xqDebug() << "join case 2";
         case_2(unknown_buffer, unknown_length, left_rom, &left_length);
     }else{
-        qDebug() << "You are wrong about case not 1 or 2 what else?";
+        //xqDebug() << "You are wrong about case not 1 or 2 what else?";
     }
-    free(all_buffer);
-    delete unknown_buffer;
+#endif
+    free(a_full_packet_buffer);
+    delete fresh_buffer;
 }
 
 void NetClientThread::case_4(quint8 *socket_buffer, quint64 length)
 {
-    //qDebug() << "do case 4";
+    //xqDebug() << "do case 4";
     quint64 first_header_index = 0;
     quint8 *unknown_buffer = new quint8[ONE_PACKET_LENGTH*100];
     quint32 unknown_length = 0;
@@ -381,13 +423,13 @@ void NetClientThread::case_4(quint8 *socket_buffer, quint64 length)
 
     int ret = check_packet(unknown_buffer, unknown_length);
     if (ret == 1) {
-        //qDebug() << "join case 1";
+        //xqDebug() << "case 4 join case 1";
         case_1(unknown_buffer,unknown_length);
     }else if( ret == 2 ) {
-       // qDebug() << "join case 2";
+        //xqDebug() << "case 4 join case 2";
         case_2(unknown_buffer, unknown_length, left_rom, &left_length);
     }else{
-        qDebug() << "You are wrong about case not 1 or 2 what else?";
+        //xqDebug() << "You are wrong about case not 1 or 2 what else?";
     }
     free(all_buffer);
     delete unknown_buffer;

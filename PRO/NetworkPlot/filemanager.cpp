@@ -51,7 +51,7 @@ FileManager::FileManager(): file(new QFile),datetime(new QDateTime){
         dir_flag = false;
         prewriteexame = false;
         currenttime = "20181019220522";
-        qFileDirPath = "../data/";
+        qFileDirPath = "/usr/data/";
 }
 
 
@@ -216,7 +216,6 @@ void FileManager::fileClose()
 {
     file->close();
     prewriteexame = false;
-
 
 }
 void FileManager::file_size()
