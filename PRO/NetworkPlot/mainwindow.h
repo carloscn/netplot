@@ -80,8 +80,13 @@ private slots:
 
     void on_net_file_size(double);
 
+    void on_net_lic_check_failed();
 
     void on_pushButton_clear_clicked();
+
+    void on_actionexit_triggered();
+
+    void on_actionclear_all_triggered();
 
 signals:
 

@@ -73,6 +73,7 @@ MainWindow::MainWindow(QWidget *parent) :
     is_start_read_socket = false;
     on_pushButton_close_remote_clicked();
     net_socket->enable_socket_read(is_start_read_socket);
+    ui->lineEdit_host_ip->setText( this->get_local_ip() );
     connect( (QObject*)this->net_socket, SIGNAL( data_prepared(float*,uint) ), this, SLOT( on_double_data_prepared(float*,uint) ));
     connect( (QObject*)this->net_socket, SIGNAL(data_plot(double*)),this,SLOT(on_plot_picture(double*)));
     connect( (QObject*)this->net_socket, SIGNAL(net_data_ready(char*,quint32)),this,SLOT(on_net_data_read(char*,quint32)));
@@ -82,8 +83,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect( (QObject*)this->net_socket, SIGNAL(net_add_doc_list(QString) ),this ,SLOT(on_net_add_doc_list(QString)));
     connect( this, SIGNAL(net_enable_save(bool) ),(QObject*)this->net_socket ,SLOT(on_net_enable_save(bool)));
     connect( (QObject*)this->net_socket, SIGNAL(net_file_size(double)), this, SLOT(on_net_file_size(double)));
+    connect( (QObject*)this->net_socket, SIGNAL(net_lic_check_failed()), this, SLOT(on_net_lic_check_failed()) );
 
-    ui->lineEdit_host_ip->setText( this->get_local_ip() );
     /*
      * ui state.
      **/
@@ -116,31 +117,21 @@ MainWindow::MainWindow(QWidget *parent) :
     file_count = 0;
     c_bar = new QProgressBar();
     ui->gridLayout->addWidget(table_widget);
-    /*
-    QProcess process;
-    process.start("free -m");
-    process.readLine();
-    QString str = process.readLine();
-    str.replace("\n","");
-    str.replace(QRegExp("( ){1,}")," ");
-    auto lst = str.split(" ");
-    double sum = lst[1].toDouble();
-    double free = lst[6].toDouble();
-    ui->progressBar->setValue((int)(free/sum));
-    */
+
     /*
     * Init qwt plugin.
     */
     init_qwt();
+
 }
 
 MainWindow::~MainWindow()
 {
     on_pushButton_disconnect_clicked();
-    this->net_socket->stop();
-    free(this->net_socket);
+    delete this->net_socket;
     emit net_close_file();
     delete ui;
+    qApp->quit();
 }
 
 void MainWindow::init_qwt()
@@ -164,6 +155,8 @@ void MainWindow::init_qwt()
     ui->qwt_fft->setAxisTitle(2,"Hz");
     ui->qwt_ch->insertLegend(new QwtLegend(), QwtPlot::TopLegend);
     ui->qwt_fft->insertLegend(new QwtLegend(), QwtPlot::TopLegend);
+    ui->qwt_ch->setStyleSheet("background-color:rgb(255,255,255)");
+    ui->qwt_fft->setStyleSheet("background-color:rgb(255,255,255)");
     this->qwt_curve1_ch1 = new QwtPlotCurve("CH1");
     this->qwt_curve1_ch2 = new QwtPlotCurve("CH2");
     this->qwt_curve1_ch3 = new QwtPlotCurve("CH3");
@@ -172,12 +165,12 @@ void MainWindow::init_qwt()
     this->qwt_curve1_ch2_fft = new QwtPlotCurve("CH2 FFT");
     this->qwt_curve1_ch3_fft = new QwtPlotCurve("CH3 FFT");
     this->qwt_curve1_ch4_fft = new QwtPlotCurve("CH4 FFT");
-    this->qwt_curve1_ch1->setPen(QColor(75,0,130),2,Qt::SolidLine);
-    this->qwt_curve1_ch1_fft->setPen(QColor(75,0,130),2,Qt::SolidLine);
-    this->qwt_curve1_ch2->setPen(QColor(124,205,124),2,Qt::SolidLine);
-    this->qwt_curve1_ch2_fft->setPen(QColor(124,205,124),2,Qt::SolidLine);
-    this->qwt_curve1_ch3->setPen(QColor(220,20,60),2,Qt::SolidLine);
-    this->qwt_curve1_ch3_fft->setPen(QColor(220,20,60),2,Qt::SolidLine);
+    this->qwt_curve1_ch1->setPen(QColor(255,0,0),2,Qt::SolidLine);
+    this->qwt_curve1_ch1_fft->setPen(QColor(255,0,0),2,Qt::SolidLine);
+    this->qwt_curve1_ch2->setPen(QColor(0,255,0),2,Qt::SolidLine);
+    this->qwt_curve1_ch2_fft->setPen(QColor(0,255,0),2,Qt::SolidLine);
+    this->qwt_curve1_ch3->setPen(QColor(0,191,255),2,Qt::SolidLine);
+    this->qwt_curve1_ch3_fft->setPen(QColor(0,191,255),2,Qt::SolidLine);
     this->qwt_curve1_ch4->setPen(QColor(0,0,0),2,Qt::SolidLine);
     this->qwt_curve1_ch4_fft->setPen(QColor(0,0,0),2,Qt::SolidLine);
     this->qwt_curve1_ch1->setBrush(brush2);
@@ -204,24 +197,24 @@ void MainWindow::init_qwt()
     this->qwt_curve1_ch2_fft->attach(ui->qwt_fft);
     this->qwt_curve1_ch3_fft->attach(ui->qwt_fft);
     this->qwt_curve1_ch4_fft->attach(ui->qwt_fft);
-    grid_ch->setPen(QColor(220,220,220),1);
-    grid_fft->setPen(QColor(220,220,220),1);
+    grid_ch->setPen(QColor(220,220,220),1, Qt::DashLine);
+    grid_fft->setPen(QColor(220,220,220),1,Qt::DashLine);
     grid_ch->attach(ui->qwt_ch);
-    grid_fft->attach(ui->qwt_ch);
+    grid_fft->attach(ui->qwt_fft);
     for( int i = 0; i < N; i ++ )
         sin_table[i] = 50* sin(2*M_PI*(5.0/N)*i) + 20 * cos(2*M_PI*(10.0/N)*i) + 60 * cos(2*M_PI*(15.0/N)*i);
     qwt_plot_wave(CHANNEL_0,sin_table,N);
     qwt_plot_fft(CHANNEL_0, sin_table, N);
     for( int i = 0; i < N; i ++ )
-        sin_table[i] = 50* sin(2*M_PI*(2/N)*i + (M_PI)/4.0);
+        sin_table[i] = 50* sin(2*M_PI*(5.0/N)*i + (M_PI)/4.0);
     qwt_plot_wave(CHANNEL_1,sin_table,N);
     qwt_plot_fft(CHANNEL_1, sin_table, N);
     for( int i = 0; i < N; i ++ )
-        sin_table[i] = 50* sin(2*M_PI*(2/N)*i + (2*M_PI)/4.0);
+        sin_table[i] = 50* sin(2*M_PI*(5.0/N)*i + (2*M_PI)/4.0);
     qwt_plot_wave(CHANNEL_2,sin_table,N);
     qwt_plot_fft(CHANNEL_2, sin_table, N);
     for( int i = 0; i < N; i ++ )
-        sin_table[i] = 50* sin(2*M_PI*(2/N)*i + (3*M_PI)/4.0);
+        sin_table[i] = 50* sin(2*M_PI*(5.0/N)*i + (3*M_PI)/4.0);
     qwt_plot_wave(CHANNEL_3,sin_table,N);
     qwt_plot_fft(CHANNEL_3, sin_table, N);
 
@@ -259,12 +252,16 @@ void MainWindow::on_pushButton_set_clicked()
         ui->pushButton_fs_set->setEnabled(true);
         ui->pushButton_gain_set->setEnabled(true);
         ui->pushButton_sample->setEnabled(true);
+        on_pushButton_gain_set_clicked();
+        on_pushButton_freq_set_clicked();
     }
 }
 
 void MainWindow::on_pushButton_disconnect_clicked()
 {
     qDebug() << "listener has been closed!\n";
+    on_pushButton_close_sample_clicked();
+    emit net_enable_save(false);
     this->net_socket->set_disconnet();
     ui->pushButton_disconnect->setEnabled(false);
     ui->pushButton_set->setEnabled(true);
@@ -574,7 +571,7 @@ void MainWindow::qwt_plot_fft(int channel, double *rom, int NP)
     fftwf_destroy_plan(p);
     fftwf_cleanup();
     memset(draw_buffer, 0, NP);
-    for( quint64 i = 0; i < NP/2-1 ; i++ ){
+    for( quint64 i = 0; i < 120 ; i++ ){
         QPointF point;
         current_fft_value = sqrt(out1_c[i][0] * out1_c[i][0] + out1_c[i][1] * out1_c[i][1]);
         point.setX((210000/500)*i);
@@ -661,4 +658,26 @@ void MainWindow::on_net_file_size(double percent)
 void MainWindow::on_pushButton_clear_clicked()
 {
     ui->textBrowser->clear();
+}
+
+void MainWindow::on_net_lic_check_failed()
+{
+    QMessageBox::warning(this, "License Warning", "The license has been checked failed, Please fetch a new lic from admin. And some functions will work out unless a new valid lic checked!");
+}
+
+void MainWindow::on_actionexit_triggered()
+{
+    on_pushButton_disconnect_clicked();
+    delete this->net_socket;
+    emit net_close_file();
+    delete ui;
+    qApp->quit();
+}
+
+void MainWindow::on_actionclear_all_triggered()
+{
+    qDebug() << "clear all";
+    //QProcess process;
+    //process.execute("sudo rm -rf /usr/data/*");
+    system("rm -rf /usr/data/*");
 }

@@ -1,7 +1,7 @@
 #include "netclientthread.h"
 
 #define             RING_BUFFER_SIZE    19200ul
-
+#define             pow(x) x*x
 NetClientThread::NetClientThread( QString server_ip, int server_port )
 {
     socket = new QTcpSocket();
@@ -19,6 +19,55 @@ NetClientThread::NetClientThread( QString server_ip, int server_port )
     left_length = 0;
     array_rom.clear();
 
+
+    char *key_str = new char[18];
+    QString file_key;
+    QString mac_key;
+    QFile *key_file = new QFile("./lic/key");
+    if (key_file->size() > 1) {
+        key_file->open(QIODevice::ReadOnly | QIODevice::Text);
+        key_file->readLine(key_str, 18);
+        key_file->close();
+        file_key = QString(QLatin1String(key_str));
+        QString key_data = file_key.mid(10,6);
+        mac_key = file_key.mid(0,10);
+        quint64 date = key_data.toUInt();
+        QString currentTime = QDateTime::currentDateTime().toString("yyyyMM");
+        qDebug() << currentTime;
+        if ( currentTime.toUInt() <= date - 123456 && currentTime.toUInt() > 201809 ) {
+            qDebug() << "Using free license. check ok. LIC TO " << date - 123456 ;
+            key_check = true;
+        }else {
+            qDebug() << "Free license over the time. check mac license.";
+            key_check = false;
+            QList<QString> mac_id = gethostMac().split(':');
+            QString key = "";
+            uint16_t q[6];
+            uint16_t r[6];
+            for (quint8 i = 0; i < 6; i ++) {
+                q[i] = mac_id.at(i).toUInt();
+            }
+            for (quint8 i = 0; i < 6; i++ ) {
+                r[i] = (pow(q[i]) + 9 - i) & 0xFF;
+                key.append(QString::number(r[i]));
+            }
+            if (!key.compare(mac_key)) {
+
+                key_check = true;
+            }else {
+                key_check = false;
+            }
+
+        }
+
+    }else{
+        key_check = false;
+    }
+    if (key_check) {
+        qDebug() << "lic check key ok";
+    }else {
+        qDebug() << "sorry, lic check key failed, please find admin lifimlt fetch a new lic.";
+    }
     connect( this, SIGNAL(net_data_save_to_disk(quint8*,quint64) ),(QObject*)this->file_ctr ,SLOT(on_save_data_to_disk(quint8*,quint64)));
     connect( (QObject*)this->file_ctr, SIGNAL(file_manager_add_file_name(QString)), this, SLOT(on_file_manager_add_doc_list(QString)) );
     connect( (QObject*)this->file_ctr, SIGNAL(file_manager_file_size(double)), this, SLOT(on_file_manager_file_size(double)));
@@ -26,6 +75,10 @@ NetClientThread::NetClientThread( QString server_ip, int server_port )
 
 bool NetClientThread::set_connect(QString server_ip, int server_port)
 {
+    if (!key_check) {
+        emit net_lic_check_failed();
+        return false;
+    }
     //1//xqDebug() << "netclientread@set_connect() >: seting the connection...." ;
     socket->connectToHost( server_ip, server_port , QIODevice::ReadWrite );
 
@@ -120,7 +173,12 @@ void NetClientThread::run()
 }
 void NetClientThread::on_read_message()
 {
-    if (is_enable_socket_read == false) {
+    if (key_check == false) {
+        socket->readAll();
+        socket->flush();
+        return;
+    }
+    if (is_enable_socket_read == false ) {
         socket->readAll();
         socket->flush();
         return;
@@ -316,7 +374,7 @@ void NetClientThread::case_2(quint8 *socket_buffer, quint64 length, quint8 *left
 
     // step 2: save complete data packet.
     //xqDebug() << "case 2 join case 1";
-    case_1(left_buffer, final_head_index);
+    //case_1(left_buffer, final_head_index);
 }
 
 void NetClientThread::case_3(quint8 *socket_buffer, quint64 length, quint8 *right_buffer, quint64 right_length)
@@ -345,7 +403,7 @@ void NetClientThread::case_3(quint8 *socket_buffer, quint64 length, quint8 *righ
     memcpy(a_full_packet_buffer, socket_buffer, header_vector_table[0]);
     // now a full packet mix succuss, the length is 8010.
     // save the a_full_packet_buffer.
-    case_1(a_full_packet_buffer, ONE_PACKET_LENGTH);
+    //case_1(a_full_packet_buffer, ONE_PACKET_LENGTH);
 
     // STEP2 : give the surplus data to check.
     refresh_len =  length - header_vector_table[0];
@@ -354,10 +412,10 @@ void NetClientThread::case_3(quint8 *socket_buffer, quint64 length, quint8 *righ
 
     if (ret == 1) {
         //xqDebug() << "case 3 join case 1";
-        case_1(fresh_buffer, refresh_len);
+        //case_1(fresh_buffer, refresh_len);
     }else if( ret == 2 ) {
         //xqDebug() << "case 3 join case 2";
-        case_2(fresh_buffer, refresh_len, left_rom, &left_length);
+        //case_2(fresh_buffer, refresh_len, left_rom, &left_length);
     }else{
         //xqDebug() << "You are wrong about case not 1 or 2 what else?";
     }
@@ -424,10 +482,10 @@ void NetClientThread::case_4(quint8 *socket_buffer, quint64 length)
     int ret = check_packet(unknown_buffer, unknown_length);
     if (ret == 1) {
         //xqDebug() << "case 4 join case 1";
-        case_1(unknown_buffer,unknown_length);
+        //case_1(unknown_buffer,unknown_length);
     }else if( ret == 2 ) {
         //xqDebug() << "case 4 join case 2";
-        case_2(unknown_buffer, unknown_length, left_rom, &left_length);
+        //case_2(unknown_buffer, unknown_length, left_rom, &left_length);
     }else{
         //xqDebug() << "You are wrong about case not 1 or 2 what else?";
     }
@@ -473,4 +531,25 @@ void NetClientThread::stop()
 void NetClientThread::enable_socket_read(bool state)
 {
     is_enable_socket_read = state;
+}
+
+QString NetClientThread::gethostMac()
+{
+    QList<QNetworkInterface> nets = QNetworkInterface::allInterfaces();
+    int nCnt = nets.count();
+    QString strMacAddr = "";
+    for(int i = 0; i < nCnt; i ++) {
+        if(nets[i].flags().testFlag(QNetworkInterface::IsUp) && nets[i].flags().testFlag(QNetworkInterface::IsRunning)
+                && !nets[i].flags().testFlag(QNetworkInterface::IsLoopBack))
+        {
+            strMacAddr = nets[i].hardwareAddress();
+            break;
+        }
+    }
+    return strMacAddr;
+
+}
+NetClientThread::~NetClientThread()
+{
+    delete this->file_ctr;
 }

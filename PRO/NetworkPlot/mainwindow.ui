@@ -569,6 +569,8 @@
     <property name="title">
      <string>文件</string>
     </property>
+    <addaction name="actionexit"/>
+    <addaction name="actionclear_all"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -587,6 +589,16 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionexit">
+   <property name="text">
+    <string>exit</string>
+   </property>
+  </action>
+  <action name="actionclear_all">
+   <property name="text">
+    <string>clear all</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>

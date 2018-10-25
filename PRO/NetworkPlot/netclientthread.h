@@ -43,6 +43,8 @@ class NetClientThread:public QThread
     Q_OBJECT
 public:
     NetClientThread( QString server_ip, int server_port );
+    ~NetClientThread();
+
     void stop();
     bool set_connect( QString server_ip, int server_port );
     void set_disconnet();
@@ -81,6 +83,8 @@ signals:
 
     void net_file_size(double);
 
+    void net_lic_check_failed();
+
 private :
     struct data_packet_t *data_packet;
     QMutex *mutex;
@@ -110,6 +114,8 @@ private :
     quint32 channel_data[2000];
     bool is_enable_socket_read;
 
+    bool key_check;
+
 private:
 
     qint8 check_packet(quint8* array, quint64 length);
@@ -118,6 +124,7 @@ private:
     void case_2(quint8* buffer, quint64 length, quint8 *left_buffer, quint64 *left_length);
     void case_3(quint8 *socket_buffer, quint64 length, quint8 *right_buffer, quint64 right_length);
     void case_4(quint8* buffer, quint64 length);
+    QString gethostMac();
 
 
 };
