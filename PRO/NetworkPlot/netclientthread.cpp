@@ -20,49 +20,64 @@ NetClientThread::NetClientThread( QString server_ip, int server_port )
     array_rom.clear();
 
 
-    char *key_str = new char[18];
+    char *key_str = new char[40];
     QString file_key;
     QString mac_key;
     QFile *key_file = new QFile("./lic/key");
+    bool time_checked = false;
+    bool mac_checked = false;
     if (key_file->size() > 1) {
         key_file->open(QIODevice::ReadOnly | QIODevice::Text);
-        key_file->readLine(key_str, 18);
+        key_file->readLine(key_str, 40);
         key_file->close();
         file_key = QString(QLatin1String(key_str));
-        QString key_data = file_key.mid(10,6);
-        mac_key = file_key.mid(0,10);
+        qDebug() << file_key;
+        QString key_data = file_key.mid(0,6);
+        mac_key = file_key.mid(6,40);
+        qDebug() << "mac key:" << mac_key;
         quint64 date = key_data.toUInt();
         QString currentTime = QDateTime::currentDateTime().toString("yyyyMM");
-        qDebug() << currentTime;
+        qDebug() << key_data.toUInt() - 123456;
         if ( currentTime.toUInt() <= date - 123456 && currentTime.toUInt() > 201809 ) {
-            qDebug() << "Using free license. check ok. LIC TO " << date - 123456 ;
-            key_check = true;
+            qDebug() << "Date check ok. LIC TO " << date - 123456 ;
+            time_checked = true;
+
         }else {
-            qDebug() << "Free license over the time. check mac license.";
-            key_check = false;
-            QList<QString> mac_id = gethostMac().split(':');
-            QString key = "";
-            uint16_t q[6];
-            uint16_t r[6];
-            for (quint8 i = 0; i < 6; i ++) {
-                q[i] = mac_id.at(i).toUInt();
-            }
-            for (quint8 i = 0; i < 6; i++ ) {
-                r[i] = (pow(q[i]) + 9 - i) & 0xFF;
-                key.append(QString::number(r[i]));
-            }
-            if (!key.compare(mac_key)) {
-
-                key_check = true;
-            }else {
-                key_check = false;
-            }
-
+            qDebug() << "Date check over the time.";
+            time_checked = false;
         }
 
+        QList<QString> mac_id = gethostMac().split(':');
+        QString macAddr;
+        QString key = "";
+        for (quint8 i = 0; i < 6; i ++) {
+            macAddr.append(mac_id.at(i));
+        }
+
+        for (quint8 i = 0; i < 12; i ++) {
+            key.append(QString::number(macAddr.at(i).toLatin1()));
+        }
+        key.append('\n');
+        qDebug() << key;
+
+        if (!key.compare(mac_key)) {
+            qDebug() << "mac check ok!";
+            mac_checked = true;
+        }else {
+            qDebug() << "mac check failed";
+            mac_checked = false;
+        }
     }else{
+        qDebug() << "invalid key doc;";
         key_check = false;
     }
+
+    if ( mac_checked && time_checked ) {
+        key_check = true;
+    }else {
+        key_check = false;
+    }
+
     if (key_check) {
         qDebug() << "lic check key ok";
     }else {
