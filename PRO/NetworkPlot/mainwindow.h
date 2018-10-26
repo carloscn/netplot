@@ -129,6 +129,7 @@ private:
     quint32 file_count;
     QProgressBar *c_bar;
     bool is_start_read_socket;
+
 };
 
 #endif // MAINWINDOW_H

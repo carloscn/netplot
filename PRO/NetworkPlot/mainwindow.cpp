@@ -73,7 +73,7 @@ MainWindow::MainWindow(QWidget *parent) :
     is_start_read_socket = false;
     on_pushButton_close_remote_clicked();
     net_socket->enable_socket_read(is_start_read_socket);
-    ui->lineEdit_host_ip->setText( this->get_local_ip() );
+
     connect( (QObject*)this->net_socket, SIGNAL( data_prepared(float*,uint) ), this, SLOT( on_double_data_prepared(float*,uint) ));
     connect( (QObject*)this->net_socket, SIGNAL(data_plot(double*)),this,SLOT(on_plot_picture(double*)));
     connect( (QObject*)this->net_socket, SIGNAL(net_data_ready(char*,quint32)),this,SLOT(on_net_data_read(char*,quint32)));
@@ -88,6 +88,7 @@ MainWindow::MainWindow(QWidget *parent) :
     /*
      * ui state.
      **/
+    qDebug() << "ui init!@";
     ui->pushButton_disconnect->setEnabled(false);
     ui->pushButton_set->setEnabled(true);
     ui->pushButton_close_remote->setEnabled(false);
@@ -103,6 +104,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->progressBar->setValue(0);
     isSaveEnable = true;
     on_pushButton_close_test_clicked();
+    qDebug() << "table widget init!";
     table_widget = new QTableWidget();
     table_widget->setRowCount(1000);
     table_widget->setColumnCount(2);
@@ -110,17 +112,17 @@ MainWindow::MainWindow(QWidget *parent) :
     table_widget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     table_widget->verticalHeader()->hide();
     for (int i = 0; i < 1000; i ++) {
-        //table_widget->setColumnWidth(i,80);
         table_widget->setRowHeight(i,20);
     }
     table_widget->horizontalHeader()->setStyleSheet("QHeaderView::section{background-color:rgb(40,143,218);font:10pt;}");
     file_count = 0;
     c_bar = new QProgressBar();
     ui->gridLayout->addWidget(table_widget);
-
+    ui->lineEdit_host_ip->setText( this->get_local_ip() );
     /*
     * Init qwt plugin.
     */
+    qDebug() << "qwt init!";
     init_qwt();
 
 }
@@ -217,6 +219,7 @@ void MainWindow::init_qwt()
         sin_table[i] = 50* sin(2*M_PI*(5.0/N)*i + (3*M_PI)/4.0);
     qwt_plot_wave(CHANNEL_3,sin_table,N);
     qwt_plot_fft(CHANNEL_3, sin_table, N);
+    qDebug() << "qwt init finish!";
 
 }
 QString MainWindow::get_doc_name()
@@ -558,7 +561,7 @@ void MainWindow::qwt_plot_fft(int channel, double *rom, int NP)
     fftwf_plan p;
     fftwf_complex  *in1_c = (fftwf_complex*)fftwf_malloc(sizeof(fftwf_complex)* NP);;
     fftwf_complex  *out1_c = (fftwf_complex *)fftwf_malloc(sizeof(fftwf_complex) * NP);
-    double* draw_buffer = (double*)malloc(sizeof(double)*NP);
+
     QVector<QPointF> vector;
     double current_fft_value;
 
@@ -568,9 +571,6 @@ void MainWindow::qwt_plot_fft(int channel, double *rom, int NP)
     }
     p = fftwf_plan_dft_1d(NP, in1_c, out1_c, FFTW_FORWARD, FFTW_ESTIMATE);
     fftwf_execute(p);
-    fftwf_destroy_plan(p);
-    fftwf_cleanup();
-    memset(draw_buffer, 0, NP);
     for( quint64 i = 0; i < 120 ; i++ ){
         QPointF point;
         current_fft_value = sqrt(out1_c[i][0] * out1_c[i][0] + out1_c[i][1] * out1_c[i][1]);
@@ -581,7 +581,13 @@ void MainWindow::qwt_plot_fft(int channel, double *rom, int NP)
             point.setY(current_fft_value);
         vector.append(point);
     }
+    fftwf_free(in1_c);
+    fftwf_free(out1_c);
+    fftwf_destroy_plan(p);
+    fftwf_cleanup();
+
     QwtPointSeriesData* series = new QwtPointSeriesData(vector);
+
     if (channel == CHANNEL_0) {
         qwt_curve1_ch1_fft->setData(series);
     } else if (channel == CHANNEL_1) {
@@ -593,6 +599,7 @@ void MainWindow::qwt_plot_fft(int channel, double *rom, int NP)
     }
     ui->qwt_fft->replot();
     ui->qwt_fft->show();
+
 }
 void MainWindow::qwt_plot_wave(unsigned int channel, double *data, unsigned long length)
 {
@@ -627,6 +634,7 @@ void MainWindow::qwt_plot_wave(unsigned int channel, double *data, unsigned long
     }
     ui->qwt_ch->replot();
     ui->qwt_ch->show();
+
 }
 void MainWindow::on_net_add_doc_list(QString filename)
 {

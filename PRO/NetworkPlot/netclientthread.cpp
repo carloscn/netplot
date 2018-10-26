@@ -4,6 +4,7 @@
 #define             pow(x) x*x
 NetClientThread::NetClientThread( QString server_ip, int server_port )
 {
+
     socket = new QTcpSocket();
     server = new QTcpServer();
     data_packet = (struct data_packet_t*)malloc(sizeof(struct data_packet_t));
@@ -86,6 +87,9 @@ NetClientThread::NetClientThread( QString server_ip, int server_port )
     connect( this, SIGNAL(net_data_save_to_disk(quint8*,quint64) ),(QObject*)this->file_ctr ,SLOT(on_save_data_to_disk(quint8*,quint64)));
     connect( (QObject*)this->file_ctr, SIGNAL(file_manager_add_file_name(QString)), this, SLOT(on_file_manager_add_doc_list(QString)) );
     connect( (QObject*)this->file_ctr, SIGNAL(file_manager_file_size(double)), this, SLOT(on_file_manager_file_size(double)));
+    //delete key_file;
+    //delete key_str;
+
 }
 
 bool NetClientThread::set_connect(QString server_ip, int server_port)
@@ -472,7 +476,8 @@ void NetClientThread::case_3(quint8 *socket_buffer, quint64 length, quint8 *righ
         //xqDebug() << "You are wrong about case not 1 or 2 what else?";
     }
 #endif
-    free(a_full_packet_buffer);
+    delete a_full_packet_buffer;
+    free(unknown_buffer);
     delete fresh_buffer;
 }
 
