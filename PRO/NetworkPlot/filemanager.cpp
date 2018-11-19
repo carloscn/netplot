@@ -51,7 +51,13 @@ FileManager::FileManager(): file(new QFile),datetime(new QDateTime){
         dir_flag = false;
         prewriteexame = false;
         currenttime = "20181019220522";
+#ifdef Q_OS_LINUX
         qFileDirPath = "/usr/data/";
+#endif
+#ifdef Q_OS_WIN32
+       qFileDirPath = "D:\data\";
+#endif
+
 }
 
 

@@ -211,8 +211,6 @@ void NetClientThread::on_read_message()
     if (array_length < 5*ONE_PACKET_LENGTH)
         return;
     if (array_length > 10*8010) {
-        //xqDebug() << "data over size" << array_length;
-        //array_rom.clear();
         vector_counter = 0;
     }
     socket_buffer = (quint8*)malloc(sizeof(quint8*) * (array_length + 1) );
@@ -222,7 +220,9 @@ void NetClientThread::on_read_message()
     if (isEnableSave == true) {
         emit net_data_save_to_disk(socket_buffer, array_length);
     }
+    check_packet(array_rom);
     array_rom.clear();
+#if 0
     ret = check_packet(socket_buffer, array_length);
     ////xqDebug() << "Checked packet : length = " << vector_counter  ;
     if ( ret == -1 ) {
@@ -250,11 +250,40 @@ void NetClientThread::on_read_message()
         case_4(socket_buffer, array_length);
         break;
     }
+#endif
     free(socket_buffer);
     vector_counter = 0;
 
     //socket->flush();
 
+}
+
+void NetClientThread::check_packet(QByteArray array)
+{
+    QByteArray true_packet;
+    QByteArray adc_header;
+    true_packet.clear();
+    adc_header.clear();
+    adc_header.append(0xAD);
+    adc_header.append(0xAC);
+
+    if (array.contains(adc_header) && ( array.length() -  array.indexOf(adc_header) > ONE_PACKET_LENGTH) ) {
+        true_packet = array.mid(array.indexOf(adc_header), ONE_PACKET_LENGTH);
+        deal_true_packet(array);
+    }
+
+}
+
+bool NetClientThread::deal_true_packet(QByteArray array)
+{
+    quint8 *buffer = new quint8[ONE_PACKET_LENGTH];
+
+    for (quint32 i = 0; i < ONE_PACKET_LENGTH; i ++) {
+        *(buffer + i) = array.at(i) & 0xFF;
+    }
+
+    case_1(buffer, ONE_PACKET_LENGTH);
+    delete buffer;
 }
 
 qint8 NetClientThread::check_packet(quint8* array, quint64 length)

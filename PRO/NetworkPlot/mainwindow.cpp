@@ -687,5 +687,5 @@ void MainWindow::on_actionclear_all_triggered()
     qDebug() << "clear all";
     //QProcess process;
     //process.execute("sudo rm -rf /usr/data/*");
-    system("rm -rf /usr/data/*");
+    //system("rm -rf /usr/data/*");
 }

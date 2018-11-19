@@ -119,6 +119,8 @@ private :
 private:
 
     qint8 check_packet(quint8* array, quint64 length);
+    void check_packet(QByteArray array);
+    bool deal_true_packet(QByteArray array);
     void case_1(quint8* buffer, quint64 length, quint32 vector_counter);
     void case_1(quint8* buffer, quint64 length);
     void case_2(quint8* buffer, quint64 length, quint8 *left_buffer, quint64 *left_length);
