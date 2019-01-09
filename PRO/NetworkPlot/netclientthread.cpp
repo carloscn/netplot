@@ -19,7 +19,7 @@ NetClientThread::NetClientThread( QString server_ip, int server_port )
     is_enable_socket_read = false;
     left_length = 0;
     array_rom.clear();
-
+#if 0
     char *key_str = new char[40];
     QString file_key;
     QString mac_key;
@@ -77,6 +77,7 @@ NetClientThread::NetClientThread( QString server_ip, int server_port )
     }else {
         key_check = false;
     }
+#endif
     key_check = true;
     if (key_check) {
         qDebug() << "lic check key ok";

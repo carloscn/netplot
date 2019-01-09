@@ -21,12 +21,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+unix {
+    INCLUDEPATH += /usr/local/qwt-6.1.3/include
+    INCLUDEPATH += /usr/local/fftw/include
+    LIBS += -L"/usr/local/qwt-6.1.3/lib/" -lqwt
+    LIBS += "/usr/local/fftw/lib/libfftw3f.a"
+}
 
-INCLUDEPATH += /usr/local/qwt-6.1.3/include
-INCLUDEPATH += /usr/local/fftw/include
-LIBS += -L"/usr/local/qwt-6.1.3/lib/" -lqwt
-LIBS += "/usr/local/fftw/lib/libfftw3f.a"
-
+win32 {
+    INCLUDEPATH += C:\Qwt-6.1.3\include
+    INCLUDEPATH += C:\fftw
+    LIBS += -L"C:\Qwt-6.1.3\lib" -lqwt
+    LIBS += "C:\fftw\libfftw3f-3.dll"
+}
 SOURCES += \
         main.cpp \
         mainwindow.cpp \

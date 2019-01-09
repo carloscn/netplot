@@ -29,7 +29,12 @@
 #include <QProgressBar>
 #include <QTableWidget>
 #include <QDateTime>
+#if defined(Q_OS_LINUX)
 #include "fftw3.h"
+#elif defined(Q_OS_WIN32)
+#include "fftw3.h"
+#endif
+
 #include "da_dialog.h"
 #define         CHANNEL_0           0
 #define         CHANNEL_1           1

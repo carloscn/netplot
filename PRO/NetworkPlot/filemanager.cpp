@@ -55,7 +55,7 @@ FileManager::FileManager(): file(new QFile),datetime(new QDateTime){
         qFileDirPath = "/usr/data/";
 #endif
 #ifdef Q_OS_WIN32
-       qFileDirPath = "D:\data\";
+       qFileDirPath = "D:/data/";
 #endif
 
 }
