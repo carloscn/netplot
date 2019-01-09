@@ -30,6 +30,7 @@
 #include <QTableWidget>
 #include <QDateTime>
 #include "fftw3.h"
+#include "da_dialog.h"
 #define         CHANNEL_0           0
 #define         CHANNEL_1           1
 #define         CHANNEL_2           2
@@ -88,6 +89,20 @@ private slots:
 
     void on_actionclear_all_triggered();
 
+    void on_actionDA_Back_triggered();
+
+    void on_horizontalSlider_do_valueChanged(int value);
+
+    void on_da_trans_packet(QByteArray);
+
+    void on_pushButton_da_start_clicked();
+
+    void on_pushButton_da_clear_buffer_clicked();
+
+    void on_pushButton_da_stop_clicked();
+
+    void on_pushButton_da_reback_clicked();
+
 signals:
 
     void net_close_file();
@@ -100,6 +115,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    da_dialog *da_dialog_w;
     bool isSaveEnable;
     QDateTime current_time;
     quint32 plot_count;
@@ -129,6 +145,9 @@ private:
     quint32 file_count;
     QProgressBar *c_bar;
     bool is_start_read_socket;
+
+    QString current_daback_file_name;
+
 
 };
 

@@ -125,6 +125,7 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug() << "qwt init!";
     init_qwt();
 
+
 }
 
 MainWindow::~MainWindow()
@@ -397,15 +398,15 @@ void MainWindow::on_pushButton_gain_set_clicked()
     gain1 = lineStr1.toUInt();
     gain2 = lineStr2.toUInt();
 
-    if (gain1 > 100) {
-        gain1 = 100;
-        QMessageBox::warning(this, "Warning", "设置失败，一级增益最大值为40");
+    if (gain1 > 99) {
+        gain1 = 99;
+        QMessageBox::warning(this, "Warning", "设置失败，一级增益最大值为99");
         return;
     }
 
-    if (gain2 > 100) {
-        gain2 = 100;
-        QMessageBox::warning(this, "Warning", "设置失败，二级增益最大值为40");
+    if (gain2 > 49) {
+        gain2 = 49;
+        QMessageBox::warning(this, "Warning", "设置失败，二级增益最大值为49");
         return;
     }
 
@@ -688,4 +689,118 @@ void MainWindow::on_actionclear_all_triggered()
     //QProcess process;
     //process.execute("sudo rm -rf /usr/data/*");
     //system("rm -rf /usr/data/*");
+}
+
+void MainWindow::on_actionDA_Back_triggered()
+{
+    if (!net_socket->is_network_setup()) {
+        QMessageBox::warning(this,"Info","Please connect to the network advance.");
+        return;
+    }
+    da_dialog_w = new da_dialog(this);
+    connect( (QObject*)da_dialog_w, SIGNAL( da_trans_packet(QByteArray) ),  \
+                                        this,       \
+                                        SLOT( on_da_trans_packet(QByteArray)));
+    da_dialog_w->setModal(false);
+    da_dialog_w->show();
+
+}
+void MainWindow::on_da_trans_packet(QByteArray array)
+{
+    net_socket->socket_write_byte_array(array);
+}
+
+void MainWindow::on_horizontalSlider_do_valueChanged(int value)
+{
+    if (current_daback_file_name.isNull()) {
+        return;
+    }
+    //xqDebug() << "do case 1";
+    qint64 count = 0;
+    qint32 pac_num = 8010;
+    quint32 da,db,dc,dd,d_len;
+    quint8 plot_buffer[ONE_PACKET_LENGTH];
+    quint32 channel_data[2000];
+
+    //1//xqDebug() << "@case_1 : count is :" << count;
+    // plot data
+    memset(channel_data,0,2000);
+    quint32 uh = 0, h = 0, l = 0, ul = 0;
+
+    for (quint64 i = 0; i < 500; i ++)
+        //plot_buffer[i] = adc_data[i] &0xFF;
+    for (quint64 i = 0; i < 500; i ++) {
+        uh = (plot_buffer[16*i + 2 - value] << 16) & 0x00FF0000;
+        h  = (plot_buffer[16*i + 1 - value]  << 8)  & 0x0000FF00;
+        l  = (plot_buffer[16*i + 0 - value] << 0)  & 0x000000FF;
+        ul = (plot_buffer[16*i + 3 - value] << 0)  & 0X000000FF;
+
+        da = uh | h | l;
+
+        uh = (plot_buffer[16*i + 6 - value] << 16) & 0x00FF0000;
+        h  = (plot_buffer[16*i + 5 - value] << 8)  & 0x0000FF00;
+        l  = (plot_buffer[16*i + 4 - value] << 0)  & 0x000000FF;
+        ul = (plot_buffer[16*i + 7 - value] << 0)  & 0X000000FF;
+
+        db = uh | h | l;
+
+        uh = (plot_buffer[16*i + 10 - value] << 16) & 0x00FF0000;
+        h  = (plot_buffer[16*i + 9 - value] << 8)  & 0x0000FF00;
+        l  = (plot_buffer[16*i + 8 - value] << 0)  & 0x000000FF;
+        ul = (plot_buffer[16*i + 11 - value] << 0)  & 0X000000FF;
+
+        dc = uh | h | l;
+
+        uh = (plot_buffer[16*i + 14 - value] << 16) & 0x00FF0000;
+        h  = (plot_buffer[16*i + 13 - value] << 8)  & 0x0000FF00;
+        l  = (plot_buffer[16*i + 12 - value] << 0)  & 0x000000FF;
+        ul = (plot_buffer[16*i + 15 - value] << 0)  & 0X000000FF;
+
+        dd = uh | h | l;
+
+        channel_data[i - value] = da;
+        channel_data[500 + i - value] = db;
+        channel_data[1000 + i - value] = dc;
+        channel_data[1500 + i- value]  = dd;
+    }
+    on_net_plot_read(channel_data, 500);
+}
+
+void MainWindow::on_pushButton_da_start_clicked()
+{
+    uint8_t cmd[5];
+
+    cmd[0] = CMD_DA_START;
+    this->net_socket->send_cmd_to_remote( cmd , 1);
+    ui->textBrowser_da->append("@System: DA START..");
+}
+
+void MainWindow::on_pushButton_da_clear_buffer_clicked()
+{
+    uint8_t cmd[5];
+
+    cmd[0] = CMD_DA_CLR_BUFFER;
+    this->net_socket->send_cmd_to_remote( cmd , 1);
+    ui->textBrowser_da->append("@System: DA clear buffer..");
+}
+
+void MainWindow::on_pushButton_da_stop_clicked()
+{
+    uint8_t cmd[5];
+
+    cmd[0] = CMD_DA_PAUSE;
+    this->net_socket->send_cmd_to_remote( cmd , 1);
+    ui->textBrowser_da->append("@System: DA STOP..");
+}
+
+void MainWindow::on_pushButton_da_reback_clicked()
+{
+    QString lineStr;
+    uint8_t   cmd[5];
+
+    lineStr = ui->lineEdit_da_times->text();
+    cmd[0] = CMD_DA_RECALL;
+    cmd[1] = lineStr.toInt();
+    this->net_socket->send_cmd_to_remote( cmd , 2);
+    ui->textBrowser_da->append("@System: DA recall " + QString::number(cmd[1]) +" times.");
 }

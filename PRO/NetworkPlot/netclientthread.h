@@ -54,7 +54,10 @@ public:
     union bcd_code_t bcdCode;
     void send_cmd_to_remote( uint8_t *cmd, quint16 length );
     void enable_socket_read(bool);
-
+    void case_1(quint8* buffer, quint64 length, quint32 vector_counter);
+    void case_1(quint8* buffer, quint64 length);
+    void socket_write_byte_array(QByteArray array);
+    bool is_network_setup();
 protected:
     void run();
 
@@ -113,20 +116,20 @@ private :
     quint8 plot_buffer[ONE_PACKET_LENGTH];
     quint32 channel_data[2000];
     bool is_enable_socket_read;
-
     bool key_check;
+
 
 private:
 
     qint8 check_packet(quint8* array, quint64 length);
     void check_packet(QByteArray array);
     bool deal_true_packet(QByteArray array);
-    void case_1(quint8* buffer, quint64 length, quint32 vector_counter);
-    void case_1(quint8* buffer, quint64 length);
+
     void case_2(quint8* buffer, quint64 length, quint8 *left_buffer, quint64 *left_length);
     void case_3(quint8 *socket_buffer, quint64 length, quint8 *right_buffer, quint64 right_length);
     void case_4(quint8* buffer, quint64 length);
     QString gethostMac();
+
 
 
 };

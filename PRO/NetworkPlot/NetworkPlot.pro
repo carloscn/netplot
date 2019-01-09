@@ -32,14 +32,17 @@ SOURCES += \
         mainwindow.cpp \
     netclientthread.cpp \
     ringbuffer.cpp \
-    filemanager.cpp
+    filemanager.cpp \
+    da_dialog.cpp
 
 HEADERS += \
     mainwindow.h \
     netclientthread.h \
     com.h \
     ringbuffer.h \
-    filemanager.h
+    filemanager.h \
+    da_dialog.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    da_dialog.ui

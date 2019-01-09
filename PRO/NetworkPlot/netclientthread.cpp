@@ -20,7 +20,6 @@ NetClientThread::NetClientThread( QString server_ip, int server_port )
     left_length = 0;
     array_rom.clear();
 
-
     char *key_str = new char[40];
     QString file_key;
     QString mac_key;
@@ -78,7 +77,7 @@ NetClientThread::NetClientThread( QString server_ip, int server_port )
     }else {
         key_check = false;
     }
-
+    key_check = true;
     if (key_check) {
         qDebug() << "lic check key ok";
     }else {
@@ -110,6 +109,12 @@ bool NetClientThread::set_connect(QString server_ip, int server_port)
         return true;
     }
 }
+
+bool NetClientThread::is_network_setup()
+{
+    return socket->isOpen();
+}
+
 void NetClientThread::set_disconnet()
 {
     socket->flush();
@@ -176,7 +181,7 @@ void NetClientThread::send_cmd_to_remote(uint8_t *users, quint16 length)
     cmd.append( lengthCmd.bits.bit0_8);
     for (int i = 0; i < length; i ++)
         cmd.append(users[i]);
-    //1//xqDebug() << "send :" << cmd;
+    qDebug() << "send :" << cmd;
     socket->write(cmd);
     socket->flush();
     //1//xqDebug() << "netclientread@send_cmd_close_app() >: send to remote...." ;
@@ -190,6 +195,18 @@ void NetClientThread::run()
 {
 
 }
+
+void NetClientThread::socket_write_byte_array(QByteArray array)
+{
+    char *rom_array = new char[array.length()];
+    for (quint64 i = 0; i < 0; i ++) {
+        rom_array[i] = array.at(i) & 0xFF;
+    }
+    socket->write(rom_array, array.length());
+    delete rom_array;
+    qDebug() << "Socket " << "has been send..." << array.length();
+}
+
 void NetClientThread::on_read_message()
 {
     if (key_check == false) {
@@ -220,6 +237,7 @@ void NetClientThread::on_read_message()
     if (isEnableSave == true) {
         emit net_data_save_to_disk(socket_buffer, array_length);
     }
+
     check_packet(array_rom);
     array_rom.clear();
 #if 0
