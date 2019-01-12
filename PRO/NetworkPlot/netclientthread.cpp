@@ -205,7 +205,6 @@ void NetClientThread::socket_write_byte_array(QByteArray array)
     }
     socket->write(rom_array, array.length());
     delete rom_array;
-    qDebug() << "Socket " << "has been send..." << array.length();
 }
 
 void NetClientThread::on_read_message()

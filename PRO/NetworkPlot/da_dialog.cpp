@@ -57,9 +57,8 @@ void da_dialog::on_buttonBox_accepted()
     QString file_name = ui->lineEdit_path->text();
     QByteArray stream_data;
     union {
-        float f;
-        quint64 quint64_d;
-        quint8 quint8_a[8];
+        qint32 qint32_d;
+        quint8 quint8_a[4];
     } da_com;
     QFile *filp = new QFile(file_name);
     if ( !filp->open(QIODevice::ReadOnly | QIODevice::Text) ) {
@@ -71,9 +70,9 @@ void da_dialog::on_buttonBox_accepted()
     stream_data = filp->readAll();
     QList<QByteArray> data_sep = stream_data.split(',');
     da_len = data_sep.length();
-    float dac_data[da_len + 1];
+    qint32 dac_data[da_len + 1];
     for (quint64 i = 0; i < da_len; i ++) {
-        dac_data[i] = data_sep.at(i).toDouble();
+        dac_data[i] = data_sep.at(i).toInt();
     }
 
     // data load prepare send to host.
@@ -86,20 +85,20 @@ void da_dialog::on_buttonBox_accepted()
         da_packet.clear();
         da_packet.append(0xAD);
         da_packet.append(0xAC);
-        da_com.quint64_d = da_freq;
+        da_com.qint32_d = da_freq;
         da_packet.append(da_com.quint8_a[3]);
         da_packet.append(da_com.quint8_a[2]);
         da_packet.append(da_com.quint8_a[1]);
         da_packet.append(da_com.quint8_a[0]);
         if ( i < da_pac_n - 1) {
-            da_com.quint64_d = 2000;
+            da_com.qint32_d = 2000;
         }else {
-            da_com.quint64_d = da_len - ((da_pac_n-1) * 2000);
+            da_com.qint32_d = da_len - ((da_pac_n-1) * 2000);
         }
         da_packet.append(da_com.quint8_a[1]);
         da_packet.append(da_com.quint8_a[0]);
         for (quint64 j = 0; j < 2000; j ++) {
-            da_com.quint64_d = dac_data[j+i*2000];
+            da_com.qint32_d = dac_data[j+i*2000];
             da_packet.append(da_com.quint8_a[3]);
             da_packet.append(da_com.quint8_a[2]);
             da_packet.append(da_com.quint8_a[1]);
