@@ -58,7 +58,12 @@ void da_dialog::on_buttonBox_accepted()
     QByteArray stream_data;
     union {
         qint32 qint32_d;
-        quint8 quint8_a[4];
+        struct BITS{
+            quint8 B0:4;
+            quint8 B1:4;
+            quint8 B2:4;
+            quint8 B3:4;
+        } bit;
     } da_com;
     QFile *filp = new QFile(file_name);
     if ( !filp->open(QIODevice::ReadOnly | QIODevice::Text) ) {
@@ -86,23 +91,23 @@ void da_dialog::on_buttonBox_accepted()
         da_packet.append(0xAD);
         da_packet.append(0xAC);
         da_com.qint32_d = da_freq;
-        da_packet.append(da_com.quint8_a[3]);
-        da_packet.append(da_com.quint8_a[2]);
-        da_packet.append(da_com.quint8_a[1]);
-        da_packet.append(da_com.quint8_a[0]);
+        da_packet.append(da_com.bit.B3);
+        da_packet.append(da_com.bit.B2);
+        da_packet.append(da_com.bit.B1);
+        da_packet.append(da_com.bit.B0);
         if ( i < da_pac_n - 1) {
             da_com.qint32_d = 2000;
         }else {
             da_com.qint32_d = da_len - ((da_pac_n-1) * 2000);
         }
-        da_packet.append(da_com.quint8_a[1]);
-        da_packet.append(da_com.quint8_a[0]);
+        da_packet.append(da_com.bit.B1);
+        da_packet.append(da_com.bit.B0);
         for (quint64 j = 0; j < 2000; j ++) {
             da_com.qint32_d = dac_data[j+i*2000];
-            da_packet.append(da_com.quint8_a[3]);
-            da_packet.append(da_com.quint8_a[2]);
-            da_packet.append(da_com.quint8_a[1]);
-            da_packet.append(da_com.quint8_a[0]);
+            da_packet.append(da_com.bit.B3);
+            da_packet.append(da_com.bit.B2);
+            da_packet.append(da_com.bit.B1);
+            da_packet.append(da_com.bit.B0);
         }
         da_packet.append(0xBF);
         da_packet.append(0xBE);
