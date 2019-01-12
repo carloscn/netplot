@@ -6,7 +6,9 @@ da_dialog::da_dialog(QWidget *parent) :
     ui(new Ui::da_dialog)
 {
     ui->setupUi(this);
-
+    timer = new QTimer();
+    connect(timer,SIGNAL(timeout()), this, SLOT(on_timer_over_time()));
+    is_over_time = false;
 }
 
 da_dialog::~da_dialog()
@@ -23,9 +25,6 @@ void da_dialog::on_pushButton_load_clicked()
                                                      "/usr/data",
                                                      "Data Document(*.da *.flt)",
                                                      0);
-
-
-
     if (!file_name.isNull()) {
         qDebug() << file_name ;
     }else{
@@ -33,8 +32,15 @@ void da_dialog::on_pushButton_load_clicked()
         return;
     }
     ui->lineEdit_path->setText(file_name);
+}
 
+void da_dialog::on_timer_over_time()
+{
+    is_over_time = true;
 
+    is_over_time = false;
+    timer->stop();
+    qDebug() << "timer over time";
 }
 
 void da_dialog::on_buttonBox_accepted()
@@ -79,12 +85,11 @@ void da_dialog::on_buttonBox_accepted()
     for (quint64 i = 0; i < da_len; i ++) {
         dac_data[i] = data_sep.at(i).toInt();
     }
-
+    qDebug() << "the dac length is :" << da_len;
     // data load prepare send to host.
     // 1. judge the number of packet.
-    da_pac_n = (quint64) ceil(da_len / 2000.0);
+    da_pac_n = (quint64) ceil(da_len / 1000.0);
     qDebug() << da_pac_n;
-    QByteArray da_packet;
 
     for (quint64 i = 0; i < da_pac_n; i++) {
         da_packet.clear();
@@ -98,12 +103,12 @@ void da_dialog::on_buttonBox_accepted()
         if ( i < da_pac_n - 1) {
             da_com.qint32_d = 2000;
         }else {
-            da_com.qint32_d = da_len - ((da_pac_n-1) * 2000);
+            da_com.qint32_d = da_len - ((da_pac_n-1) * 1000.0);
         }
         da_packet.append(da_com.bit.B1);
         da_packet.append(da_com.bit.B0);
-        for (quint64 j = 0; j < 2000; j ++) {
-            da_com.qint32_d = dac_data[j+i*2000];
+        for (quint64 j = 0; j < 1000; j ++) {
+            da_com.qint32_d = dac_data[j+i*1000];
             da_packet.append(da_com.bit.B3);
             da_packet.append(da_com.bit.B2);
             da_packet.append(da_com.bit.B1);
@@ -111,11 +116,12 @@ void da_dialog::on_buttonBox_accepted()
         }
         da_packet.append(0xBF);
         da_packet.append(0xBE);
-        qDebug() << "Send the " << i << "num packet to host.";
+        qDebug() << "send times :" << i << " data.";
+        QElapsedTimer t;
+        t.start();
+        while(t.elapsed() <= 1);
         emit da_trans_packet(da_packet);
-
     }
-
     filp->close();
     delete filp;
 }
