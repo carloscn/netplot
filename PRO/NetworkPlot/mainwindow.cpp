@@ -695,7 +695,7 @@ void MainWindow::on_actionDA_Back_triggered()
 {
     if (!net_socket->is_network_setup()) {
         QMessageBox::warning(this,"Info","Please connect to the network advance.");
-        //return;
+        return;
     }
     da_dialog_w = new da_dialog(this);
     connect( (QObject*)da_dialog_w, SIGNAL( da_trans_packet(QByteArray) ),  \
