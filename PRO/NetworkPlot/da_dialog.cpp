@@ -90,9 +90,8 @@ void da_dialog::on_buttonBox_accepted()
     // 1. judge the number of packet.
     da_pac_n = (quint64) ceil(da_len / 1000.0);
     qDebug() << da_pac_n;
-
+    da_packet.clear();
     for (quint64 i = 0; i < da_pac_n; i++) {
-        da_packet.clear();
         da_packet.append(0xAD);
         da_packet.append(0xAC);
         da_com.qint32_d = da_freq;
@@ -121,6 +120,7 @@ void da_dialog::on_buttonBox_accepted()
         t.start();
         while(t.elapsed() <= 1);
         emit da_trans_packet(da_packet);
+        da_packet.clear();
     }
     filp->close();
     delete filp;

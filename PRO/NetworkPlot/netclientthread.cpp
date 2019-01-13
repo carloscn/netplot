@@ -199,12 +199,15 @@ void NetClientThread::run()
 
 void NetClientThread::socket_write_byte_array(QByteArray array)
 {
+    /*
     char *rom_array = new char[array.length()];
     for (quint64 i = 0; i < 0; i ++) {
         rom_array[i] = array.at(i) & 0xFF;
     }
     socket->write(rom_array, array.length());
     delete rom_array;
+    */
+    socket->write(array);
 }
 
 void NetClientThread::on_read_message()
