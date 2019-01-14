@@ -78,7 +78,9 @@ NetClientThread::NetClientThread( QString server_ip, int server_port )
         key_check = false;
     }
 #endif
+
     key_check = true;
+
     if (key_check) {
         qDebug() << "lic check key ok";
     }else {

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1249</width>
-    <height>705</height>
+    <height>727</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -688,6 +688,7 @@
     </property>
     <addaction name="actionexit"/>
     <addaction name="actionclear_all"/>
+    <addaction name="actionlcok"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -695,8 +696,24 @@
     </property>
     <addaction name="actionDA_Back"/>
    </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>关于</string>
+    </property>
+    <widget class="QMenu" name="menu_4">
+     <property name="title">
+      <string>联系管理员</string>
+     </property>
+     <addaction name="action_5"/>
+    </widget>
+    <addaction name="separator"/>
+    <addaction name="action_2"/>
+    <addaction name="action_3"/>
+    <addaction name="menu_4"/>
+   </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
+   <addaction name="menu_3"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -720,6 +737,26 @@
   <action name="actionDA_Back">
    <property name="text">
     <string>数据调制回放</string>
+   </property>
+  </action>
+  <action name="actionlcok">
+   <property name="text">
+    <string>lcok</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>关于该软件</string>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="text">
+    <string>查看许可说明</string>
+   </property>
+  </action>
+  <action name="action_5">
+   <property name="text">
+    <string>√</string>
    </property>
   </action>
  </widget>

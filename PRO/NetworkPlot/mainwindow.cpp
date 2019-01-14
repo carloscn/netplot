@@ -804,3 +804,17 @@ void MainWindow::on_pushButton_da_reback_clicked()
     this->net_socket->send_cmd_to_remote( cmd , 2);
     ui->textBrowser_da->append("@System: DA recall " + QString::number(cmd[1]) +" times.");
 }
+
+void MainWindow::set_lic_state(bool e)
+{
+    lic_state = e;
+}
+bool MainWindow::get_lic_state()
+{
+    return lic_state;
+}
+
+void MainWindow::on_action_5_toggled(bool arg1)
+{
+    lic_state = arg1;
+}

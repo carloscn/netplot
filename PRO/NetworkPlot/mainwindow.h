@@ -51,7 +51,8 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
+    bool get_lic_state();
+    void set_lic_state(bool e);
 
 private slots:
     void on_pushButton_set_clicked();
@@ -108,6 +109,8 @@ private slots:
 
     void on_pushButton_da_reback_clicked();
 
+    void on_action_5_toggled(bool arg1);
+
 signals:
 
     void net_close_file();
@@ -152,6 +155,8 @@ private:
     bool is_start_read_socket;
 
     QString current_daback_file_name;
+
+    bool lic_state;
 
 
 };
