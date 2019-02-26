@@ -29,10 +29,10 @@ unix {
 }
 
 win32 {
-    INCLUDEPATH += C:\Qwt-6.1.3\include
-    INCLUDEPATH += C:\fftw
-    LIBS += -L"C:\Qwt-6.1.3\lib" -lqwt
-    LIBS += "C:\fftw\libfftw3f-3.dll"
+    INCLUDEPATH += C:\opt\Qwt-6.1.3\include
+    INCLUDEPATH += C:\opt\fftw-3.3.5\b32
+    LIBS += -L"C:\opt\Qwt-6.1.3\lib" -lqwt
+    LIBS += "C:\opt\fftw-3.3.5\b32\libfftw3f-3.dll"
 }
 SOURCES += \
         main.cpp \
