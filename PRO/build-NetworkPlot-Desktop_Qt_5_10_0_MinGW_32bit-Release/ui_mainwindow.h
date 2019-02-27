@@ -659,7 +659,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(1);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -668,8 +668,8 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", nullptr));
-        actionexit->setText(QApplication::translate("MainWindow", "exit", nullptr));
-        actionclear_all->setText(QApplication::translate("MainWindow", "clear all", nullptr));
+        actionexit->setText(QApplication::translate("MainWindow", "\351\200\200\345\207\272\350\275\257\344\273\266", nullptr));
+        actionclear_all->setText(QApplication::translate("MainWindow", "\346\270\205\351\231\244\347\274\223\345\255\230", nullptr));
         actionDA_Back->setText(QApplication::translate("MainWindow", "\346\225\260\346\215\256\350\260\203\345\210\266\345\233\236\346\224\276", nullptr));
         actionlcok->setText(QApplication::translate("MainWindow", "lcok", nullptr));
         action_2->setText(QApplication::translate("MainWindow", "\345\205\263\344\272\216\350\257\245\350\275\257\344\273\266", nullptr));
