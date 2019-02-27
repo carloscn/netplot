@@ -22,9 +22,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 unix {
-    INCLUDEPATH += /usr/local/qwt-6.1.4/include
+    INCLUDEPATH += /usr/local/qwt-6.1.3/include
     INCLUDEPATH += /usr/local/fftw/include
-    LIBS += -L"/usr/local/qwt-6.1.4/lib/" -lqwt
+    LIBS += -L"/usr/local/qwt-6.1.3/lib/" -lqwt
     LIBS += "/usr/local/fftw/lib/libfftw3f.a"
 }
 
