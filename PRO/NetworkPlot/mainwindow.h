@@ -111,6 +111,8 @@ private slots:
 
     void on_action_5_toggled(bool arg1);
 
+    void on_actionlcok_triggered();
+
 signals:
 
     void net_close_file();

@@ -19,7 +19,7 @@ NetClientThread::NetClientThread( QString server_ip, int server_port )
     is_enable_socket_read = false;
     left_length = 0;
     array_rom.clear();
-#if 0
+#ifdef KEY_ENABLE
     char *key_str = new char[40];
     QString file_key;
     QString mac_key;
@@ -216,36 +216,30 @@ void NetClientThread::on_read_message()
 {
     if (key_check == false) {
         socket->readAll();
-        socket->flush();
         return;
     }
     if (is_enable_socket_read == false ) {
         socket->readAll();
-        socket->flush();
         return;
     }
     qint8 ret = 7;
 
     array_rom.append(socket->readAll());
     array_length = array_rom.length();
-
-    ////xqDebug() << "on read message" << array_length;
-    if (array_length < 5*ONE_PACKET_LENGTH)
+    if (array_length < 4*ONE_PACKET_LENGTH)
         return;
-    if (array_length > 10*8010) {
+    if (array_length > 10*8010)
         vector_counter = 0;
-    }
+    //qDebug() << "on read message" << array_length;
     socket_buffer = (quint8*)malloc(sizeof(quint8*) * (array_length + 1) );
-    for (quint32 i = 0; i < array_length; i ++) {
+    for (quint32 i = 0; i < array_length; i ++)
         socket_buffer[i] = array_rom.at(i)&0xFF;
-    }
-    if (isEnableSave == true) {
+    if (isEnableSave == true)
         emit net_data_save_to_disk(socket_buffer, array_length);
-    }
-
     check_packet(array_rom);
     array_rom.clear();
-#if 0
+    array_length = 0;
+#if false
     ret = check_packet(socket_buffer, array_length);
     ////xqDebug() << "Checked packet : length = " << vector_counter  ;
     if ( ret == -1 ) {
@@ -292,7 +286,7 @@ void NetClientThread::check_packet(QByteArray array)
 
     if (array.contains(adc_header) && ( array.length() -  array.indexOf(adc_header) > ONE_PACKET_LENGTH) ) {
         true_packet = array.mid(array.indexOf(adc_header), ONE_PACKET_LENGTH);
-        deal_true_packet(array);
+        deal_true_packet(true_packet);
     }
 
 }
@@ -364,8 +358,6 @@ void NetClientThread::case_1(quint8 *buffer,  quint64 length)
     quint32 da,db,dc,dd,d_len;
     count = (length_d / 8010);
     ////1//xqDebug() << "emit net data save to disk singal.";
-
-
     kcount ++;
     //1//xqDebug() << "@case_1 : count is :" << count;
     // plot data
@@ -374,10 +366,8 @@ void NetClientThread::case_1(quint8 *buffer,  quint64 length)
         memset(channel_data,0,2000);
         quint32 uh = 0, h = 0, l = 0, ul = 0;
 
-        for (quint64 i = 0 ; i < 500*16; i ++) {
+        for (quint64 i = 0 ; i < 500*16; i ++)
             plot_buffer[i] = buffer[i+6];
-        }
-
         uh = (plot_buffer[2] << 24) & 0xFF000000;
         h  = (plot_buffer[3] << 16) & 0x00FF0000;
         l  = (plot_buffer[4] << 8)  & 0x0000FF00;
@@ -385,46 +375,35 @@ void NetClientThread::case_1(quint8 *buffer,  quint64 length)
         d_len = uh | h | l | ul;
 
         for (quint64 i = 0; i < 500; i ++) {
-
             uh = (plot_buffer[16*i + 2] << 16) & 0x00FF0000;
             h  = (plot_buffer[16*i + 1] << 8)  & 0x0000FF00;
             l  = (plot_buffer[16*i + 0] << 0)  & 0x000000FF;
             ul = (plot_buffer[16*i + 3] << 0)  & 0X000000FF;
-
             da = uh | h | l;
-
             uh = (plot_buffer[16*i + 6] << 16) & 0x00FF0000;
             h  = (plot_buffer[16*i + 5] << 8)  & 0x0000FF00;
             l  = (plot_buffer[16*i + 4] << 0)  & 0x000000FF;
             ul = (plot_buffer[16*i + 7] << 0)  & 0X000000FF;
-
             db = uh | h | l;
-
             uh = (plot_buffer[16*i + 10] << 16) & 0x00FF0000;
             h  = (plot_buffer[16*i + 9] << 8)  & 0x0000FF00;
             l  = (plot_buffer[16*i + 8] << 0)  & 0x000000FF;
             ul = (plot_buffer[16*i + 11] << 0)  & 0X000000FF;
-
             dc = uh | h | l;
-
             uh = (plot_buffer[16*i + 14] << 16) & 0x00FF0000;
             h  = (plot_buffer[16*i + 13] << 8)  & 0x0000FF00;
             l  = (plot_buffer[16*i + 12] << 0)  & 0x000000FF;
             ul = (plot_buffer[16*i + 15] << 0)  & 0X000000FF;
-
             dd = uh | h | l;
-
             channel_data[i] = da;
             channel_data[500 + i] = db;
             channel_data[1000 + i] = dc;
             channel_data[1500 + i] = dd;
         }
-        ////1//xqDebug() << "emit net data plot signal.";
-       emit net_data_plot(channel_data, 2000);
+        emit net_data_plot(channel_data, 2000);
     }
-
-
 }
+
 void NetClientThread::case_2(quint8 *socket_buffer, quint64 length, quint8 *left_buffer, quint64 *left_length)
 {
     //xqDebug() << "do case 2";

@@ -158,7 +158,7 @@
          </size>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="tab">
          <attribute name="title">
@@ -726,12 +726,12 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionexit">
    <property name="text">
-    <string>exit</string>
+    <string>退出软件</string>
    </property>
   </action>
   <action name="actionclear_all">
    <property name="text">
-    <string>clear all</string>
+    <string>清除缓存</string>
    </property>
   </action>
   <action name="actionDA_Back">

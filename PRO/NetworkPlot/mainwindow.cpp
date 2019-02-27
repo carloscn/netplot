@@ -492,10 +492,10 @@ void MainWindow::on_net_plot_read(quint32 *block, quint32 length)
         channel_d[i] = (qint32) block[3*500+i] << 8;// & (0xFFFFFF))* (((block[3*500+i] & 0x800000) >> 23)?1:-1);
     }
     for (quint32 i = 0; i < 500; i ++) {
-        channel_a_d[i] = channel_a[i] / 100000;
-        channel_b_d[i] = channel_b[i] / 100000;
-        channel_c_d[i] = channel_c[i] / 100000;
-        channel_d_d[i] = channel_d[i] / 100000;
+        channel_a_d[i] = channel_a[i] / 1677722 + 700;
+        channel_b_d[i] = channel_b[i] / 1677722 + 700;
+        channel_c_d[i] = channel_c[i] / 1677722 + 700;
+        channel_d_d[i] = channel_d[i] / 1677722 + 700 - 250;
         //qDebug() << "sample: " << channel_a_d[i];
     }
     if (ui->checkBox_ch1_time->isChecked()) {
@@ -817,4 +817,9 @@ bool MainWindow::get_lic_state()
 void MainWindow::on_action_5_toggled(bool arg1)
 {
     lic_state = arg1;
+}
+
+void MainWindow::on_actionlcok_triggered()
+{
+
 }
