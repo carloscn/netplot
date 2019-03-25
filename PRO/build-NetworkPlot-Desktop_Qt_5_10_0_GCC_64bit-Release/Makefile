@@ -1302,6 +1302,7 @@ moc_mainwindow.cpp: /opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QMainWindow \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QDialog \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QFileDialog \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/QElapsedTimer \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/QTime \
 		../NetworkPlot/mainwindow.h \
 		moc_predefs.h \
 		/opt/Qt5.10.0/5.10.0/gcc_64/bin/moc
@@ -1774,6 +1775,8 @@ moc_da_dialog.cpp: /opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QDialog \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/qbasictimer.h \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/QElapsedTimer \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/qelapsedtimer.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/QTime \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/qdatetime.h \
 		../NetworkPlot/da_dialog.h \
 		moc_predefs.h \
 		/opt/Qt5.10.0/5.10.0/gcc_64/bin/moc
@@ -2523,6 +2526,7 @@ main.o: ../NetworkPlot/main.cpp ../NetworkPlot/mainwindow.h \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QDialog \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QFileDialog \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/QElapsedTimer \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/QTime \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QApplication
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../NetworkPlot/main.cpp
 
@@ -3127,6 +3131,7 @@ mainwindow.o: ../NetworkPlot/mainwindow.cpp ../NetworkPlot/mainwindow.h \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QDialog \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QFileDialog \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/QElapsedTimer \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/QTime \
 		ui_mainwindow.h \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QAction \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QApplication \
@@ -3683,6 +3688,8 @@ da_dialog.o: ../NetworkPlot/da_dialog.cpp ../NetworkPlot/da_dialog.h \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/qbasictimer.h \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/QElapsedTimer \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/qelapsedtimer.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/QTime \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/qdatetime.h \
 		ui_da_dialog.h \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/QVariant \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QAction \

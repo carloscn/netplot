@@ -21,18 +21,25 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+
+LINUX_QWT_DIR=/usr/local/qwt-6.1.3
+LINUX_FFTW_DIR=/usr/local/fftw
+
+WIN_QWT_DIR=C:\opt\qwt\qwt-6.1.3
+WIN_FFTW_DIR=C:\opt\fftw
+
 unix {
-    INCLUDEPATH += /usr/local/qwt-6.1.3/include
-    INCLUDEPATH += /usr/local/fftw/include
-    LIBS += -L"/usr/local/qwt-6.1.3/lib/" -lqwt
-    LIBS += "/usr/local/fftw/lib/libfftw3f.a"
+    INCLUDEPATH += $${LINUX_QWT_DIR}/include
+    INCLUDEPATH += $${LINUX_FFTW_DIR}/include
+    LIBS += -L"$${LINUX_QWT_DIR}/lib/" -lqwt
+    LIBS += $${LINUX_FFTW_DIR}/lib/libfftw3f.a
 }
 
 win32 {
-    INCLUDEPATH += C:\opt\Qwt-6.1.3\include
-    INCLUDEPATH += C:\opt\fftw-3.3.5\b32
-    LIBS += -L"C:\opt\Qwt-6.1.3\lib" -lqwt
-    LIBS += "C:\opt\fftw-3.3.5\b32\libfftw3f-3.dll"
+    INCLUDEPATH += $${WIN_QWT_DIR}\include
+    INCLUDEPATH += $${WIN_FFTW_DIR}
+    LIBS += -L"$${WIN_QWT_DIR}\lib" -lqwt
+    LIBS += "$${WIN_FFTW_DIR}\libfftw3f-3.dll"
 }
 SOURCES += \
         main.cpp \
