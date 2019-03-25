@@ -125,6 +125,22 @@ MainWindow::MainWindow(QWidget *parent) :
     */
     qDebug() << "qwt init!";
     init_qwt();
+    union {
+        qint32 qint32_d;
+        struct BITS{
+            quint8 B0:8;
+            quint8 B1:8;
+            quint8 B2:8;
+            quint8 B3:8;
+        } bit;
+    } da_com;
+
+    da_com.qint32_d = 0x12345678;
+    qDebug("0x%x", da_com.bit.B0);
+    qDebug("0x%x", da_com.bit.B1);
+    qDebug("0x%x", da_com.bit.B2);
+    qDebug("0x%x", da_com.bit.B3);
+
 
 
 }

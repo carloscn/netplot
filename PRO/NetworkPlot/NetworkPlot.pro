@@ -25,7 +25,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 LINUX_QWT_DIR=/usr/local/qwt-6.1.3
 LINUX_FFTW_DIR=/usr/local/fftw
 
-WIN_QWT_DIR=C:\opt\qwt\qwt-6.1.4
+WIN_QWT_DIR=C:\opt\qwt-6.1.3
 WIN_FFTW_DIR=C:\opt\fftw
 # add file: qwt.dll file: libfftw3f-3.dll to *.exe path
 

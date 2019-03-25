@@ -16,7 +16,7 @@
 #include <QMutex>
 #include "netclientthread.h"
 #include "com.h"
-#include <qwt.h>
+#include "qwt.h"
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
 #include <qwt_legend.h>

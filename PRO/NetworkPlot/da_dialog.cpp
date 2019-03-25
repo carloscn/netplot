@@ -76,20 +76,17 @@ void da_dialog::on_net_notify_dac_hand_ok(bool state)
 {
     uint64_t cycle_num;
     QByteArray da_packet;
-    QByteArray ack;
-    ack.append(0xAA);
-    ack.append(0xBB);
     is_stop_pressed = false;
     union {
         qint32 qint32_d;
         struct BITS{
-            quint8 B0:4;
-            quint8 B1:4;
-            quint8 B2:4;
-            quint8 B3:4;
+            quint8 B0:8;
+            quint8 B1:8;
+            quint8 B2:8;
+            quint8 B3:8;
         } bit;
     } da_com;
-    DELAY_MS(10);
+//    DELAY_MS(10);
     if (dac_summay_buffer.left_len > 1 ) {
         is_dac_hand_ok = state;
         if (dac_summay_buffer.left_len > 256 )
@@ -104,14 +101,16 @@ void da_dialog::on_net_notify_dac_hand_ok(bool state)
             da_packet.append(da_com.bit.B2);
             da_packet.append(da_com.bit.B1);
             da_packet.append(da_com.bit.B0);
+//            qDebug("B0: 0x%x", da_com.bit.B0);
+//            qDebug("B1: 0x%x", da_com.bit.B1);
+//            qDebug("B2: 0x%x", da_com.bit.B2);
+//            qDebug("B3: 0x%x", da_com.bit.B3);
             dac_summay_buffer.left_len--;
         }
         data_counter++;
         qDebug() << "send data packet number is :" << data_counter << "| left:" << dac_summay_buffer.left_len;
-        //emit da_trans_packet(da_packet);
-        DELAY_MS(1);
+        emit da_trans_packet(da_packet);
         da_packet.clear();
-        emit da_trans_packet(ack);
         if (dac_summay_buffer.left_len == 1) {
             sleep_da_state();
             free(dac_summay_buffer.buffer);
@@ -149,36 +148,24 @@ void da_dialog::on_pushButton_Send_clicked()
         this->show();
         return;
     }
-    quint64 da_freq = ui->lineEdit_freq->text().toInt();
     QString file_name = ui->lineEdit_path->text();
     QByteArray stream_data;
-
-    union {
-        qint32 qint32_d;
-        struct BITS{
-            quint8 B0:4;
-            quint8 B1:4;
-            quint8 B2:4;
-            quint8 B3:4;
-        } bit;
-    } da_com;
+    stream_data.clear();
     QFile *filp = new QFile(file_name);
     if ( !filp->open(QIODevice::ReadOnly | QIODevice::Text) ) {
         QMessageBox::warning(this, "Warning","Open File Failed!");
         return;
     }
     quint64 da_len = 0;
-    quint64 da_pac_n = 0;
     stream_data = filp->readAll();
     QList<QByteArray> data_sep = stream_data.split(',');
 
     dac_summay_buffer.left_len = da_len = data_sep.length();
     qDebug() << "read file data length: " << da_len;
     dac_summay_buffer.buffer = (quint32*)malloc(sizeof(quint32) * da_len * 4);
-
     data_counter = 0;
     for (quint64 i = 0; i < da_len; i ++) {
-        dac_summay_buffer.buffer[i] = data_sep.at(i).toInt();
+        dac_summay_buffer.buffer[i] = data_sep.at(i).toUInt();
     }
     qDebug() << "the dac length is :" << da_len;
 
