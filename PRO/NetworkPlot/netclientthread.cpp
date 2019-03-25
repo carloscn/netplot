@@ -19,6 +19,7 @@ NetClientThread::NetClientThread( QString server_ip, int server_port )
     is_enable_socket_read = false;
     left_length = 0;
     array_rom.clear();
+    adc_dac_mode = DAC_MODE;
 #ifdef KEY_ENABLE
     char *key_str = new char[40];
     QString file_key;
@@ -89,6 +90,7 @@ NetClientThread::NetClientThread( QString server_ip, int server_port )
     connect( this, SIGNAL(net_data_save_to_disk(quint8*,quint64) ),(QObject*)this->file_ctr ,SLOT(on_save_data_to_disk(quint8*,quint64)));
     connect( (QObject*)this->file_ctr, SIGNAL(file_manager_add_file_name(QString)), this, SLOT(on_file_manager_add_doc_list(QString)) );
     connect( (QObject*)this->file_ctr, SIGNAL(file_manager_file_size(double)), this, SLOT(on_file_manager_file_size(double)));
+
     //delete key_file;
     //delete key_str;
 
@@ -210,6 +212,7 @@ void NetClientThread::socket_write_byte_array(QByteArray array)
     delete rom_array;
     */
     socket->write(array);
+
 }
 
 void NetClientThread::on_read_message()
@@ -218,60 +221,79 @@ void NetClientThread::on_read_message()
         socket->readAll();
         return;
     }
-    if (is_enable_socket_read == false ) {
-        socket->readAll();
-        return;
-    }
-    qint8 ret = 7;
+    if (adc_dac_mode == DAC_MODE) {
+        QByteArray dac_cmd_array;
+        dac_cmd_array.clear();
+        dac_cmd_array.append(socket->readAll());
+        socket->flush();
+        qDebug() << "*DAC Recv: " << dac_cmd_array;
+        if (dac_cmd_array.contains(0xAD) && dac_cmd_array.contains(0xAC)) {
+            dac_cmd_array.clear();
+            qDebug() << "*emit notify dac hand signal..";
+            emit net_notify_dac_hand_ok(true);
 
-    array_rom.append(socket->readAll());
-    array_length = array_rom.length();
-    if (array_length < 4*ONE_PACKET_LENGTH)
-        return;
-    if (array_length > 10*8010)
-        vector_counter = 0;
-    //qDebug() << "on read message" << array_length;
-    socket_buffer = (quint8*)malloc(sizeof(quint8*) * (array_length + 1) );
-    for (quint32 i = 0; i < array_length; i ++)
-        socket_buffer[i] = array_rom.at(i)&0xFF;
-    if (isEnableSave == true)
-        emit net_data_save_to_disk(socket_buffer, array_length);
-    check_packet(array_rom);
-    array_rom.clear();
-    array_length = 0;
+        }else {
+            dac_cmd_array.clear();
+            emit net_notify_dac_hand_ok(false);
+        }
+    }
+    else if (adc_dac_mode == ADC_MODE) {
+
+        if (is_enable_socket_read == false ) {
+            socket->readAll();
+            return;
+        }
+        qint8 ret = 7;
+
+        array_rom.append(socket->readAll());
+        array_length = array_rom.length();
+        if (array_length < 4*ONE_PACKET_LENGTH)
+            return;
+        if (array_length > 10*8010)
+            vector_counter = 0;
+        //qDebug() << "on read message" << array_length;
+        socket_buffer = (quint8*)malloc(sizeof(quint8*) * (array_length + 1) );
+        for (quint32 i = 0; i < array_length; i ++)
+            socket_buffer[i] = array_rom.at(i)&0xFF;
+        if (isEnableSave == true)
+            emit net_data_save_to_disk(socket_buffer, array_length);
+        check_packet(array_rom);
+        array_rom.clear();
+        array_length = 0;
 #if false
-    ret = check_packet(socket_buffer, array_length);
-    ////xqDebug() << "Checked packet : length = " << vector_counter  ;
-    if ( ret == -1 ) {
-        //xqDebug() << "Checked failed..........................................................";
-    }
-    switch(ret) {
+        ret = check_packet(socket_buffer, array_length);
+        ////xqDebug() << "Checked packet : length = " << vector_counter  ;
+        if ( ret == -1 ) {
+            //xqDebug() << "Checked failed..........................................................";
+        }
+        switch(ret) {
 
-    case 1:
-        ////xqDebug() << "case 1: ";
-        case_1(socket_buffer, array_length);
-        break;
+        case 1:
+            ////xqDebug() << "case 1: ";
+            case_1(socket_buffer, array_length);
+            break;
 
-    case 2:
-        ////xqDebug() << "case 2: ";
-        case_2(socket_buffer, array_length, left_rom, &left_length);
-        break;
+        case 2:
+            ////xqDebug() << "case 2: ";
+            case_2(socket_buffer, array_length, left_rom, &left_length);
+            break;
 
-    case 3:
-        ////xqDebug() << "case 3: ";
-        case_3(socket_buffer, array_length, left_rom, left_length);
-        break;
+        case 3:
+            ////xqDebug() << "case 3: ";
+            case_3(socket_buffer, array_length, left_rom, left_length);
+            break;
 
-    case 4:
-        ////xqDebug() << "case 4: ";
-        case_4(socket_buffer, array_length);
-        break;
-    }
+        case 4:
+            ////xqDebug() << "case 4: ";
+            case_4(socket_buffer, array_length);
+            break;
+        }
 #endif
-    free(socket_buffer);
-    vector_counter = 0;
+        free(socket_buffer);
+        vector_counter = 0;
 
-    //socket->flush();
+        //socket->flush();
+    }
 
 }
 
@@ -403,7 +425,16 @@ void NetClientThread::case_1(quint8 *buffer,  quint64 length)
         emit net_data_plot(channel_data, 2000);
     }
 }
-
+void NetClientThread::on_adc_dac_mode_set(int index)
+{
+    if (index == ADC_MODE) {
+        adc_dac_mode = ADC_MODE;
+        qDebug() << "set ADC MODE!";
+    }else if (index == DAC_MODE) {
+        adc_dac_mode = DAC_MODE;
+        qDebug() << "set DAC MODE!";
+    }
+}
 void NetClientThread::case_2(quint8 *socket_buffer, quint64 length, quint8 *left_buffer, quint64 *left_length)
 {
     //xqDebug() << "do case 2";

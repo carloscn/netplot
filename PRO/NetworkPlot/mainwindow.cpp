@@ -84,6 +84,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect( this, SIGNAL(net_enable_save(bool) ),(QObject*)this->net_socket ,SLOT(on_net_enable_save(bool)));
     connect( (QObject*)this->net_socket, SIGNAL(net_file_size(double)), this, SLOT(on_net_file_size(double)));
     connect( (QObject*)this->net_socket, SIGNAL(net_lic_check_failed()), this, SLOT(on_net_lic_check_failed()) );
+    connect( (QObject*)this, SIGNAL(adc_dac_mode_set(int)), this->net_socket, SLOT(on_adc_dac_mode_set(int))  );
+
 
     /*
      * ui state.
@@ -256,8 +258,8 @@ void MainWindow::on_pushButton_set_clicked()
         ui->pushButton_fs_set->setEnabled(true);
         ui->pushButton_gain_set->setEnabled(true);
         ui->pushButton_sample->setEnabled(true);
-        on_pushButton_gain_set_clicked();
-        on_pushButton_freq_set_clicked();
+        //on_pushButton_gain_set_clicked();
+        //on_pushButton_freq_set_clicked();
     }
 }
 
@@ -701,6 +703,7 @@ void MainWindow::on_actionDA_Back_triggered()
     connect( (QObject*)da_dialog_w, SIGNAL( da_trans_packet(QByteArray) ),  \
                                         this,       \
                                         SLOT( on_da_trans_packet(QByteArray)));
+    connect( (QObject*)this->net_socket, SIGNAL(net_notify_dac_hand_ok(bool)), da_dialog_w, SLOT(on_net_notify_dac_hand_ok(bool))  );
     da_dialog_w->setModal(false);
     da_dialog_w->show();
 
@@ -822,4 +825,9 @@ void MainWindow::on_action_5_toggled(bool arg1)
 void MainWindow::on_actionlcok_triggered()
 {
 
+}
+
+void MainWindow::on_tabWidget_currentChanged(int index)
+{
+    emit adc_dac_mode_set(index);
 }

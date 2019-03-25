@@ -113,10 +113,13 @@ private slots:
 
     void on_actionlcok_triggered();
 
+    void on_tabWidget_currentChanged(int index);
+
 signals:
 
     void net_close_file();
     void net_enable_save(bool);
+    void adc_dac_mode_set(int);
 
 public:
     QCustomPlot *plot;

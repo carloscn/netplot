@@ -13,6 +13,8 @@
 #include "ringbuffer.h"
 #include "filemanager.h"
 #define             ONE_PACKET_LENGTH           (8010ul)
+#define             ADC_MODE                    0
+#define             DAC_MODE                    1
 
 struct bcd_sper_t{
     uint8_t bit24_32;
@@ -67,6 +69,7 @@ private slots:
     void on_net_enable_save(bool);
     void on_file_manager_add_doc_list(QString);
     void on_file_manager_file_size(double);
+    void on_adc_dac_mode_set(int);
 
 signals:
 
@@ -87,6 +90,8 @@ signals:
     void net_file_size(double);
 
     void net_lic_check_failed();
+
+    void net_notify_dac_hand_ok(bool);
 
 private :
     struct data_packet_t *data_packet;
@@ -117,6 +122,7 @@ private :
     quint32 channel_data[2000];
     bool is_enable_socket_read;
     bool key_check;
+    int adc_dac_mode;
 
 
 private:

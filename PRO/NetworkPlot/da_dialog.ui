@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>474</width>
-    <height>102</height>
+    <height>206</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -61,12 +61,40 @@
     </layout>
    </item>
    <item>
+    <widget class="QPushButton" name="pushButton_Send">
+     <property name="text">
+      <string>Send</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="pushButton_start">
+     <property name="text">
+      <string>Start</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="pushButton_stop">
+     <property name="text">
+      <string>stop</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_dac_state">
+     <property name="text">
+      <string>State: DAC Fucntion.</string>
      </property>
     </widget>
    </item>
