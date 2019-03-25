@@ -55,6 +55,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     this->setWindowTitle("Network Plot");
     /*
     *  init the values of class
@@ -85,8 +86,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect( (QObject*)this->net_socket, SIGNAL(net_file_size(double)), this, SLOT(on_net_file_size(double)));
     connect( (QObject*)this->net_socket, SIGNAL(net_lic_check_failed()), this, SLOT(on_net_lic_check_failed()) );
     connect( (QObject*)this, SIGNAL(adc_dac_mode_set(int)), this->net_socket, SLOT(on_adc_dac_mode_set(int))  );
-
-
     /*
      * ui state.
      **/

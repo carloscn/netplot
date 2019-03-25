@@ -104,14 +104,10 @@ Makefile: ../NetworkPlot/NetworkPlot.pro C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mk
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_bluetooth.pri \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_bluetooth_private.pri \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_bootstrap_private.pri \
-		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_charts.pri \
-		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_charts_private.pri \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_concurrent.pri \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_concurrent_private.pri \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_core.pri \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_core_private.pri \
-		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_datavisualization.pri \
-		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_datavisualization_private.pri \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_dbus.pri \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_dbus_private.pri \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_designer.pri \
@@ -137,8 +133,6 @@ Makefile: ../NetworkPlot/NetworkPlot.pro C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mk
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_multimediawidgets_private.pri \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_network.pri \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_network_private.pri \
-		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_networkauth.pri \
-		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_networkauth_private.pri \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_nfc.pri \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_nfc_private.pri \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_opengl.pri \
@@ -151,8 +145,6 @@ Makefile: ../NetworkPlot/NetworkPlot.pro C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mk
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_positioning_private.pri \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_printsupport.pri \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_printsupport_private.pri \
-		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_purchasing.pri \
-		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_purchasing_private.pri \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_qml.pri \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_qml_private.pri \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_qmldebug_private.pri \
@@ -168,14 +160,6 @@ Makefile: ../NetworkPlot/NetworkPlot.pro C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mk
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_quicktemplates2_private.pri \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_quickwidgets.pri \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_quickwidgets_private.pri \
-		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_remoteobjects.pri \
-		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_remoteobjects_private.pri \
-		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_repparser.pri \
-		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_repparser_private.pri \
-		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_script.pri \
-		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_script_private.pri \
-		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_scripttools.pri \
-		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_scripttools_private.pri \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_scxml.pri \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_scxml_private.pri \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_sensors.pri \
@@ -285,14 +269,10 @@ C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_axserver_private.pri
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_bluetooth.pri:
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_bluetooth_private.pri:
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_bootstrap_private.pri:
-C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_charts.pri:
-C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_charts_private.pri:
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_concurrent.pri:
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_concurrent_private.pri:
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_core.pri:
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_core_private.pri:
-C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_datavisualization.pri:
-C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_datavisualization_private.pri:
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_dbus.pri:
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_dbus_private.pri:
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_designer.pri:
@@ -318,8 +298,6 @@ C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_multimediawidgets.pr
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_multimediawidgets_private.pri:
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_network.pri:
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_network_private.pri:
-C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_networkauth.pri:
-C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_networkauth_private.pri:
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_nfc.pri:
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_nfc_private.pri:
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_opengl.pri:
@@ -332,8 +310,6 @@ C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_positioning.pri:
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_positioning_private.pri:
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_printsupport.pri:
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_printsupport_private.pri:
-C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_purchasing.pri:
-C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_purchasing_private.pri:
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_qml.pri:
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_qml_private.pri:
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_qmldebug_private.pri:
@@ -349,14 +325,6 @@ C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_quickparticles_priva
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_quicktemplates2_private.pri:
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_quickwidgets.pri:
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_quickwidgets_private.pri:
-C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_remoteobjects.pri:
-C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_remoteobjects_private.pri:
-C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_repparser.pri:
-C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_repparser_private.pri:
-C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_script.pri:
-C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_script_private.pri:
-C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_scripttools.pri:
-C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_scripttools_private.pri:
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_scxml.pri:
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_scxml_private.pri:
 C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/modules/qt_lib_sensors.pri:
