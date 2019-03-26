@@ -31,6 +31,7 @@ public:
     ~da_dialog();
     void active_da_state();
     void sleep_da_state();
+    void run_da_out();
 signals:
 
     void da_trans_packet(QByteArray);
@@ -62,7 +63,7 @@ private:
     QTimer *timer;
     bool is_over_time;
     quint64 data_counter;
-
+    quint64 cycle_num;
     bool is_dac_hand_ok;
     struct dac_data dac_summay_buffer;
     bool is_stop_pressed;

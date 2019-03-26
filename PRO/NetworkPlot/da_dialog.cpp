@@ -12,6 +12,7 @@ da_dialog::da_dialog(QWidget *parent) :
     is_dac_hand_ok = false;
     data_counter = 0;
     is_stop_pressed = false;
+    this->cycle_num = 0;
 }
 
 da_dialog::~da_dialog()
@@ -40,11 +41,13 @@ void da_dialog::on_pushButton_load_clicked()
 
 void da_dialog::on_timer_over_time()
 {
-    is_over_time = true;
+    if (this->cycle_num < 0) {
+        timer->stop();
+    }else{
+        this->cycle_num = ui->lineEdit_cycle_num->text().toUInt();
+        run_da_out();
+    }
 
-    is_over_time = false;
-    timer->stop();
-    qDebug() << "timer over time";
 }
 
 void da_dialog::on_buttonBox_accepted()
@@ -86,7 +89,7 @@ void da_dialog::on_net_notify_dac_hand_ok(bool state)
             quint8 B3:8;
         } bit;
     } da_com;
-//    DELAY_MS(10);
+    //    DELAY_MS(10);
     if (dac_summay_buffer.left_len > 1 ) {
         is_dac_hand_ok = state;
         if (dac_summay_buffer.left_len > 256 )
@@ -101,10 +104,10 @@ void da_dialog::on_net_notify_dac_hand_ok(bool state)
             da_packet.append(da_com.bit.B2);
             da_packet.append(da_com.bit.B1);
             da_packet.append(da_com.bit.B0);
-//            qDebug("B0: 0x%x", da_com.bit.B0);
-//            qDebug("B1: 0x%x", da_com.bit.B1);
-//            qDebug("B2: 0x%x", da_com.bit.B2);
-//            qDebug("B3: 0x%x", da_com.bit.B3);
+            //            qDebug("B0: 0x%x", da_com.bit.B0);
+            //            qDebug("B1: 0x%x", da_com.bit.B1);
+            //            qDebug("B2: 0x%x", da_com.bit.B2);
+            //            qDebug("B3: 0x%x", da_com.bit.B3);
             dac_summay_buffer.left_len--;
         }
         data_counter++;
@@ -119,6 +122,7 @@ void da_dialog::on_net_notify_dac_hand_ok(bool state)
         }
     }else {
         qDebug() << "recived stop ack.";
+
     }
 }
 
@@ -131,6 +135,7 @@ void da_dialog::on_buttonBox_rejected()
 {
     sleep_da_state();
     ui->label_dac_state->setText("State: Send seelp cmd to host.");
+    timer->stop();
 }
 
 void da_dialog::on_pushButton_Send_clicked()
@@ -148,6 +153,14 @@ void da_dialog::on_pushButton_Send_clicked()
         this->show();
         return;
     }
+    cycle_num = ui->lineEdit_cycle_num->text().toUInt();
+    run_da_out();
+    timer->start(1000);
+
+}
+
+void da_dialog::run_da_out()
+{
     QString file_name = ui->lineEdit_path->text();
     QByteArray stream_data;
     stream_data.clear();
@@ -171,8 +184,10 @@ void da_dialog::on_pushButton_Send_clicked()
 
     filp->close();
     delete filp;
+
     active_da_state();
-    ui->label_dac_state->setText("State: Send active cmd to host.");
+    this->cycle_num--;
+    ui->label_dac_state->setText("State: Send time: " + QString::number(this->cycle_num) + " to host.");
 }
 
 void da_dialog::on_pushButton_start_clicked()
@@ -193,4 +208,5 @@ void da_dialog::on_pushButton_stop_clicked()
     sleep_da_state();
     dac_summay_buffer.left_len = 0;
     ui->label_dac_state->setText("State: Send sleep cmd to host.");
+    timer->stop();
 }

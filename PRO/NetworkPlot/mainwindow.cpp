@@ -480,6 +480,7 @@ void MainWindow::on_pushButton_close_sample_clicked()
 
 void MainWindow::on_net_plot_read(quint32 *block, quint32 length)
 {
+    qDebug() << "huitu";
     qint32 channel_a[500];
     qint32 channel_b[500];
     qint32 channel_c[500];
@@ -534,8 +535,6 @@ void MainWindow::on_net_plot_read(quint32 *block, quint32 length)
     }else{
         this->qwt_curve1_ch3->detach();
     }
-
-
     if (ui->checkBox_ch4_time->isChecked()) {
         this->qwt_curve1_ch4->attach(ui->qwt_ch);
         qwt_plot_wave(CHANNEL_3, channel_d_d, 500);
