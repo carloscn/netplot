@@ -98,7 +98,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->pushButton_freq_set->setEnabled(false);
     ui->pushButton_fs_set->setEnabled(false);
     ui->pushButton_gain_set->setEnabled(false);
-    ui->pushButton_sample->setEnabled(false);
+    ui->pushButton_sample->setEnabled(true);
     ui->checkBox_ch1_time->setChecked(true);
     ui->checkBox_ch1_fft->setChecked(true);
     ui->pushButton_close_test->setEnabled(false);
@@ -125,24 +125,12 @@ MainWindow::MainWindow(QWidget *parent) :
     */
     qDebug() << "qwt init!";
     init_qwt();
-    union {
-        qint32 qint32_d;
-        struct BITS{
-            quint8 B0:8;
-            quint8 B1:8;
-            quint8 B2:8;
-            quint8 B3:8;
-        } bit;
-    } da_com;
 
-    da_com.qint32_d = 0x12345678;
-    qDebug("0x%x", da_com.bit.B0);
-    qDebug("0x%x", da_com.bit.B1);
-    qDebug("0x%x", da_com.bit.B2);
-    qDebug("0x%x", da_com.bit.B3);
-
-
-
+    if (ui->tabWidget->currentIndex() == 0) {
+        adc_dac_mode_set(ADC_MODE);
+    }else if (ui->tabWidget->currentIndex()) {
+        adc_dac_mode_set(DAC_MODE);
+    }
 }
 
 MainWindow::~MainWindow()
@@ -480,7 +468,6 @@ void MainWindow::on_pushButton_close_sample_clicked()
 
 void MainWindow::on_net_plot_read(quint32 *block, quint32 length)
 {
-    qDebug() << "huitu";
     qint32 channel_a[500];
     qint32 channel_b[500];
     qint32 channel_c[500];
@@ -718,8 +705,11 @@ void MainWindow::on_actionDA_Back_triggered()
                                         this,       \
                                         SLOT( on_da_trans_packet(QByteArray)));
     connect( (QObject*)this->net_socket, SIGNAL(net_notify_dac_hand_ok(bool)), da_dialog_w, SLOT(on_net_notify_dac_hand_ok(bool))  );
+    ui->tabWidget->setCurrentIndex(1);
     da_dialog_w->setModal(false);
+
     da_dialog_w->show();
+
 
 }
 void MainWindow::on_da_trans_packet(QByteArray array)

@@ -82,11 +82,6 @@ NetClientThread::NetClientThread( QString server_ip, int server_port )
 
     key_check = true;
 
-    if (key_check) {
-        qDebug() << "lic check key ok";
-    }else {
-        qDebug() << "sorry, lic check key failed, please find admin lifimlt fetch a new lic.";
-    }
     connect( this, SIGNAL(net_data_save_to_disk(quint8*,quint64) ),(QObject*)this->file_ctr ,SLOT(on_save_data_to_disk(quint8*,quint64)));
     connect( (QObject*)this->file_ctr, SIGNAL(file_manager_add_file_name(QString)), this, SLOT(on_file_manager_add_doc_list(QString)) );
     connect( (QObject*)this->file_ctr, SIGNAL(file_manager_file_size(double)), this, SLOT(on_file_manager_file_size(double)));
@@ -309,6 +304,7 @@ void NetClientThread::check_packet(QByteArray array)
     if (array.contains(adc_header) && ( array.length() -  array.indexOf(adc_header) > ONE_PACKET_LENGTH) ) {
         true_packet = array.mid(array.indexOf(adc_header), ONE_PACKET_LENGTH);
         deal_true_packet(true_packet);
+        //qDebug() << "one true packet checked.";
     }
 
 }

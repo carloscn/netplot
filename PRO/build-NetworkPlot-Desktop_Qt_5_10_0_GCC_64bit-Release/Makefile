@@ -232,6 +232,7 @@ DIST          = /opt/Qt5.10.0/5.10.0/gcc_64/mkspecs/features/spec_pre.prf \
 		/opt/Qt5.10.0/5.10.0/gcc_64/mkspecs/features/qt_config.prf \
 		/opt/Qt5.10.0/5.10.0/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/opt/Qt5.10.0/5.10.0/gcc_64/mkspecs/features/spec_post.prf \
+		../NetworkPlot/.qmake.stash \
 		/opt/Qt5.10.0/5.10.0/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/opt/Qt5.10.0/5.10.0/gcc_64/mkspecs/features/toolchain.prf \
 		/opt/Qt5.10.0/5.10.0/gcc_64/mkspecs/features/default_pre.prf \
@@ -435,6 +436,7 @@ Makefile: ../NetworkPlot/NetworkPlot.pro /opt/Qt5.10.0/5.10.0/gcc_64/mkspecs/lin
 		/opt/Qt5.10.0/5.10.0/gcc_64/mkspecs/features/qt_config.prf \
 		/opt/Qt5.10.0/5.10.0/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/opt/Qt5.10.0/5.10.0/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/opt/Qt5.10.0/5.10.0/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/opt/Qt5.10.0/5.10.0/gcc_64/mkspecs/features/toolchain.prf \
 		/opt/Qt5.10.0/5.10.0/gcc_64/mkspecs/features/default_pre.prf \
@@ -623,6 +625,7 @@ Makefile: ../NetworkPlot/NetworkPlot.pro /opt/Qt5.10.0/5.10.0/gcc_64/mkspecs/lin
 /opt/Qt5.10.0/5.10.0/gcc_64/mkspecs/features/qt_config.prf:
 /opt/Qt5.10.0/5.10.0/gcc_64/mkspecs/linux-g++/qmake.conf:
 /opt/Qt5.10.0/5.10.0/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /opt/Qt5.10.0/5.10.0/gcc_64/mkspecs/features/exclusive_builds.prf:
 /opt/Qt5.10.0/5.10.0/gcc_64/mkspecs/features/toolchain.prf:
 /opt/Qt5.10.0/5.10.0/gcc_64/mkspecs/features/default_pre.prf:
@@ -3129,7 +3132,28 @@ mainwindow.o: ../NetworkPlot/mainwindow.cpp ../NetworkPlot/mainwindow.h \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QFileDialog \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/QElapsedTimer \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/QTime \
-		ui_mainwindow.h
+		ui_mainwindow.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QAction \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QApplication \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QButtonGroup \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QCheckBox \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QGridLayout \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QGroupBox \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QHBoxLayout \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QHeaderView \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QLabel \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QLineEdit \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QMenu \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QMenuBar \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QPushButton \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QSlider \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QSpacerItem \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QSpinBox \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QStatusBar \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QTabWidget \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QTextBrowser \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QToolBar \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QVBoxLayout
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../NetworkPlot/mainwindow.cpp
 
 netclientthread.o: ../NetworkPlot/netclientthread.cpp ../NetworkPlot/netclientthread.h \
@@ -3666,7 +3690,58 @@ da_dialog.o: ../NetworkPlot/da_dialog.cpp ../NetworkPlot/da_dialog.h \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/qelapsedtimer.h \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/QTime \
 		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/qdatetime.h \
-		ui_da_dialog.h
+		ui_da_dialog.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/QVariant \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QAction \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qaction.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtGui/qicon.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qactiongroup.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QApplication \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qapplication.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/qcoreapplication.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/qeventloop.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtGui/qguiapplication.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtGui/qinputmethod.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QButtonGroup \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qbuttongroup.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QDialogButtonBox \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QHBoxLayout \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qboxlayout.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qlayout.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qlayoutitem.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qgridlayout.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QHeaderView \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qheaderview.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qabstractitemview.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qframe.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/qabstractitemmodel.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/qitemselectionmodel.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qstyleoption.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtGui/qvalidator.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtCore/qregularexpression.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qslider.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qabstractslider.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qstyle.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qtabbar.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qtabwidget.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qrubberband.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QLabel \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qlabel.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QLineEdit \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qlineedit.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtGui/qtextcursor.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtGui/qtextformat.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtGui/qpen.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtGui/qtextoption.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QPushButton \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qpushbutton.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/qabstractbutton.h \
+		/opt/Qt5.10.0/5.10.0/gcc_64/include/QtWidgets/QVBoxLayout
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o da_dialog.o ../NetworkPlot/da_dialog.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 

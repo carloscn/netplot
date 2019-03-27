@@ -36,10 +36,10 @@
 #endif
 
 #include "da_dialog.h"
-#define         CHANNEL_0           0
-#define         CHANNEL_1           1
-#define         CHANNEL_2           2
-#define         CHANNEL_3           3
+#define         CHANNEL_3           0
+#define         CHANNEL_2           1
+#define         CHANNEL_1           2
+#define         CHANNEL_0           3
 namespace Ui {
 class MainWindow;
 }
