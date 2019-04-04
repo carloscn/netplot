@@ -565,7 +565,7 @@ void MainWindow::qwt_plot_fft(int channel, double *rom, int NP)
     fftwf_plan p;
     fftwf_complex  *in1_c = (fftwf_complex*)fftwf_malloc(sizeof(fftwf_complex)* NP);;
     fftwf_complex  *out1_c = (fftwf_complex *)fftwf_malloc(sizeof(fftwf_complex) * NP);
-
+    float ui_sample_freq = ui->lineEdit_freq->text().toFloat();
     QVector<QPointF> vector;
     double current_fft_value;
 
@@ -578,7 +578,7 @@ void MainWindow::qwt_plot_fft(int channel, double *rom, int NP)
     for( quint64 i = 0; i < 120 ; i++ ){
         QPointF point;
         current_fft_value = sqrt(out1_c[i][0] * out1_c[i][0] + out1_c[i][1] * out1_c[i][1]);
-        point.setX((210000/500)*i);
+        point.setX((ui_sample_freq/500)*i);
         if ( i < 2 )
             point.setY(0);
         else
