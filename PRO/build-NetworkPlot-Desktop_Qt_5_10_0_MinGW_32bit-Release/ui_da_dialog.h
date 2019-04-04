@@ -36,17 +36,23 @@ public:
     QLabel *label_2;
     QLineEdit *lineEdit_freq;
     QLabel *label_3;
+    QHBoxLayout *horizontalLayout_4;
+    QLabel *label_4;
+    QLineEdit *lineEdit_cycle_num;
+    QLabel *label_5;
+    QHBoxLayout *horizontalLayout_3;
     QPushButton *pushButton_Send;
     QPushButton *pushButton_start;
     QPushButton *pushButton_stop;
-    QDialogButtonBox *buttonBox;
+    QHBoxLayout *horizontalLayout_5;
     QLabel *label_dac_state;
+    QDialogButtonBox *buttonBox;
 
     void setupUi(QDialog *da_dialog)
     {
         if (da_dialog->objectName().isEmpty())
             da_dialog->setObjectName(QStringLiteral("da_dialog"));
-        da_dialog->resize(474, 206);
+        da_dialog->resize(511, 168);
         verticalLayout = new QVBoxLayout(da_dialog);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         horizontalLayout_2 = new QHBoxLayout();
@@ -89,32 +95,62 @@ public:
 
         verticalLayout->addLayout(horizontalLayout);
 
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
+        label_4 = new QLabel(da_dialog);
+        label_4->setObjectName(QStringLiteral("label_4"));
+
+        horizontalLayout_4->addWidget(label_4);
+
+        lineEdit_cycle_num = new QLineEdit(da_dialog);
+        lineEdit_cycle_num->setObjectName(QStringLiteral("lineEdit_cycle_num"));
+
+        horizontalLayout_4->addWidget(lineEdit_cycle_num);
+
+        label_5 = new QLabel(da_dialog);
+        label_5->setObjectName(QStringLiteral("label_5"));
+
+        horizontalLayout_4->addWidget(label_5);
+
+
+        verticalLayout->addLayout(horizontalLayout_4);
+
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
         pushButton_Send = new QPushButton(da_dialog);
         pushButton_Send->setObjectName(QStringLiteral("pushButton_Send"));
 
-        verticalLayout->addWidget(pushButton_Send);
+        horizontalLayout_3->addWidget(pushButton_Send);
 
         pushButton_start = new QPushButton(da_dialog);
         pushButton_start->setObjectName(QStringLiteral("pushButton_start"));
 
-        verticalLayout->addWidget(pushButton_start);
+        horizontalLayout_3->addWidget(pushButton_start);
 
         pushButton_stop = new QPushButton(da_dialog);
         pushButton_stop->setObjectName(QStringLiteral("pushButton_stop"));
 
-        verticalLayout->addWidget(pushButton_stop);
+        horizontalLayout_3->addWidget(pushButton_stop);
+
+
+        verticalLayout->addLayout(horizontalLayout_3);
+
+        horizontalLayout_5 = new QHBoxLayout();
+        horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
+        label_dac_state = new QLabel(da_dialog);
+        label_dac_state->setObjectName(QStringLiteral("label_dac_state"));
+
+        horizontalLayout_5->addWidget(label_dac_state);
 
         buttonBox = new QDialogButtonBox(da_dialog);
         buttonBox->setObjectName(QStringLiteral("buttonBox"));
         buttonBox->setOrientation(Qt::Horizontal);
         buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
 
-        verticalLayout->addWidget(buttonBox);
+        horizontalLayout_5->addWidget(buttonBox);
 
-        label_dac_state = new QLabel(da_dialog);
-        label_dac_state->setObjectName(QStringLiteral("label_dac_state"));
 
-        verticalLayout->addWidget(label_dac_state);
+        verticalLayout->addLayout(horizontalLayout_5);
 
 
         retranslateUi(da_dialog);
@@ -127,14 +163,17 @@ public:
     void retranslateUi(QDialog *da_dialog)
     {
         da_dialog->setWindowTitle(QApplication::translate("da_dialog", "Dialog", nullptr));
-        label->setText(QApplication::translate("da_dialog", "Load:", nullptr));
+        label->setText(QApplication::translate("da_dialog", "\345\212\240\350\275\275\346\226\207\344\273\266\357\274\232", nullptr));
         pushButton_load->setText(QApplication::translate("da_dialog", "...", nullptr));
-        label_2->setText(QApplication::translate("da_dialog", "Freq:", nullptr));
+        label_2->setText(QApplication::translate("da_dialog", "\346\263\242\345\275\242\351\242\221\347\216\207\357\274\232", nullptr));
         lineEdit_freq->setText(QApplication::translate("da_dialog", "100000", nullptr));
         label_3->setText(QApplication::translate("da_dialog", "Hz", nullptr));
-        pushButton_Send->setText(QApplication::translate("da_dialog", "Send", nullptr));
-        pushButton_start->setText(QApplication::translate("da_dialog", "Start", nullptr));
-        pushButton_stop->setText(QApplication::translate("da_dialog", "stop", nullptr));
+        label_4->setText(QApplication::translate("da_dialog", "\345\276\252\347\216\257\346\254\241\346\225\260\357\274\232", nullptr));
+        lineEdit_cycle_num->setText(QApplication::translate("da_dialog", "50", nullptr));
+        label_5->setText(QApplication::translate("da_dialog", "\346\254\241", nullptr));
+        pushButton_Send->setText(QApplication::translate("da_dialog", "\345\217\221\351\200\201", nullptr));
+        pushButton_start->setText(QApplication::translate("da_dialog", "\345\274\200\345\247\213\344\277\241\345\217\267", nullptr));
+        pushButton_stop->setText(QApplication::translate("da_dialog", "\345\201\234\346\255\242\344\277\241\345\217\267", nullptr));
         label_dac_state->setText(QApplication::translate("da_dialog", "State: DAC Fucntion.", nullptr));
     } // retranslateUi
 
