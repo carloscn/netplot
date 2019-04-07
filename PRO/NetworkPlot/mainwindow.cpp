@@ -497,10 +497,10 @@ void MainWindow::on_net_plot_read(quint32 *block, quint32 length)
         channel_d[i] = (qint32) block[3*500+i] << 8;// & (0xFFFFFF))* (((block[3*500+i] & 0x800000) >> 23)?1:-1);
     }
     for (quint32 i = 0; i < 500; i ++) {
-        channel_a_d[i] = channel_a[i] / 1677722 + 700;
-        channel_b_d[i] = channel_b[i] / 1677722 + 700;
-        channel_c_d[i] = channel_c[i] / 1677722 + 700;
-        channel_d_d[i] = channel_d[i] / 1677722 + 700 - 250;
+        channel_a_d[i] = channel_a[i] / 16777216;
+        channel_b_d[i] = channel_b[i] / 16777216;
+        channel_c_d[i] = channel_c[i] / 16777216;
+        channel_d_d[i] = channel_d[i] / 16777216;
         //qDebug() << "sample: " << channel_a_d[i];
     }
     if (ui->checkBox_ch1_time->isChecked()) {

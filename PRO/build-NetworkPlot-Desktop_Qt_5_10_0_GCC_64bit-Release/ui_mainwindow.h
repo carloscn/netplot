@@ -331,7 +331,7 @@ public:
         lineEdit_fs->setObjectName(QStringLiteral("lineEdit_fs"));
         sizePolicy2.setHeightForWidth(lineEdit_fs->sizePolicy().hasHeightForWidth());
         lineEdit_fs->setSizePolicy(sizePolicy2);
-        lineEdit_fs->setReadOnly(true);
+        lineEdit_fs->setReadOnly(false);
 
         horizontalLayout_8->addWidget(lineEdit_fs);
 
@@ -659,7 +659,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(1);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -689,8 +689,8 @@ public:
         label_5->setText(QApplication::translate("MainWindow", "\344\275\216\351\200\232\351\242\221\347\216\207(KHz):", nullptr));
         lineEdit_freq->setText(QApplication::translate("MainWindow", "50", nullptr));
         pushButton_freq_set->setText(QApplication::translate("MainWindow", "\350\256\276\345\256\232", nullptr));
-        label_6->setText(QApplication::translate("MainWindow", "\351\207\207\346\240\267\347\216\207kHz):", nullptr));
-        lineEdit_fs->setText(QApplication::translate("MainWindow", "210", nullptr));
+        label_6->setText(QApplication::translate("MainWindow", "\351\207\207\346\240\267\347\216\207Hz):", nullptr));
+        lineEdit_fs->setText(QApplication::translate("MainWindow", "250000", nullptr));
         pushButton_fs_set->setText(QApplication::translate("MainWindow", "\350\256\276\345\256\232", nullptr));
         label_4->setText(QApplication::translate("MainWindow", "\345\242\236\347\233\212(1,2): ", nullptr));
         lineEdit_gain_1->setText(QApplication::translate("MainWindow", "1", nullptr));
