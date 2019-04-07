@@ -14,10 +14,10 @@ CXX           = g++
 DEFINES       = -DUNICODE -D_UNICODE -DQT_DEPRECATED_WARNINGS -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN
 CFLAGS        = -fno-keep-inline-dllexport -g -Wextra -Wall -W $(DEFINES)
 CXXFLAGS      = -fno-keep-inline-dllexport -g -std=gnu++11 -Wextra -Wall -W -fexceptions -mthreads $(DEFINES)
-INCPATH       = -I..\NetworkPlot -I. -IC:\opt\qwt\qwt-6.1.4\include -IC:\opt\fftw -IC:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\include -IC:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\include\QtPrintSupport -IC:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\include\QtWidgets -IC:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\include\QtGui -IC:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\include\QtANGLE -IC:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\include\QtNetwork -IC:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\include\QtCore -Idebug -I. -IC:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\mkspecs\win32-g++ 
+INCPATH       = -I..\NetworkPlot -I. -IC:\opt\qwt\qwt-6.1.3\include -IC:\opt\fftw -IC:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\include -IC:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\include\QtPrintSupport -IC:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\include\QtWidgets -IC:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\include\QtGui -IC:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\include\QtANGLE -IC:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\include\QtNetwork -IC:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\include\QtCore -Idebug -I. -IC:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\mkspecs\win32-g++ 
 LINKER      =        g++
 LFLAGS        =        -Wl,-subsystem,windows -mthreads
-LIBS        =        -lmingw32 -LC:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\lib C:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\lib\libqtmaind.a -LC:\utils\my_sql\my_sql\lib -LC:\utils\postgresql\pgsql\lib -lshell32 -LC:\opt\qwt\qwt-6.1.4\lib -lqwt C:\opt\fftw\libfftw3f-3.dll C:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\lib\libQt5PrintSupportd.a C:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\lib\libQt5Widgetsd.a C:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\lib\libQt5Guid.a C:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\lib\libQt5Networkd.a C:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\lib\libQt5Cored.a 
+LIBS        =        -lmingw32 -LC:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\lib C:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\lib\libqtmaind.a -LC:\utils\my_sql\my_sql\lib -LC:\utils\postgresql\pgsql\lib -lshell32 -LC:\opt\qwt\qwt-6.1.3\lib -lqwt C:\opt\fftw\libfftw3f-3.dll C:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\lib\libQt5PrintSupportd.a C:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\lib\libQt5Widgetsd.a C:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\lib\libQt5Guid.a C:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\lib\libQt5Networkd.a C:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\lib\libQt5Cored.a 
 QMAKE         = C:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\bin\qmake.exe
 IDC           = idc
 IDL           = midl
@@ -690,40 +690,40 @@ debug/moc_mainwindow.cpp: C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtWidgets
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/QTypeInfo \
 		../NetworkPlot/filemanager.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/QDir \
-		C:/opt/qwt/qwt-6.1.4/include/qwt.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_global.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_text.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_dict.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_item.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_legend_data.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_graphic.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_null_paintdevice.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_scale_map.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_transform.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_interval.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_curve.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_seriesitem.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_scale_div.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_series_data.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_samples.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_point_3d.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_point_polar.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_math.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_series_store.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_legend.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_abstract_legend.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_zoomer.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_picker.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_picker.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_event_pattern.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_panner.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_panner.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_magnifier.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_magnifier.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_grid.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_scale_draw.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_abstract_scale_draw.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_global.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_text.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_dict.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_item.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_legend_data.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_graphic.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_null_paintdevice.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_scale_map.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_transform.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_interval.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_curve.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_seriesitem.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_scale_div.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_series_data.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_samples.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_point_3d.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_point_polar.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_math.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_series_store.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_legend.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_abstract_legend.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_zoomer.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_picker.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_picker.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_event_pattern.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_panner.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_panner.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_magnifier.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_magnifier.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_grid.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_scale_draw.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_abstract_scale_draw.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtWidgets/QProgressBar \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtWidgets/QTableWidget \
 		C:/opt/fftw/fftw3.h \
@@ -735,7 +735,7 @@ debug/moc_mainwindow.cpp: C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtWidgets
 		../NetworkPlot/mainwindow.h \
 		debug/moc_predefs.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/bin/moc.exe
-	C:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\bin\moc.exe $(DEFINES) --include debug/moc_predefs.h -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/win32-g++ -ID:/Workspace/QT/NETWORK_PLOT/netplot/PRO/NetworkPlot -IC:/opt/qwt/qwt-6.1.4/include -IC:/opt/fftw -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtPrintSupport -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtWidgets -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtGui -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtANGLE -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtNetwork -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore -I. -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include-fixed -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include/c++ -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include/c++/i686-w64-mingw32 -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include/c++/backward ..\NetworkPlot\mainwindow.h -o debug\moc_mainwindow.cpp
+	C:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\bin\moc.exe $(DEFINES) --include debug/moc_predefs.h -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/win32-g++ -ID:/Workspace/QT/netplot/PRO/NetworkPlot -IC:/opt/qwt/qwt-6.1.3/include -IC:/opt/fftw -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtPrintSupport -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtWidgets -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtGui -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtANGLE -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtNetwork -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore -I. -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include-fixed -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include/c++ -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include/c++/i686-w64-mingw32 -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include/c++/backward ..\NetworkPlot\mainwindow.h -o debug\moc_mainwindow.cpp
 
 debug/moc_netclientthread.cpp: C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/QThread \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/qthread.h \
@@ -998,7 +998,7 @@ debug/moc_netclientthread.cpp: C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCo
 		../NetworkPlot/netclientthread.h \
 		debug/moc_predefs.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/bin/moc.exe
-	C:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\bin\moc.exe $(DEFINES) --include debug/moc_predefs.h -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/win32-g++ -ID:/Workspace/QT/NETWORK_PLOT/netplot/PRO/NetworkPlot -IC:/opt/qwt/qwt-6.1.4/include -IC:/opt/fftw -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtPrintSupport -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtWidgets -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtGui -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtANGLE -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtNetwork -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore -I. -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include-fixed -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include/c++ -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include/c++/i686-w64-mingw32 -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include/c++/backward ..\NetworkPlot\netclientthread.h -o debug\moc_netclientthread.cpp
+	C:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\bin\moc.exe $(DEFINES) --include debug/moc_predefs.h -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/win32-g++ -ID:/Workspace/QT/netplot/PRO/NetworkPlot -IC:/opt/qwt/qwt-6.1.3/include -IC:/opt/fftw -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtPrintSupport -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtWidgets -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtGui -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtANGLE -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtNetwork -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore -I. -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include-fixed -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include/c++ -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include/c++/i686-w64-mingw32 -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include/c++/backward ..\NetworkPlot\netclientthread.h -o debug\moc_netclientthread.cpp
 
 debug/moc_filemanager.cpp: C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/QString \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/qstring.h \
@@ -1083,7 +1083,7 @@ debug/moc_filemanager.cpp: C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/Q
 		../NetworkPlot/filemanager.h \
 		debug/moc_predefs.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/bin/moc.exe
-	C:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\bin\moc.exe $(DEFINES) --include debug/moc_predefs.h -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/win32-g++ -ID:/Workspace/QT/NETWORK_PLOT/netplot/PRO/NetworkPlot -IC:/opt/qwt/qwt-6.1.4/include -IC:/opt/fftw -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtPrintSupport -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtWidgets -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtGui -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtANGLE -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtNetwork -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore -I. -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include-fixed -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include/c++ -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include/c++/i686-w64-mingw32 -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include/c++/backward ..\NetworkPlot\filemanager.h -o debug\moc_filemanager.cpp
+	C:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\bin\moc.exe $(DEFINES) --include debug/moc_predefs.h -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/win32-g++ -ID:/Workspace/QT/netplot/PRO/NetworkPlot -IC:/opt/qwt/qwt-6.1.3/include -IC:/opt/fftw -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtPrintSupport -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtWidgets -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtGui -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtANGLE -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtNetwork -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore -I. -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include-fixed -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include/c++ -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include/c++/i686-w64-mingw32 -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include/c++/backward ..\NetworkPlot\filemanager.h -o debug\moc_filemanager.cpp
 
 debug/moc_da_dialog.cpp: C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtWidgets/QDialog \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtWidgets/qdialog.h \
@@ -1209,7 +1209,7 @@ debug/moc_da_dialog.cpp: C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtWidgets/
 		../NetworkPlot/da_dialog.h \
 		debug/moc_predefs.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/bin/moc.exe
-	C:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\bin\moc.exe $(DEFINES) --include debug/moc_predefs.h -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/win32-g++ -ID:/Workspace/QT/NETWORK_PLOT/netplot/PRO/NetworkPlot -IC:/opt/qwt/qwt-6.1.4/include -IC:/opt/fftw -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtPrintSupport -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtWidgets -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtGui -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtANGLE -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtNetwork -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore -I. -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include-fixed -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include/c++ -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include/c++/i686-w64-mingw32 -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include/c++/backward ..\NetworkPlot\da_dialog.h -o debug\moc_da_dialog.cpp
+	C:\opt\Qt\Qt5.10.0\5.10.0\mingw53_32\bin\moc.exe $(DEFINES) --include debug/moc_predefs.h -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/mkspecs/win32-g++ -ID:/Workspace/QT/netplot/PRO/NetworkPlot -IC:/opt/qwt/qwt-6.1.3/include -IC:/opt/fftw -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtPrintSupport -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtWidgets -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtGui -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtANGLE -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtNetwork -IC:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore -I. -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include-fixed -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include/c++ -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include/c++/i686-w64-mingw32 -IC:/opt/Qt/Qt5.10.0/Tools/mingw530_32/i686-w64-mingw32/include/c++/backward ..\NetworkPlot\da_dialog.h -o debug\moc_da_dialog.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -1220,8 +1220,8 @@ compiler_uic_clean:
 	-$(DEL_FILE) ui_mainwindow.h ui_da_dialog.h
 ui_mainwindow.h: ../NetworkPlot/mainwindow.ui \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/bin/uic.exe \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_global.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_global.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/qglobal.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/qconfig-bootstrapped.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/qconfig.h \
@@ -1243,7 +1243,7 @@ ui_mainwindow.h: ../NetworkPlot/mainwindow.ui \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/qmutex.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/qnumeric.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/qversiontagging.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_text.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_text.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/qstring.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/qchar.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/qbytearray.h \
@@ -1282,11 +1282,11 @@ ui_mainwindow.h: ../NetworkPlot/mainwindow.ui \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/qvarlengtharray.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/qcontainerfwd.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/qobject_impl.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_dict.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_item.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_legend_data.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_graphic.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_null_paintdevice.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_dict.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_item.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_legend_data.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_graphic.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_null_paintdevice.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtGui/qpaintdevice.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/qrect.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/qmargins.h \
@@ -1320,9 +1320,9 @@ ui_mainwindow.h: ../NetworkPlot/mainwindow.ui \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/qlocale.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/qset.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/qcontiguouscache.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_scale_map.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_transform.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_interval.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_scale_map.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_transform.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_interval.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtWidgets/qframe.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtWidgets/qtwidgetsglobal.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtWidgets/qtwidgets-config.h \
@@ -1921,40 +1921,40 @@ debug/main.o: ../NetworkPlot/main.cpp ../NetworkPlot/mainwindow.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/QTypeInfo \
 		../NetworkPlot/filemanager.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/QDir \
-		C:/opt/qwt/qwt-6.1.4/include/qwt.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_global.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_text.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_dict.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_item.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_legend_data.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_graphic.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_null_paintdevice.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_scale_map.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_transform.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_interval.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_curve.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_seriesitem.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_scale_div.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_series_data.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_samples.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_point_3d.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_point_polar.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_math.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_series_store.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_legend.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_abstract_legend.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_zoomer.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_picker.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_picker.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_event_pattern.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_panner.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_panner.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_magnifier.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_magnifier.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_grid.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_scale_draw.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_abstract_scale_draw.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_global.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_text.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_dict.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_item.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_legend_data.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_graphic.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_null_paintdevice.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_scale_map.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_transform.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_interval.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_curve.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_seriesitem.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_scale_div.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_series_data.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_samples.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_point_3d.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_point_polar.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_math.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_series_store.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_legend.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_abstract_legend.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_zoomer.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_picker.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_picker.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_event_pattern.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_panner.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_panner.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_magnifier.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_magnifier.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_grid.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_scale_draw.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_abstract_scale_draw.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtWidgets/QProgressBar \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtWidgets/QTableWidget \
 		C:/opt/fftw/fftw3.h \
@@ -2531,40 +2531,40 @@ debug/mainwindow.o: ../NetworkPlot/mainwindow.cpp ../NetworkPlot/mainwindow.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/QTypeInfo \
 		../NetworkPlot/filemanager.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtCore/QDir \
-		C:/opt/qwt/qwt-6.1.4/include/qwt.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_global.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_text.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_dict.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_item.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_legend_data.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_graphic.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_null_paintdevice.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_scale_map.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_transform.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_interval.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_curve.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_seriesitem.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_scale_div.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_series_data.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_samples.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_point_3d.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_point_polar.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_math.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_series_store.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_legend.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_abstract_legend.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_zoomer.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_picker.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_picker.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_event_pattern.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_panner.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_panner.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_magnifier.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_magnifier.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_plot_grid.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_scale_draw.h \
-		C:/opt/qwt/qwt-6.1.4/include/qwt_abstract_scale_draw.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_global.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_text.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_dict.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_item.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_legend_data.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_graphic.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_null_paintdevice.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_scale_map.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_transform.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_interval.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_curve.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_seriesitem.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_scale_div.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_series_data.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_samples.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_point_3d.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_point_polar.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_math.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_series_store.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_legend.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_abstract_legend.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_zoomer.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_picker.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_picker.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_event_pattern.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_panner.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_panner.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_magnifier.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_magnifier.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_plot_grid.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_scale_draw.h \
+		C:/opt/qwt/qwt-6.1.3/include/qwt_abstract_scale_draw.h \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtWidgets/QProgressBar \
 		C:/opt/Qt/Qt5.10.0/5.10.0/mingw53_32/include/QtWidgets/QTableWidget \
 		C:/opt/fftw/fftw3.h \
