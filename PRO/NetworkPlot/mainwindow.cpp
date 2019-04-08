@@ -131,6 +131,8 @@ MainWindow::MainWindow(QWidget *parent) :
     }else if (ui->tabWidget->currentIndex()) {
         adc_dac_mode_set(DAC_MODE);
     }
+
+
 }
 
 MainWindow::~MainWindow()
@@ -150,25 +152,29 @@ void MainWindow::init_qwt()
     QBrush brush2(QColor(128,128,128));
     QwtPlotGrid* grid_ch = new QwtPlotGrid();
     QwtPlotGrid* grid_fft = new QwtPlotGrid();
+    QwtPlotPicker *m_picker_ch = new QwtPlotPicker( QwtPlot::xBottom, QwtPlot::yLeft,
+                                                    QwtPlotPicker::CrossRubberBand, QwtPicker::AlwaysOn,
+                                                    ui->qwt_ch->canvas() );
+    QwtPlotPicker *m_picker_fft = new QwtPlotPicker( QwtPlot::xBottom, QwtPlot::yLeft,
+                                                     QwtPlotPicker::CrossRubberBand, QwtPicker::AlwaysOn,
+                                                     ui->qwt_fft->canvas() );
 
+    //qwtPicker->trackerTextF();
     brush2.setStyle(Qt::NoBrush);
-    font.setBold(true);
-    font.setItalic(false);
-    title.setFont(font);
-    title.setColor(QColor(25,25,112));
-    title.setText("Channel Time Domain");
-    //ui->qwt_ch->setTitle(title);
-    title.setText("Channel Freqency Domain");
-    //ui->qwt_fft->setTitle("Channel 01 FFT");
+    title.setText("时域波形图");
+    ui->qwt_ch->setAxisTitle(2,"伏特(V)");
+    ui->qwt_ch->setTitle(title);
+    title.setText("频域波形图");
+    ui->qwt_fft->setTitle(title);
     ui->qwt_fft->setAxisTitle(2,"Hz");
     ui->qwt_ch->insertLegend(new QwtLegend(), QwtPlot::TopLegend);
     ui->qwt_fft->insertLegend(new QwtLegend(), QwtPlot::TopLegend);
     ui->qwt_ch->setStyleSheet("background-color:rgb(255,255,255)");
     ui->qwt_fft->setStyleSheet("background-color:rgb(255,255,255)");
-    this->qwt_curve1_ch1 = new QwtPlotCurve("CH1");
-    this->qwt_curve1_ch2 = new QwtPlotCurve("CH2");
-    this->qwt_curve1_ch3 = new QwtPlotCurve("CH3");
-    this->qwt_curve1_ch4 = new QwtPlotCurve("CH4");
+    this->qwt_curve1_ch1 = new QwtPlotCurve("通道1（单位V）");
+    this->qwt_curve1_ch2 = new QwtPlotCurve("通道2（单位V）");
+    this->qwt_curve1_ch3 = new QwtPlotCurve("通道3（单位V）");
+    this->qwt_curve1_ch4 = new QwtPlotCurve("通道4（单位V）");
     this->qwt_curve1_ch1_fft = new QwtPlotCurve("CH1 FFT");
     this->qwt_curve1_ch2_fft = new QwtPlotCurve("CH2 FFT");
     this->qwt_curve1_ch3_fft = new QwtPlotCurve("CH3 FFT");
