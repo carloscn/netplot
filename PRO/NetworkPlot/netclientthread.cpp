@@ -101,7 +101,7 @@ bool NetClientThread::set_connect(QString server_ip, int server_port)
     socket->connectToHost( server_ip, server_port , QIODevice::ReadWrite );
 
     QObject::connect((QObject*) socket,SIGNAL(readyRead()),(QObject*)this,SLOT(on_read_message()));
-    if( !socket->waitForConnected(30000) ) {
+    if( !socket->waitForConnected(1000) ) {
         //1//xqDebug("netclientread@set_connect() >: socket Connection failed!!");
         return false;
     }else {

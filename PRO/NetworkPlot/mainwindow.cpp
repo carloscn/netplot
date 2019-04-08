@@ -246,12 +246,12 @@ void MainWindow::on_pushButton_set_clicked()
     ret = net_socket->set_connect( ui->lineEdit_server_ip->text(), ui->lineEdit_port_num->text().toInt());
     if( !ret ) {
         qDebug("socket Connection failed!!");
-        QMessageBox::warning(this,"Info","Remote server connected failed.");
+        QMessageBox::warning(this,"Info","与通信系统下位机网路连接失败！");
         ui->pushButton_set->setEnabled(true);
         ui->pushButton_disconnect->setEnabled(false);
     }else {
         qDebug("socket conncetion succussful.");
-        QMessageBox::information(this,"Info","Remote server connected.");
+        QMessageBox::information(this,"Info","与通信系统下位机已建立连接.");
         ui->pushButton_set->setEnabled(false);
         ui->pushButton_disconnect->setEnabled(true);
         ui->pushButton_close_remote->setEnabled(true);
@@ -484,25 +484,54 @@ void MainWindow::on_net_plot_read(quint32 *block, quint32 length)
         channel_a[i] = ((qint32)(~block[i] + 1) & (0xFFFFFF)) * (((block[i] & 0x800000) >> 23)?1:-1);
         channel_b[i] = ((qint32)(~block[500+i] + 1) & (0xFFFFFF)) * (((block[500+i] & 0x800000) >> 23)?1:-1);
         channel_c[i] = ((qint32)(~block[2*500+i] + 1) & (0xFFFFFF))* (((block[2*500+i] & 0x800000) >> 23)?1:-1);
-        channel_d[i] = ((qint32)(~block[3*500+i] + 1) & (0xFFFFFF))* (((block[3*500+i] & 0x800000) >> 23)?1:-1);
-#elif 0
-        channel_a[i] = (qint32) (~(block[i] - 1))      ^(1<<23);// & (0xFFFFFF)) * (((block[i] & 0x800000) >> 23)?1:-1);
-        channel_b[i] = (qint32) (~(block[500+i] - 1))  ^(1<<23);// & (0xFFFFFF)) * (((block[500+i] & 0x800000) >> 23)?1:-1);
-        channel_c[i] = (qint32) (~(block[2*500+i] - 1))^(1<<23);// & (0xFFFFFF))* (((block[2*500+i] & 0x800000) >> 23)?1:-1);
-        channel_d[i] = (qint32) (~(block[3*500+i] - 1))^(1<<23);// & (0xFFFFFF))* (((block[3*500+i] & 0x800000) >> 23)?1:-1);
-#endif
-        channel_a[i] = (qint32) block[i] << 8;// & (0xFFFFFF)) * (((block[i] & 0x800000) >> 23)?1:-1);
+#elif 1
+        channel_a[i] = (qint32) block[i] << 8;
         channel_b[i] = (qint32) block[500+i] << 8;// & (0xFFFFFF)) * (((block[500+i] & 0x800000) >> 23)?1:-1);
         channel_c[i] = (qint32) block[2*500+i] << 8;// & (0xFFFFFF))* (((block[2*500+i] & 0x800000) >> 23)?1:-1);
         channel_d[i] = (qint32) block[3*500+i] << 8;// & (0xFFFFFF))* (((block[3*500+i] & 0x800000) >> 23)?1:-1);
+#elif 0
+
+        // 23 22 21 20    19 18 17 16    15 14 13 12    11  10  9   8   7  6  5   4   3   2   1   0
+        // 0  0  0  0  |  0  0  0  0 |   0  0  0  0  |  0   0   0   0  |0  0  0   0 | 0   0   0   0
+        // 8 0 0 0 0 0
+        if (block[i] & 0x00800000 == 0x00800000) {
+            channel_a[i] = (qint32)0x007FFFFF - ((qint32)block[i] & 0x007FFFFF);
+            channel_a[i] *= -1;
+        }else{
+            channel_a[i] = block[i] & 0x007FFFFF;
+        }
+
+        if (block[500+i] & 0x00800000 == 0x00800000) {
+            channel_b[i] = (qint32)0x007FFFFF - ((qint32)block[500+i] & 0x007FFFFF);
+            channel_b[i] *= -1;
+        }else{
+            channel_b[i] = block[500+i] & 0x007FFFFF;
+        }
+
+        if (block[2*500+ i] & 0x00800000 == 0x00800000) {
+            channel_c[i] = (qint32)0x007FFFFF - ((qint32)block[2*500+ i] & 0x007FFFFF);
+            channel_c[i] *= -1;
+        }else{
+            channel_c[i] = block[2*500+ i] & 0x007FFFFF;
+        }
+
+        if (block[3*500+ i] & 0x00800000 == 0x00800000) {
+            channel_d[i] = (qint32)0x007FFFFF - ((qint32)block[3*500+ i] & 0x007FFFFF);
+            channel_d[i] *= -1;
+        }else{
+            channel_d[i] = block[3*500+ i] & 0x007FFFFF;
+        }
+#endif
     }
+
     for (quint32 i = 0; i < 500; i ++) {
-        channel_a_d[i] = channel_a[i] / 16777216 * 5.0;
-        channel_b_d[i] = channel_b[i] / 16777216 * 5.0;
-        channel_c_d[i] = channel_c[i] / 16777216 * 5.0;
-        channel_d_d[i] = channel_d[i] / 16777216 * 5.0;
+        channel_a_d[i] = channel_a[i] / 256 / 1000000000.0 * 488;
+        channel_b_d[i] = channel_b[i] / 256 / 1000000000.0 * 488;
+        channel_c_d[i] = channel_c[i] / 256 / 1000000000.0 * 488;
+        channel_d_d[i] = channel_d[i] / 256 / 1000000000.0 * 488;
         //qDebug() << "sample: " << channel_a_d[i];
     }
+
     if (ui->checkBox_ch1_time->isChecked()) {
         this->qwt_curve1_ch1->attach(ui->qwt_ch);
         qwt_plot_wave(CHANNEL_0, channel_a_d, 500);
@@ -565,7 +594,7 @@ void MainWindow::qwt_plot_fft(int channel, double *rom, int NP)
     fftwf_plan p;
     fftwf_complex  *in1_c = (fftwf_complex*)fftwf_malloc(sizeof(fftwf_complex)* NP);;
     fftwf_complex  *out1_c = (fftwf_complex *)fftwf_malloc(sizeof(fftwf_complex) * NP);
-    float ui_sample_freq = ui->lineEdit_freq->text().toFloat();
+    float ui_sample_freq = 250000.0;
     QVector<QPointF> vector;
     double current_fft_value;
 
@@ -702,8 +731,8 @@ void MainWindow::on_actionDA_Back_triggered()
     }
     da_dialog_w = new da_dialog(this);
     connect( (QObject*)da_dialog_w, SIGNAL( da_trans_packet(QByteArray) ),  \
-                                        this,       \
-                                        SLOT( on_da_trans_packet(QByteArray)));
+             this,       \
+             SLOT( on_da_trans_packet(QByteArray)));
     connect( (QObject*)this->net_socket, SIGNAL(net_notify_dac_hand_ok(bool)), da_dialog_w, SLOT(on_net_notify_dac_hand_ok(bool))  );
     ui->tabWidget->setCurrentIndex(1);
     da_dialog_w->setModal(false);
@@ -736,40 +765,40 @@ void MainWindow::on_horizontalSlider_do_valueChanged(int value)
 
     for (quint64 i = 0; i < 500; i ++)
         //plot_buffer[i] = adc_data[i] &0xFF;
-    for (quint64 i = 0; i < 500; i ++) {
-        uh = (plot_buffer[16*i + 2 - value] << 16) & 0x00FF0000;
-        h  = (plot_buffer[16*i + 1 - value]  << 8)  & 0x0000FF00;
-        l  = (plot_buffer[16*i + 0 - value] << 0)  & 0x000000FF;
-        ul = (plot_buffer[16*i + 3 - value] << 0)  & 0X000000FF;
+        for (quint64 i = 0; i < 500; i ++) {
+            uh = (plot_buffer[16*i + 2 - value] << 16) & 0x00FF0000;
+            h  = (plot_buffer[16*i + 1 - value]  << 8)  & 0x0000FF00;
+            l  = (plot_buffer[16*i + 0 - value] << 0)  & 0x000000FF;
+            ul = (plot_buffer[16*i + 3 - value] << 0)  & 0X000000FF;
 
-        da = uh | h | l;
+            da = uh | h | l;
 
-        uh = (plot_buffer[16*i + 6 - value] << 16) & 0x00FF0000;
-        h  = (plot_buffer[16*i + 5 - value] << 8)  & 0x0000FF00;
-        l  = (plot_buffer[16*i + 4 - value] << 0)  & 0x000000FF;
-        ul = (plot_buffer[16*i + 7 - value] << 0)  & 0X000000FF;
+            uh = (plot_buffer[16*i + 6 - value] << 16) & 0x00FF0000;
+            h  = (plot_buffer[16*i + 5 - value] << 8)  & 0x0000FF00;
+            l  = (plot_buffer[16*i + 4 - value] << 0)  & 0x000000FF;
+            ul = (plot_buffer[16*i + 7 - value] << 0)  & 0X000000FF;
 
-        db = uh | h | l;
+            db = uh | h | l;
 
-        uh = (plot_buffer[16*i + 10 - value] << 16) & 0x00FF0000;
-        h  = (plot_buffer[16*i + 9 - value] << 8)  & 0x0000FF00;
-        l  = (plot_buffer[16*i + 8 - value] << 0)  & 0x000000FF;
-        ul = (plot_buffer[16*i + 11 - value] << 0)  & 0X000000FF;
+            uh = (plot_buffer[16*i + 10 - value] << 16) & 0x00FF0000;
+            h  = (plot_buffer[16*i + 9 - value] << 8)  & 0x0000FF00;
+            l  = (plot_buffer[16*i + 8 - value] << 0)  & 0x000000FF;
+            ul = (plot_buffer[16*i + 11 - value] << 0)  & 0X000000FF;
 
-        dc = uh | h | l;
+            dc = uh | h | l;
 
-        uh = (plot_buffer[16*i + 14 - value] << 16) & 0x00FF0000;
-        h  = (plot_buffer[16*i + 13 - value] << 8)  & 0x0000FF00;
-        l  = (plot_buffer[16*i + 12 - value] << 0)  & 0x000000FF;
-        ul = (plot_buffer[16*i + 15 - value] << 0)  & 0X000000FF;
+            uh = (plot_buffer[16*i + 14 - value] << 16) & 0x00FF0000;
+            h  = (plot_buffer[16*i + 13 - value] << 8)  & 0x0000FF00;
+            l  = (plot_buffer[16*i + 12 - value] << 0)  & 0x000000FF;
+            ul = (plot_buffer[16*i + 15 - value] << 0)  & 0X000000FF;
 
-        dd = uh | h | l;
+            dd = uh | h | l;
 
-        channel_data[i - value] = da;
-        channel_data[500 + i - value] = db;
-        channel_data[1000 + i - value] = dc;
-        channel_data[1500 + i- value]  = dd;
-    }
+            channel_data[i - value] = da;
+            channel_data[500 + i - value] = db;
+            channel_data[1000 + i - value] = dc;
+            channel_data[1500 + i- value]  = dd;
+        }
     on_net_plot_read(channel_data, 500);
 }
 
