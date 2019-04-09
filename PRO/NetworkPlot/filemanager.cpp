@@ -64,7 +64,7 @@ FileManager::FileManager(): file(new QFile),datetime(new QDateTime){
 FileManager::~FileManager() {
 
 }
-
+/*
 void FileManager::write(QByteArray data) {
 
     if(prewriteexame == false) {
@@ -96,7 +96,7 @@ void FileManager::write(QByteArray data) {
     QDataStream out(file);
     out << data;
 }
-
+*/
 void FileManager::write(quint8* buffer, quint64 length) {
     double percent;
 
@@ -131,6 +131,45 @@ void FileManager::write(quint8* buffer, quint64 length) {
     percent = ((double)filesize)/512.0/1024.0/1024.0;
 
     file->write((char*)buffer, length);
+
+    emit file_manager_file_size(percent);
+    //qDebug() << "Writing data to hex file ... ...";
+}
+
+void FileManager::write(QByteArray array) {
+    double percent;
+
+    if(prewriteexame == false) {
+        // preWriteExam only run once!
+        preWriteExam();
+        prewriteexame = true;
+
+    }
+    // Determine if the hex file full with FILE_SIZE_MAX, if true, then, create another file
+    if(isFileFull(qFilePath)==true) {
+
+        if(fileclose == true) {
+            file->close();
+            fileopen = false;
+        }
+        currenttime = datetime->currentDateTime().toString("yyyyMMddHHmmss");
+        qFilePath = qFileDirPath + currenttime + ".hex";
+        emit file_manager_add_file_name(currenttime+".hex");
+        qDebug() << "Create another hex file ....................";
+    }
+
+    if(file->isOpen() == false) {
+        file->setFileName(qFilePath);
+        file->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text);
+        fileclose = false;
+        fileopen = true;
+    }
+    QFileInfo fileInfo(qFilePath);
+    filesize = fileInfo.size();
+
+    percent = ((double)filesize)/512.0/1024.0/1024.0;
+
+    file->write(array);
 
     emit file_manager_file_size(percent);
     //qDebug() << "Writing data to hex file ... ...";
@@ -217,6 +256,11 @@ void FileManager::on_save_data_to_disk(quint8 *buffer, quint64 length)
     //qDebug() << "slot on save data to disk..";
     this->write(buffer, length);
 }
+void FileManager::on_save_data_to_disk(QByteArray array)
+{
+    this->write(array);
+}
+
 
 void FileManager::fileClose()
 {

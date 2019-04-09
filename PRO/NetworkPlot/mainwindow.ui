@@ -121,7 +121,7 @@
            <item>
             <widget class="QPushButton" name="pushButton_close_remote">
              <property name="text">
-              <string>开启接收</string>
+              <string>刷新网络</string>
              </property>
             </widget>
            </item>
@@ -700,7 +700,7 @@
      <x>0</x>
      <y>0</y>
      <width>1249</width>
-     <height>23</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

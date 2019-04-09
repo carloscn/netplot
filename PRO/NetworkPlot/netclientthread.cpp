@@ -1,7 +1,38 @@
+/**
+ * \brief   This project about NETPLOT.
+ *
+ * \License  THIS FILE IS PART OF MULTIBEANS PROJECT;
+ *           all of the files  - The core part of the project;
+ *           THIS PROGRAM IS NOT FREE SOFTWARE, NEED MULTIBEANS ORG LIC;
+ *           YOU SHOULD HAVE RECEIVED A COPY OF WTFPL LICENSE UTIL 5/1/2021
+ *           OVER THE DATE, ALL FUNCTIONS WILL BE CLOSED. IF NOT, MULTIBEANS
+ *           WILL TAKE APPROPRIATE MEASURES.
+ *
+ *                ________________     ___           _________________
+ *               |    __    __    |   |   |         |______     ______|
+ *               |   |  |  |  |   |   |   |                |   |
+ *               |   |  |__|  |   |   |   |________        |   |
+ *               |___|        |___|   |____________|       |___|
+ *
+ *                               MULTIBEANS ORG.
+ *                     Homepage: http://www.mltbns.com/
+ *
+ *           * You can download the license on our Github. ->
+ *           * -> https://github.com/lifimlt  <-
+ *           * Copyright (c) 2018 Wei Haochen(Carlos Wei: # whc.mlt@qq.com).
+ *           * Copyright (c) 2013-2018 MULTIBEANS ORG. http://www.mltbns.com/
+ *
+ *  \note    void.
+ ****************************************************************************/
 #include "netclientthread.h"
 
 #define             RING_BUFFER_SIZE    19200ul
 #define             pow(x) x*x
+#define             UINT_FORMAT_SAVE       0
+#define             KEY_ENABLE
+
+
+
 NetClientThread::NetClientThread( QString server_ip, int server_port )
 {
 
@@ -21,74 +52,21 @@ NetClientThread::NetClientThread( QString server_ip, int server_port )
     array_rom.clear();
     adc_dac_mode = DAC_MODE;
 #ifdef KEY_ENABLE
-    char *key_str = new char[40];
-    QString file_key;
-    QString mac_key;
-    QFile *key_file = new QFile("./lic/key");
-    bool time_checked = false;
-    bool mac_checked = false;
-    if (key_file->size() > 1) {
-        key_file->open(QIODevice::ReadOnly | QIODevice::Text);
-        key_file->readLine(key_str, 40);
-        key_file->close();
-        file_key = QString(QLatin1String(key_str));
-        qDebug() << file_key;
-        QString key_data = file_key.mid(0,6);
-        mac_key = file_key.mid(6,40);
-        qDebug() << "mac key:" << mac_key;
-        quint64 date = key_data.toUInt();
-        QString currentTime = QDateTime::currentDateTime().toString("yyyyMM");
-        qDebug() << key_data.toUInt() - 123456;
-        if ( currentTime.toUInt() <= date - 123456 && currentTime.toUInt() > 201809 ) {
-            qDebug() << "Date check ok. LIC TO " << date - 123456 ;
-            time_checked = true;
-
-        }else {
-            qDebug() << "Date check over the time.";
-            time_checked = false;
-        }
-
-        QList<QString> mac_id = gethostMac().split(':');
-        QString macAddr;
-        QString key = "";
-        for (quint8 i = 0; i < 6; i ++) {
-            macAddr.append(mac_id.at(i));
-        }
-
-        for (quint8 i = 0; i < 12; i ++) {
-            key.append(QString::number(macAddr.at(i).toLatin1()));
-        }
-        key.append('\n');
-        qDebug() << key;
-
-        if (!key.compare(mac_key)) {
-            qDebug() << "mac check ok!";
-            mac_checked = true;
-        }else {
-            qDebug() << "mac check failed";
-            mac_checked = false;
-        }
-    }else{
-        qDebug() << "invalid key doc;";
-        key_check = false;
-    }
-
-    if ( mac_checked && time_checked ) {
-        key_check = true;
-    }else {
-        key_check = false;
-    }
+    key_check = this->check_key();
 #endif
-
-    key_check = true;
-
     connect( this, SIGNAL(net_data_save_to_disk(quint8*,quint64) ),(QObject*)this->file_ctr ,SLOT(on_save_data_to_disk(quint8*,quint64)));
+    connect( this, SIGNAL(net_data_save_to_disk(QByteArray) ),(QObject*)this->file_ctr ,SLOT(on_save_data_to_disk(QByteArray)));
     connect( (QObject*)this->file_ctr, SIGNAL(file_manager_add_file_name(QString)), this, SLOT(on_file_manager_add_doc_list(QString)) );
     connect( (QObject*)this->file_ctr, SIGNAL(file_manager_file_size(double)), this, SLOT(on_file_manager_file_size(double)));
 
     //delete key_file;
     //delete key_str;
 
+}
+
+bool NetClientThread::check_key()
+{
+    return true;
 }
 
 bool NetClientThread::set_connect(QString server_ip, int server_port)
@@ -233,11 +211,12 @@ void NetClientThread::on_read_message()
         }
     }
     else if (adc_dac_mode == ADC_MODE) {
-
+        /*
         if (is_enable_socket_read == false ) {
             socket->readAll();
             return;
         }
+        */
         qint8 ret = 7;
 
         array_rom.append(socket->readAll());
@@ -246,12 +225,18 @@ void NetClientThread::on_read_message()
             return;
         if (array_length > 10*8010)
             vector_counter = 0;
-        //qDebug() << "on read message" << array_length;
-        socket_buffer = (quint8*)malloc(sizeof(quint8*) * (array_length + 1) );
-        for (quint32 i = 0; i < array_length; i ++)
-            socket_buffer[i] = array_rom.at(i)&0xFF;
-        if (isEnableSave == true)
+
+        if (isEnableSave == true) {
+#if UINT_FORMAT_SAVE
+            //qDebug() << "on read message" << array_length;
+            socket_buffer = (quint8*)malloc(sizeof(quint8*) * (array_length + 1) );
+            for (quint32 i = 0; i < array_length; i ++)
+                socket_buffer[i] = array_rom.at(i)&0xFF;
             emit net_data_save_to_disk(socket_buffer, array_length);
+#else
+            emit net_data_save_to_disk(array_rom);
+#endif
+        }
         check_packet(array_rom);
         array_rom.clear();
         array_length = 0;
@@ -284,7 +269,9 @@ void NetClientThread::on_read_message()
             break;
         }
 #endif
+#if UINT_FORMAT_SAVE
         free(socket_buffer);
+#endif
         vector_counter = 0;
 
         //socket->flush();

@@ -85,6 +85,8 @@ signals:
 
     void net_data_save_to_disk(quint8*, quint64);
 
+    void net_data_save_to_disk(QByteArray);
+
     void net_add_doc_list(QString);
 
     void net_file_size(double);
@@ -121,6 +123,7 @@ private :
     quint8 plot_buffer[ONE_PACKET_LENGTH];
     quint32 channel_data[2000];
     bool is_enable_socket_read;
+
     bool key_check;
     int adc_dac_mode;
 
@@ -135,6 +138,8 @@ private:
     void case_3(quint8 *socket_buffer, quint64 length, quint8 *right_buffer, quint64 right_length);
     void case_4(quint8* buffer, quint64 length);
     QString gethostMac();
+    bool check_key();
+
 
 
 

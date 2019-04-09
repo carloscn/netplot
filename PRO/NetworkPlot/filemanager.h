@@ -80,6 +80,7 @@ public:
 
 private slots:
     void on_save_data_to_disk(quint8*, quint64);
+    void on_save_data_to_disk(QByteArray);
 
 protected:
     void run();

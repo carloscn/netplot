@@ -1,10 +1,10 @@
 /**
- * \brief   This project about ds18b20 on common channels DS18B20 .
+ * \brief   This project about NETPLOT.
  *
  * \License  THIS FILE IS PART OF MULTIBEANS PROJECT;
  *           all of the files  - The core part of the project;
  *           THIS PROGRAM IS NOT FREE SOFTWARE, NEED MULTIBEANS ORG LIC;
- *           YOU SHOULD HAVE RECEIVED A COPY OF WTFPL LICENSE UTIL 5/1/2020
+ *           YOU SHOULD HAVE RECEIVED A COPY OF WTFPL LICENSE UTIL 5/1/2021
  *           OVER THE DATE, ALL FUNCTIONS WILL BE CLOSED. IF NOT, MULTIBEANS
  *           WILL TAKE APPROPRIATE MEASURES.
  *
@@ -19,8 +19,8 @@
  *
  *           * You can download the license on our Github. ->
  *           * -> https://github.com/lifimlt  <-
- *           * Copyright (c) 2013-2018 MULTIBEANS ORG. http://www.mltbns.com/
  *           * Copyright (c) 2018 Wei Haochen(Carlos Wei: # whc.mlt@qq.com).
+ *           * Copyright (c) 2013-2018 MULTIBEANS ORG. http://www.mltbns.com/
  *
  *  \note    void.
  ****************************************************************************/
@@ -150,13 +150,14 @@ void MainWindow::init_qwt()
     QBrush brush2(QColor(128,128,128));
     QwtPlotGrid* grid_ch = new QwtPlotGrid();
     QwtPlotGrid* grid_fft = new QwtPlotGrid();
+    /*
     QwtPlotPicker *m_picker_ch = new QwtPlotPicker( QwtPlot::xBottom, QwtPlot::yLeft,
                                                     QwtPlotPicker::CrossRubberBand, QwtPicker::AlwaysOn,
                                                     ui->qwt_ch->canvas() );
     QwtPlotPicker *m_picker_fft = new QwtPlotPicker( QwtPlot::xBottom, QwtPlot::yLeft,
                                                      QwtPlotPicker::CrossRubberBand, QwtPicker::AlwaysOn,
                                                      ui->qwt_fft->canvas() );
-
+    */
     //qwtPicker->trackerTextF();
     brush2.setStyle(Qt::NoBrush);
     title.setText("时域波形图");
