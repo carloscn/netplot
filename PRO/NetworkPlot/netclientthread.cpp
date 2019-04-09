@@ -225,16 +225,20 @@ void NetClientThread::on_read_message()
             return;
         if (array_length > 10*8010)
             vector_counter = 0;
-
+#if UINT_FORMAT_SAVE
+        socket_buffer = (quint8*)malloc(sizeof(quint8*) * (array_length + 1) );
+#endif
         if (isEnableSave == true) {
 #if UINT_FORMAT_SAVE
             //qDebug() << "on read message" << array_length;
-            socket_buffer = (quint8*)malloc(sizeof(quint8*) * (array_length + 1) );
+
             for (quint32 i = 0; i < array_length; i ++)
                 socket_buffer[i] = array_rom.at(i)&0xFF;
             emit net_data_save_to_disk(socket_buffer, array_length);
+            qDebug() << "write data len:" << array_length;
 #else
             emit net_data_save_to_disk(array_rom);
+            qDebug() << "write data len:" << array_rom.length();
 #endif
         }
         check_packet(array_rom);

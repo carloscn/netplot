@@ -160,7 +160,7 @@ void FileManager::write(QByteArray array) {
 
     if(file->isOpen() == false) {
         file->setFileName(qFilePath);
-        file->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text);
+        file->open(QIODevice::WriteOnly | QIODevice::Append );
         fileclose = false;
         fileopen = true;
     }
@@ -168,6 +168,7 @@ void FileManager::write(QByteArray array) {
     filesize = fileInfo.size();
 
     percent = ((double)filesize)/512.0/1024.0/1024.0;
+
 
     file->write(array);
 

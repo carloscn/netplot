@@ -43,12 +43,27 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include <QDataStream>
 #define             SERVER_IP       "192.168.1.176"
 #define             SERVER_PORT     8322
 #define             CUSTOM_PLOT     0
 #define             QWT_PLOT        1
 #define             N               1024
+
+typedef struct _DP {
+    quint8 rom[8010];
+    quint64 num_code;
+} DP;
+union _pa{
+    struct _ps{
+        quint8 eh;
+        quint8 h;
+        quint8 l;
+        quint8 el;
+    } bits;
+    quint32 all;
+    quint8 bits_ar[4];
+} rom[8010];
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -131,6 +146,7 @@ MainWindow::MainWindow(QWidget *parent) :
     }else if (ui->tabWidget->currentIndex()) {
         adc_dac_mode_set(DAC_MODE);
     }
+
 }
 
 MainWindow::~MainWindow()
@@ -214,6 +230,9 @@ void MainWindow::init_qwt()
     grid_fft->setPen(QColor(220,220,220),1,Qt::DashLine);
     grid_ch->attach(ui->qwt_ch);
     grid_fft->attach(ui->qwt_fft);
+
+
+    /*
     for( int i = 0; i < N; i ++ )
         sin_table[i] = 50* sin(2*M_PI*(5.0/N)*i) + 20 * cos(2*M_PI*(10.0/N)*i) + 60 * cos(2*M_PI*(15.0/N)*i);
     qwt_plot_wave(CHANNEL_0,sin_table,N);
@@ -231,6 +250,11 @@ void MainWindow::init_qwt()
     qwt_plot_wave(CHANNEL_3,sin_table,N);
     qwt_plot_fft(CHANNEL_3, sin_table, N);
     qDebug() << "qwt init finish!";
+    */
+
+
+
+
 
 }
 QString MainWindow::get_doc_name()
@@ -293,7 +317,7 @@ void MainWindow::on_pushButton_disconnect_clicked()
 
 void MainWindow::on_pushButton_close_remote_clicked()
 {
-
+#if false
     net_socket->enable_socket_read(is_start_read_socket);
     if (is_start_read_socket == true) {
         ui->textBrowser->append("@System: start read socket..");
@@ -301,7 +325,7 @@ void MainWindow::on_pushButton_close_remote_clicked()
         ui->textBrowser->append("@system: stop read socket..");
     }
     is_start_read_socket = !is_start_read_socket;
-
+#endif
 
 }
 
@@ -404,19 +428,13 @@ void MainWindow::on_pushButton_gain_set_clicked()
     uint8_t gain1, gain2;
 
     lineStr1 = ui->lineEdit_gain_1->text();
-    lineStr2 = ui->lineEdit_gain_2->text();
+    lineStr2 = ui->comboBox_gain2->currentText();
     gain1 = lineStr1.toUInt();
     gain2 = lineStr2.toUInt();
 
-    if (gain1 > 99) {
-        gain1 = 99;
-        QMessageBox::warning(this, "Warning", "设置失败，一级增益最大值为99");
-        return;
-    }
-
-    if (gain2 > 49) {
-        gain2 = 49;
-        QMessageBox::warning(this, "Warning", "设置失败，二级增益最大值为49");
+    if (gain1 > 100) {
+        gain1 = 100;
+        QMessageBox::warning(this, "Warning", "设置失败，一级增益最大值为100");
         return;
     }
 

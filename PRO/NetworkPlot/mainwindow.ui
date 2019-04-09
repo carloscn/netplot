@@ -102,6 +102,9 @@
           <layout class="QHBoxLayout" name="horizontalLayout_4">
            <item>
             <widget class="QPushButton" name="pushButton_set">
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
              <property name="text">
               <string>连接</string>
              </property>
@@ -288,6 +291,19 @@
               </layout>
              </item>
              <item>
+              <widget class="QLabel" name="label_7">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>@ 增益分为一级增益和二级增益.</string>
+               </property>
+              </widget>
+             </item>
+             <item>
               <layout class="QHBoxLayout" name="horizontalLayout_6">
                <property name="sizeConstraint">
                 <enum>QLayout::SetNoConstraint</enum>
@@ -301,17 +317,23 @@
                   </sizepolicy>
                  </property>
                  <property name="text">
-                  <string>增益(1,2): </string>
+                  <string>增益: </string>
                  </property>
                 </widget>
                </item>
                <item>
                 <widget class="QLineEdit" name="lineEdit_gain_1">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
+                 <property name="minimumSize">
+                  <size>
+                   <width>50</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>50</width>
+                   <height>16777215</height>
+                  </size>
                  </property>
                  <property name="text">
                   <string>1</string>
@@ -322,19 +344,54 @@
                 </widget>
                </item>
                <item>
-                <widget class="QLineEdit" name="lineEdit_gain_2">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
+                <widget class="QComboBox" name="comboBox_gain2">
+                 <property name="minimumSize">
+                  <size>
+                   <width>50</width>
+                   <height>0</height>
+                  </size>
                  </property>
-                 <property name="text">
-                  <string>1</string>
+                 <property name="maximumSize">
+                  <size>
+                   <width>50</width>
+                   <height>16777215</height>
+                  </size>
                  </property>
-                 <property name="readOnly">
-                  <bool>false</bool>
-                 </property>
+                 <item>
+                  <property name="text">
+                   <string>2</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>5</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>10</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>20</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>30</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>50</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>100</string>
+                  </property>
+                 </item>
                 </widget>
                </item>
                <item>
@@ -429,7 +486,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>开始回放</string>
+               <string>...</string>
               </property>
              </widget>
             </item>
@@ -442,7 +499,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>清空数据缓存</string>
+               <string>...</string>
               </property>
              </widget>
             </item>
@@ -455,7 +512,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>停止数据回放</string>
+               <string>...</string>
               </property>
              </widget>
             </item>
@@ -466,7 +523,7 @@
             <item>
              <widget class="QLineEdit" name="lineEdit_da_times">
               <property name="text">
-               <string>5</string>
+               <string/>
               </property>
              </widget>
             </item>
@@ -479,7 +536,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>重放上次的数据包</string>
+               <string>...</string>
               </property>
              </widget>
             </item>
@@ -679,6 +736,19 @@
        <string>文件列表</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_6">
+       <item>
+        <widget class="QLabel" name="label_8">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>存储路径：/usr/data</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <layout class="QGridLayout" name="gridLayout"/>
        </item>
