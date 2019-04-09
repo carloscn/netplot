@@ -194,14 +194,14 @@ void MainWindow::init_qwt()
     this->qwt_curve1_ch2_fft = new QwtPlotCurve("CH2 FFT");
     this->qwt_curve1_ch3_fft = new QwtPlotCurve("CH3 FFT");
     this->qwt_curve1_ch4_fft = new QwtPlotCurve("CH4 FFT");
-    this->qwt_curve1_ch1->setPen(QColor(255,0,0),2,Qt::SolidLine);
-    this->qwt_curve1_ch1_fft->setPen(QColor(255,0,0),2,Qt::SolidLine);
-    this->qwt_curve1_ch2->setPen(QColor(0,255,0),2,Qt::SolidLine);
-    this->qwt_curve1_ch2_fft->setPen(QColor(0,255,0),2,Qt::SolidLine);
-    this->qwt_curve1_ch3->setPen(QColor(0,191,255),2,Qt::SolidLine);
-    this->qwt_curve1_ch3_fft->setPen(QColor(0,191,255),2,Qt::SolidLine);
-    this->qwt_curve1_ch4->setPen(QColor(0,0,0),2,Qt::SolidLine);
-    this->qwt_curve1_ch4_fft->setPen(QColor(0,0,0),2,Qt::SolidLine);
+    this->qwt_curve1_ch1->setPen(QColor(157,97,169),2.5,Qt::SolidLine);
+    this->qwt_curve1_ch1_fft->setPen(QColor(157,97,169),2.5,Qt::SolidLine);
+    this->qwt_curve1_ch2->setPen(QColor(241,196,86),2.5,Qt::SolidLine);
+    this->qwt_curve1_ch2_fft->setPen(QColor(241,196,86),2.5,Qt::SolidLine);
+    this->qwt_curve1_ch3->setPen(QColor(50,141,202),2.5,Qt::SolidLine);
+    this->qwt_curve1_ch3_fft->setPen(QColor(50,141,202),2.5,Qt::SolidLine);
+    this->qwt_curve1_ch4->setPen(QColor(220,95,47),2.5,Qt::SolidLine);
+    this->qwt_curve1_ch4_fft->setPen(QColor(220,95,47),2.5,Qt::SolidLine);
     this->qwt_curve1_ch1->setBrush(brush2);
     this->qwt_curve1_ch2->setBrush(brush2);
     this->qwt_curve1_ch3->setBrush(brush2);
@@ -252,11 +252,9 @@ void MainWindow::init_qwt()
     qDebug() << "qwt init finish!";
     */
 
-
-
-
-
 }
+
+
 QString MainWindow::get_doc_name()
 {
     QString name;
