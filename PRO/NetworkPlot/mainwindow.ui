@@ -522,6 +522,9 @@
              <property name="text">
               <string>CH2</string>
              </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item>
@@ -529,12 +532,18 @@
              <property name="text">
               <string>CH3</string>
              </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item>
             <widget class="QCheckBox" name="checkBox_ch4_time">
              <property name="text">
               <string>CH4</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -570,12 +579,18 @@
              <property name="text">
               <string>CH1 FFT</string>
              </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item>
             <widget class="QCheckBox" name="checkBox_ch2_fft">
              <property name="text">
               <string>CH2 FFT</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -584,12 +599,18 @@
              <property name="text">
               <string>CH3 FFT</string>
              </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item>
             <widget class="QCheckBox" name="checkBox_ch4_fft">
              <property name="text">
               <string>CH4 FFT</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -679,7 +700,7 @@
      <x>0</x>
      <y>0</y>
      <width>1249</width>
-     <height>26</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

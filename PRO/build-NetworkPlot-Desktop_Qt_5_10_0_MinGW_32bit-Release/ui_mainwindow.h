@@ -508,16 +508,19 @@ public:
 
         checkBox_ch2_time = new QCheckBox(groupBox);
         checkBox_ch2_time->setObjectName(QStringLiteral("checkBox_ch2_time"));
+        checkBox_ch2_time->setChecked(true);
 
         horizontalLayout_10->addWidget(checkBox_ch2_time);
 
         checkBox_ch3_time = new QCheckBox(groupBox);
         checkBox_ch3_time->setObjectName(QStringLiteral("checkBox_ch3_time"));
+        checkBox_ch3_time->setChecked(true);
 
         horizontalLayout_10->addWidget(checkBox_ch3_time);
 
         checkBox_ch4_time = new QCheckBox(groupBox);
         checkBox_ch4_time->setObjectName(QStringLiteral("checkBox_ch4_time"));
+        checkBox_ch4_time->setChecked(true);
 
         horizontalLayout_10->addWidget(checkBox_ch4_time);
 
@@ -540,21 +543,25 @@ public:
         horizontalLayout_11->setObjectName(QStringLiteral("horizontalLayout_11"));
         checkBox_ch1_fft = new QCheckBox(groupBox);
         checkBox_ch1_fft->setObjectName(QStringLiteral("checkBox_ch1_fft"));
+        checkBox_ch1_fft->setChecked(true);
 
         horizontalLayout_11->addWidget(checkBox_ch1_fft);
 
         checkBox_ch2_fft = new QCheckBox(groupBox);
         checkBox_ch2_fft->setObjectName(QStringLiteral("checkBox_ch2_fft"));
+        checkBox_ch2_fft->setChecked(true);
 
         horizontalLayout_11->addWidget(checkBox_ch2_fft);
 
         checkBox_ch3_fft = new QCheckBox(groupBox);
         checkBox_ch3_fft->setObjectName(QStringLiteral("checkBox_ch3_fft"));
+        checkBox_ch3_fft->setChecked(true);
 
         horizontalLayout_11->addWidget(checkBox_ch3_fft);
 
         checkBox_ch4_fft = new QCheckBox(groupBox);
         checkBox_ch4_fft->setObjectName(QStringLiteral("checkBox_ch4_fft"));
+        checkBox_ch4_fft->setChecked(true);
 
         horizontalLayout_11->addWidget(checkBox_ch4_fft);
 
@@ -622,7 +629,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1249, 26));
+        menuBar->setGeometry(QRect(0, 0, 1249, 23));
         menu = new QMenu(menuBar);
         menu->setObjectName(QStringLiteral("menu"));
         menu_2 = new QMenu(menuBar);
