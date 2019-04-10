@@ -14,6 +14,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
@@ -81,10 +82,11 @@ public:
     QLabel *label_6;
     QLineEdit *lineEdit_fs;
     QPushButton *pushButton_fs_set;
+    QLabel *label_7;
     QHBoxLayout *horizontalLayout_6;
     QLabel *label_4;
     QLineEdit *lineEdit_gain_1;
-    QLineEdit *lineEdit_gain_2;
+    QComboBox *comboBox_gain2;
     QPushButton *pushButton_gain_set;
     QHBoxLayout *horizontalLayout_9;
     QPushButton *pushButton_sample;
@@ -123,6 +125,7 @@ public:
     QSlider *horizontalSlider_do;
     QGroupBox *groupBox_4;
     QVBoxLayout *verticalLayout_6;
+    QLabel *label_8;
     QGridLayout *gridLayout;
     QProgressBar *progressBar;
     QMenuBar *menuBar;
@@ -229,6 +232,7 @@ public:
         horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
         pushButton_set = new QPushButton(groupBox_2);
         pushButton_set->setObjectName(QStringLiteral("pushButton_set"));
+        pushButton_set->setStyleSheet(QStringLiteral(""));
 
         horizontalLayout_4->addWidget(pushButton_set);
 
@@ -345,6 +349,13 @@ public:
 
         verticalLayout_7->addLayout(horizontalLayout_8);
 
+        label_7 = new QLabel(groupBox_3);
+        label_7->setObjectName(QStringLiteral("label_7"));
+        sizePolicy2.setHeightForWidth(label_7->sizePolicy().hasHeightForWidth());
+        label_7->setSizePolicy(sizePolicy2);
+
+        verticalLayout_7->addWidget(label_7);
+
         horizontalLayout_6 = new QHBoxLayout();
         horizontalLayout_6->setSpacing(6);
         horizontalLayout_6->setObjectName(QStringLiteral("horizontalLayout_6"));
@@ -358,19 +369,25 @@ public:
 
         lineEdit_gain_1 = new QLineEdit(groupBox_3);
         lineEdit_gain_1->setObjectName(QStringLiteral("lineEdit_gain_1"));
-        sizePolicy2.setHeightForWidth(lineEdit_gain_1->sizePolicy().hasHeightForWidth());
-        lineEdit_gain_1->setSizePolicy(sizePolicy2);
+        lineEdit_gain_1->setMinimumSize(QSize(50, 0));
+        lineEdit_gain_1->setMaximumSize(QSize(50, 16777215));
         lineEdit_gain_1->setReadOnly(false);
 
         horizontalLayout_6->addWidget(lineEdit_gain_1);
 
-        lineEdit_gain_2 = new QLineEdit(groupBox_3);
-        lineEdit_gain_2->setObjectName(QStringLiteral("lineEdit_gain_2"));
-        sizePolicy2.setHeightForWidth(lineEdit_gain_2->sizePolicy().hasHeightForWidth());
-        lineEdit_gain_2->setSizePolicy(sizePolicy2);
-        lineEdit_gain_2->setReadOnly(false);
+        comboBox_gain2 = new QComboBox(groupBox_3);
+        comboBox_gain2->addItem(QString());
+        comboBox_gain2->addItem(QString());
+        comboBox_gain2->addItem(QString());
+        comboBox_gain2->addItem(QString());
+        comboBox_gain2->addItem(QString());
+        comboBox_gain2->addItem(QString());
+        comboBox_gain2->addItem(QString());
+        comboBox_gain2->setObjectName(QStringLiteral("comboBox_gain2"));
+        comboBox_gain2->setMinimumSize(QSize(50, 0));
+        comboBox_gain2->setMaximumSize(QSize(50, 16777215));
 
-        horizontalLayout_6->addWidget(lineEdit_gain_2);
+        horizontalLayout_6->addWidget(comboBox_gain2);
 
         pushButton_gain_set = new QPushButton(groupBox_3);
         pushButton_gain_set->setObjectName(QStringLiteral("pushButton_gain_set"));
@@ -611,6 +628,13 @@ public:
         verticalLayout_6->setSpacing(6);
         verticalLayout_6->setContentsMargins(11, 11, 11, 11);
         verticalLayout_6->setObjectName(QStringLiteral("verticalLayout_6"));
+        label_8 = new QLabel(groupBox_4);
+        label_8->setObjectName(QStringLiteral("label_8"));
+        sizePolicy2.setHeightForWidth(label_8->sizePolicy().hasHeightForWidth());
+        label_8->setSizePolicy(sizePolicy2);
+
+        verticalLayout_6->addWidget(label_8);
+
         gridLayout = new QGridLayout();
         gridLayout->setSpacing(6);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
@@ -629,7 +653,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1249, 23));
+        menuBar->setGeometry(QRect(0, 0, 1249, 25));
         menu = new QMenu(menuBar);
         menu->setObjectName(QStringLiteral("menu"));
         menu_2 = new QMenu(menuBar);
@@ -690,7 +714,7 @@ public:
         lineEdit_port_num->setText(QApplication::translate("MainWindow", "8322", nullptr));
         pushButton_set->setText(QApplication::translate("MainWindow", "\350\277\236\346\216\245", nullptr));
         pushButton_disconnect->setText(QApplication::translate("MainWindow", "\346\226\255\345\274\200\350\277\236\346\216\245", nullptr));
-        pushButton_close_remote->setText(QApplication::translate("MainWindow", "\345\274\200\345\220\257\346\216\245\346\224\266", nullptr));
+        pushButton_close_remote->setText(QApplication::translate("MainWindow", "\345\210\267\346\226\260\347\275\221\347\273\234", nullptr));
         pushButton_close_test->setText(QApplication::translate("MainWindow", "\344\275\277\350\203\275\345\255\230\345\202\250", nullptr));
         groupBox_3->setTitle(QApplication::translate("MainWindow", "\346\216\247\345\210\266\344\277\241\346\201\257\351\205\215\347\275\256", nullptr));
         label_5->setText(QApplication::translate("MainWindow", "\344\275\216\351\200\232\351\242\221\347\216\207(KHz):", nullptr));
@@ -699,19 +723,27 @@ public:
         label_6->setText(QApplication::translate("MainWindow", "\351\207\207\346\240\267\347\216\207Hz):", nullptr));
         lineEdit_fs->setText(QApplication::translate("MainWindow", "250000", nullptr));
         pushButton_fs_set->setText(QApplication::translate("MainWindow", "\350\256\276\345\256\232", nullptr));
-        label_4->setText(QApplication::translate("MainWindow", "\345\242\236\347\233\212(1,2): ", nullptr));
+        label_7->setText(QApplication::translate("MainWindow", "@ \345\242\236\347\233\212\345\210\206\344\270\272\344\270\200\347\272\247\345\242\236\347\233\212\345\222\214\344\272\214\347\272\247\345\242\236\347\233\212.", nullptr));
+        label_4->setText(QApplication::translate("MainWindow", "\345\242\236\347\233\212: ", nullptr));
         lineEdit_gain_1->setText(QApplication::translate("MainWindow", "1", nullptr));
-        lineEdit_gain_2->setText(QApplication::translate("MainWindow", "1", nullptr));
+        comboBox_gain2->setItemText(0, QApplication::translate("MainWindow", "2", nullptr));
+        comboBox_gain2->setItemText(1, QApplication::translate("MainWindow", "5", nullptr));
+        comboBox_gain2->setItemText(2, QApplication::translate("MainWindow", "10", nullptr));
+        comboBox_gain2->setItemText(3, QApplication::translate("MainWindow", "20", nullptr));
+        comboBox_gain2->setItemText(4, QApplication::translate("MainWindow", "30", nullptr));
+        comboBox_gain2->setItemText(5, QApplication::translate("MainWindow", "50", nullptr));
+        comboBox_gain2->setItemText(6, QApplication::translate("MainWindow", "100", nullptr));
+
         pushButton_gain_set->setText(QApplication::translate("MainWindow", "\350\256\276\345\256\232", nullptr));
         pushButton_sample->setText(QApplication::translate("MainWindow", "\345\220\257\345\212\250\351\207\207\346\240\267", nullptr));
         pushButton_close_sample->setText(QApplication::translate("MainWindow", "\345\205\263\351\227\255\351\207\207\346\240\267", nullptr));
         pushButton_clear->setText(QApplication::translate("MainWindow", "\346\270\205\347\251\272\346\216\245\346\224\266\345\214\272", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "ADC", nullptr));
-        pushButton_da_start->setText(QApplication::translate("MainWindow", "\345\274\200\345\247\213\345\233\236\346\224\276", nullptr));
-        pushButton_da_clear_buffer->setText(QApplication::translate("MainWindow", "\346\270\205\347\251\272\346\225\260\346\215\256\347\274\223\345\255\230", nullptr));
-        pushButton_da_stop->setText(QApplication::translate("MainWindow", "\345\201\234\346\255\242\346\225\260\346\215\256\345\233\236\346\224\276", nullptr));
-        lineEdit_da_times->setText(QApplication::translate("MainWindow", "5", nullptr));
-        pushButton_da_reback->setText(QApplication::translate("MainWindow", "\351\207\215\346\224\276\344\270\212\346\254\241\347\232\204\346\225\260\346\215\256\345\214\205", nullptr));
+        pushButton_da_start->setText(QApplication::translate("MainWindow", "...", nullptr));
+        pushButton_da_clear_buffer->setText(QApplication::translate("MainWindow", "...", nullptr));
+        pushButton_da_stop->setText(QApplication::translate("MainWindow", "...", nullptr));
+        lineEdit_da_times->setText(QString());
+        pushButton_da_reback->setText(QApplication::translate("MainWindow", "...", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "DAC", nullptr));
         groupBox->setTitle(QApplication::translate("MainWindow", "\345\233\276\345\203\217\347\273\230\345\210\266", nullptr));
         checkBox_ch1_time->setText(QApplication::translate("MainWindow", "CH1", nullptr));
@@ -723,6 +755,7 @@ public:
         checkBox_ch3_fft->setText(QApplication::translate("MainWindow", "CH3 FFT", nullptr));
         checkBox_ch4_fft->setText(QApplication::translate("MainWindow", "CH4 FFT", nullptr));
         groupBox_4->setTitle(QApplication::translate("MainWindow", "\346\226\207\344\273\266\345\210\227\350\241\250", nullptr));
+        label_8->setText(QApplication::translate("MainWindow", "\345\255\230\345\202\250\350\267\257\345\276\204\357\274\232/usr/data", nullptr));
         menu->setTitle(QApplication::translate("MainWindow", "\346\226\207\344\273\266", nullptr));
         menu_2->setTitle(QApplication::translate("MainWindow", "\345\267\245\345\205\267", nullptr));
         menu_3->setTitle(QApplication::translate("MainWindow", "\345\205\263\344\272\216", nullptr));

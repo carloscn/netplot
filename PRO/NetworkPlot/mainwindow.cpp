@@ -547,10 +547,10 @@ void MainWindow::on_net_plot_read(quint32 *block, quint32 length)
     }
 
     for (quint32 i = 0; i < 500; i ++) {
-        channel_a_d[i] = channel_a[i] / 256 / 1000000000.0 * 488.0;
-        channel_b_d[i] = channel_b[i] / 256 / 1000000000.0 * 488.0;
-        channel_c_d[i] = channel_c[i] / 256 / 1000000000.0 * 488.0;
-        channel_d_d[i] = channel_d[i] / 256 / 1000000000.0 * 488.0;
+        channel_a_d[i] = channel_d[i] / 256 / 1000000000.0 * 488.0;
+        channel_b_d[i] = channel_c[i] / 256 / 1000000000.0 * 488.0;
+        channel_c_d[i] = channel_b[i] / 256 / 1000000000.0 * 488.0;
+        channel_d_d[i] = channel_a[i] / 256 / 1000000000.0 * 488.0;
         //qDebug() << "sample: " << channel_a_d[i];
     }
 

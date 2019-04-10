@@ -76,32 +76,33 @@ static const uint qt_meta_data_NetClientThread[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      16,   14, // methods
+      17,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-      10,       // signalCount
+      11,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    2,   94,    2, 0x06 /* Public */,
-       6,    1,   99,    2, 0x06 /* Public */,
-       8,    1,  102,    2, 0x06 /* Public */,
-       8,    2,  105,    2, 0x06 /* Public */,
-      11,    2,  110,    2, 0x06 /* Public */,
-      13,    2,  115,    2, 0x06 /* Public */,
-      15,    1,  120,    2, 0x06 /* Public */,
-      16,    1,  123,    2, 0x06 /* Public */,
-      17,    0,  126,    2, 0x06 /* Public */,
-      18,    1,  127,    2, 0x06 /* Public */,
+       1,    2,   99,    2, 0x06 /* Public */,
+       6,    1,  104,    2, 0x06 /* Public */,
+       8,    1,  107,    2, 0x06 /* Public */,
+       8,    2,  110,    2, 0x06 /* Public */,
+      11,    2,  115,    2, 0x06 /* Public */,
+      13,    2,  120,    2, 0x06 /* Public */,
+      13,    1,  125,    2, 0x06 /* Public */,
+      15,    1,  128,    2, 0x06 /* Public */,
+      16,    1,  131,    2, 0x06 /* Public */,
+      17,    0,  134,    2, 0x06 /* Public */,
+      18,    1,  135,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      19,    0,  130,    2, 0x08 /* Private */,
-      20,    0,  131,    2, 0x08 /* Private */,
-      21,    1,  132,    2, 0x08 /* Private */,
-      22,    1,  135,    2, 0x08 /* Private */,
-      23,    1,  138,    2, 0x08 /* Private */,
-      24,    1,  141,    2, 0x08 /* Private */,
+      19,    0,  138,    2, 0x08 /* Private */,
+      20,    0,  139,    2, 0x08 /* Private */,
+      21,    1,  140,    2, 0x08 /* Private */,
+      22,    1,  143,    2, 0x08 /* Private */,
+      23,    1,  146,    2, 0x08 /* Private */,
+      24,    1,  149,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3, QMetaType::UInt,    4,    5,
@@ -110,6 +111,7 @@ static const uint qt_meta_data_NetClientThread[] = {
     QMetaType::Void, 0x80000000 | 10, QMetaType::UInt,    9,    5,
     QMetaType::Void, 0x80000000 | 12, QMetaType::UInt,    9,    5,
     QMetaType::Void, 0x80000000 | 14, QMetaType::ULongLong,    2,    2,
+    QMetaType::Void, QMetaType::QByteArray,    2,
     QMetaType::Void, QMetaType::QString,    2,
     QMetaType::Void, QMetaType::Double,    2,
     QMetaType::Void,
@@ -138,16 +140,17 @@ void NetClientThread::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
         case 3: _t->net_data_ready((*reinterpret_cast< char*(*)>(_a[1])),(*reinterpret_cast< quint32(*)>(_a[2]))); break;
         case 4: _t->net_data_plot((*reinterpret_cast< quint32*(*)>(_a[1])),(*reinterpret_cast< quint32(*)>(_a[2]))); break;
         case 5: _t->net_data_save_to_disk((*reinterpret_cast< quint8*(*)>(_a[1])),(*reinterpret_cast< quint64(*)>(_a[2]))); break;
-        case 6: _t->net_add_doc_list((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 7: _t->net_file_size((*reinterpret_cast< double(*)>(_a[1]))); break;
-        case 8: _t->net_lic_check_failed(); break;
-        case 9: _t->net_notify_dac_hand_ok((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 10: _t->on_read_message(); break;
-        case 11: _t->on_net_close_file(); break;
-        case 12: _t->on_net_enable_save((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 13: _t->on_file_manager_add_doc_list((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 14: _t->on_file_manager_file_size((*reinterpret_cast< double(*)>(_a[1]))); break;
-        case 15: _t->on_adc_dac_mode_set((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 6: _t->net_data_save_to_disk((*reinterpret_cast< QByteArray(*)>(_a[1]))); break;
+        case 7: _t->net_add_doc_list((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 8: _t->net_file_size((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 9: _t->net_lic_check_failed(); break;
+        case 10: _t->net_notify_dac_hand_ok((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 11: _t->on_read_message(); break;
+        case 12: _t->on_net_close_file(); break;
+        case 13: _t->on_net_enable_save((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 14: _t->on_file_manager_add_doc_list((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 15: _t->on_file_manager_file_size((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 16: _t->on_adc_dac_mode_set((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -195,30 +198,37 @@ void NetClientThread::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
             }
         }
         {
+            typedef void (NetClientThread::*_t)(QByteArray );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&NetClientThread::net_data_save_to_disk)) {
+                *result = 6;
+                return;
+            }
+        }
+        {
             typedef void (NetClientThread::*_t)(QString );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&NetClientThread::net_add_doc_list)) {
-                *result = 6;
+                *result = 7;
                 return;
             }
         }
         {
             typedef void (NetClientThread::*_t)(double );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&NetClientThread::net_file_size)) {
-                *result = 7;
+                *result = 8;
                 return;
             }
         }
         {
             typedef void (NetClientThread::*_t)();
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&NetClientThread::net_lic_check_failed)) {
-                *result = 8;
+                *result = 9;
                 return;
             }
         }
         {
             typedef void (NetClientThread::*_t)(bool );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&NetClientThread::net_notify_dac_hand_ok)) {
-                *result = 9;
+                *result = 10;
                 return;
             }
         }
@@ -250,13 +260,13 @@ int NetClientThread::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 16)
+        if (_id < 17)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 16;
+        _id -= 17;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 16)
+        if (_id < 17)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 16;
+        _id -= 17;
     }
     return _id;
 }
@@ -304,30 +314,37 @@ void NetClientThread::net_data_save_to_disk(quint8 * _t1, quint64 _t2)
 }
 
 // SIGNAL 6
-void NetClientThread::net_add_doc_list(QString _t1)
+void NetClientThread::net_data_save_to_disk(QByteArray _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 6, _a);
 }
 
 // SIGNAL 7
-void NetClientThread::net_file_size(double _t1)
+void NetClientThread::net_add_doc_list(QString _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 7, _a);
 }
 
 // SIGNAL 8
-void NetClientThread::net_lic_check_failed()
+void NetClientThread::net_file_size(double _t1)
 {
-    QMetaObject::activate(this, &staticMetaObject, 8, nullptr);
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 8, _a);
 }
 
 // SIGNAL 9
+void NetClientThread::net_lic_check_failed()
+{
+    QMetaObject::activate(this, &staticMetaObject, 9, nullptr);
+}
+
+// SIGNAL 10
 void NetClientThread::net_notify_dac_hand_ok(bool _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
-    QMetaObject::activate(this, &staticMetaObject, 9, _a);
+    QMetaObject::activate(this, &staticMetaObject, 10, _a);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE
