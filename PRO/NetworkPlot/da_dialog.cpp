@@ -181,7 +181,7 @@ void da_dialog::on_pushButton_Send_clicked()
     }
     cycle_num = ui->lineEdit_cycle_num->text().toUInt();
     run_da_out();
-    timer->start(1000);
+    timer->start(2000);
 
 }
 
