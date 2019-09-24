@@ -128,7 +128,7 @@ void FileManager::write(quint8* buffer, quint64 length) {
     QFileInfo fileInfo(qFilePath);
     filesize = fileInfo.size();
 
-    percent = ((double)filesize)/512.0/1024.0/1024.0;
+    percent = ((double)filesize)/(double)storge_size;
 
     file->write((char*)buffer, length);
 
@@ -167,7 +167,7 @@ void FileManager::write(QByteArray array) {
     QFileInfo fileInfo(qFilePath);
     filesize = fileInfo.size();
 
-    percent = ((double)filesize)/512.0/1024.0/1024.0;
+    percent = ((double)filesize)/(double)storge_size;
 
     file->write(array);
 
@@ -202,7 +202,7 @@ bool FileManager::isFileFull(QString filePath) {
 
     QFileInfo fileInfo(filePath);
     filesize = fileInfo.size();
-    if(filesize >= FILE_SIZE_MAX) {
+    if(filesize >= storge_size) {
         fileclose = true;
         return true;//The hex file is full with 1GB
     }

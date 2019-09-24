@@ -49,7 +49,8 @@ SOURCES += \
     netclientthread.cpp \
     ringbuffer.cpp \
     filemanager.cpp \
-    da_dialog.cpp
+    da_dialog.cpp \
+    storge.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -57,7 +58,8 @@ HEADERS += \
     com.h \
     ringbuffer.h \
     filemanager.h \
-    da_dialog.h
+    da_dialog.h \
+    storge.h
 
 FORMS += \
         mainwindow.ui \

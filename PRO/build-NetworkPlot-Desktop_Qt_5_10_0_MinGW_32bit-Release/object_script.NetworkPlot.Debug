@@ -5,6 +5,7 @@ INPUT(
 ./debug\ringbuffer.o
 ./debug\filemanager.o
 ./debug\da_dialog.o
+./debug\storge.o
 ./debug\moc_mainwindow.o
 ./debug\moc_netclientthread.o
 ./debug\moc_filemanager.o

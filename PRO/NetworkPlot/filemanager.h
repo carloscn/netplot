@@ -77,6 +77,7 @@ public:
     QFile *file;
     QString qFilePath;
     bool prewriteexame;
+    quint64 storge_size;
 
 private slots:
     void on_save_data_to_disk(quint8*, quint64);

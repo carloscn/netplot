@@ -117,7 +117,7 @@ private :
     quint8 right_rom[8010];
     quint64 left_length;
     quint64 right_length;
-    FileManager *file_ctr;
+//    FileManager *file_ctr;
     quint64 kcount;
     bool isEnableSave;
     quint8 plot_buffer[ONE_PACKET_LENGTH];
@@ -127,6 +127,8 @@ private :
     bool key_check;
     int adc_dac_mode;
 
+public:
+    FileManager *file_ctr;
 
 private:
 

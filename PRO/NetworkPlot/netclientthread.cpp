@@ -58,7 +58,7 @@ NetClientThread::NetClientThread( QString server_ip, int server_port )
     connect( this, SIGNAL(net_data_save_to_disk(QByteArray) ),(QObject*)this->file_ctr ,SLOT(on_save_data_to_disk(QByteArray)));
     connect( (QObject*)this->file_ctr, SIGNAL(file_manager_add_file_name(QString)), this, SLOT(on_file_manager_add_doc_list(QString)) );
     connect( (QObject*)this->file_ctr, SIGNAL(file_manager_file_size(double)), this, SLOT(on_file_manager_file_size(double)));
-
+    
     //delete key_file;
     //delete key_str;
 

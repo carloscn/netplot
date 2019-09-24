@@ -81,11 +81,16 @@ MainWindow::MainWindow(QWidget *parent) :
     xcount = 0;
     xrange = 1024;
     this->byte_nums = 0;
-
+    //this->net_socket->file_ctr->storge_size = 100*MB;
+    ui->storge_unit->setCurrentIndex(1);//默认显示MB
+    ui->display_storge_size->setEnabled(false);
     /*
      *  init network
     */
     this->net_socket = new NetClientThread( ui->lineEdit_server_ip->text(), ui->lineEdit_port_num->text().toInt() );
+
+    this->net_socket->file_ctr->storge_size = 100*MB;
+    ui->display_storge_size->setText( "100 MB");
     is_start_read_socket = false;
     on_pushButton_close_remote_clicked();
     net_socket->enable_socket_read(is_start_read_socket);
@@ -111,7 +116,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->pushButton_close_sample->setEnabled(false);
     ui->pushButton_close_test->setEnabled(true);
     ui->pushButton_freq_set->setEnabled(false);
-    ui->pushButton_fs_set->setEnabled(false);
+    ui->pushButton_fs_set->setEnabled(true);
     ui->pushButton_gain_set->setEnabled(false);
     ui->pushButton_sample->setEnabled(true);
     ui->checkBox_ch1_time->setChecked(true);
@@ -885,4 +890,78 @@ void MainWindow::on_actionlcok_triggered()
 void MainWindow::on_tabWidget_currentChanged(int index)
 {
     emit adc_dac_mode_set(index);
+}
+
+void MainWindow::on_storge_confirm_clicked()
+{
+    qint64 storge_size_tmp;
+    QString storge_size_unit;
+    quint64 storge_available_size;
+    storge_size_tmp = ui->storge_size->text().toInt();
+    storge_size_unit = ui->storge_unit->currentText();
+
+    QStorageInfo storage = QStorageInfo::root();
+    storage.refresh();  //获得最新磁盘信息
+
+    qDebug() << storage.rootPath();
+    if (storage.isReadOnly())
+        qDebug() << "isReadOnly:" << storage.isReadOnly();
+
+//    qDebug() << "name:" << storage.name();
+//    qDebug() << "fileSystemType:" << storage.fileSystemType();
+//    qDebug() << "size:" << storage.bytesTotal()/1000/1000 << "MB";
+//    qDebug() << "availableSize:" << storage.bytesAvailable()/1000/1000 << " MB";
+
+    storge_available_size = storage.bytesAvailable();//Byte
+
+    if(storge_size_tmp <=0)
+    {
+        //弹窗提示
+        qDebug() << "请设定正确的磁盘参数！";
+        return;
+    }
+
+    if(storge_size_unit=="GB")
+    {
+        if( (storge_size_tmp * GB) > storge_available_size)
+        {
+            //弹窗提示
+            qDebug() << "storge_available_size" << storge_available_size << "B";
+            qDebug() << "storge_setting_size " << (storge_size_tmp * GB) << "B";
+            qDebug() << "此剩余磁盘空间，不足以存储该容量的单个文件！";
+            return;
+        }
+
+        this->net_socket->file_ctr->storge_size = storge_size_tmp * GB;
+        ui->display_storge_size->setText( ui->storge_size->text() + " GB");
+    }
+    else if(storge_size_unit=="MB")
+    {
+        if( (storge_size_tmp * MB) > storge_available_size)
+        {
+            //弹窗提示
+            qDebug() << "storge_available_size" << storge_available_size << "B";
+            qDebug() << "storge_setting_size " << (storge_size_tmp * GB) << "B";
+            qDebug() << "此剩余磁盘空间，不足以存储该容量的单个文件！";
+            return;
+        }
+
+        this->net_socket->file_ctr->storge_size = storge_size_tmp * MB;
+        ui->display_storge_size->setText( ui->storge_size->text() + " MB");
+    }
+    else if(storge_size_unit=="KB")
+    {
+        if( (storge_size_tmp * KB) > storge_available_size)
+        {
+            //弹窗提示
+            qDebug() << "storge_available_size" << storge_available_size << "B";
+            qDebug() << "storge_setting_size " << (storge_size_tmp * GB) << "B";
+            qDebug() << "此剩余磁盘空间，不足以存储该容量的单个文件！";
+            return;
+        }
+
+        this->net_socket->file_ctr->storge_size = storge_size_tmp * KB;
+        ui->display_storge_size->setText( ui->storge_size->text() + "KB");
+    }
+
 }

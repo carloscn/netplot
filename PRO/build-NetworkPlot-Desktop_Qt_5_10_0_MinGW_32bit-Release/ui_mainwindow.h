@@ -112,7 +112,6 @@ public:
     QCheckBox *checkBox_ch3_time;
     QCheckBox *checkBox_ch4_time;
     QSpacerItem *horizontalSpacer;
-    QwtPlot *qwt_ch;
     QHBoxLayout *horizontalLayout_11;
     QCheckBox *checkBox_ch1_fft;
     QCheckBox *checkBox_ch2_fft;
@@ -120,6 +119,14 @@ public:
     QCheckBox *checkBox_ch4_fft;
     QSpacerItem *horizontalSpacer_2;
     QwtPlot *qwt_fft;
+    QwtPlot *qwt_ch;
+    QGroupBox *groupBox_5;
+    QLineEdit *storge_size;
+    QPushButton *storge_confirm;
+    QLabel *label_9;
+    QLabel *label_10;
+    QComboBox *storge_unit;
+    QLineEdit *display_storge_size;
     QHBoxLayout *horizontalLayout_13;
     QSpinBox *spinBox;
     QSlider *horizontalSlider_do;
@@ -140,7 +147,12 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(1249, 727);
+        MainWindow->resize(1249, 729);
+        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(MainWindow->sizePolicy().hasHeightForWidth());
+        MainWindow->setSizePolicy(sizePolicy);
         actionexit = new QAction(MainWindow);
         actionexit->setObjectName(QStringLiteral("actionexit"));
         actionclear_all = new QAction(MainWindow);
@@ -166,11 +178,11 @@ public:
         verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
         groupBox_2 = new QGroupBox(centralWidget);
         groupBox_2->setObjectName(QStringLiteral("groupBox_2"));
-        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(groupBox_2->sizePolicy().hasHeightForWidth());
-        groupBox_2->setSizePolicy(sizePolicy);
+        QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Expanding);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(groupBox_2->sizePolicy().hasHeightForWidth());
+        groupBox_2->setSizePolicy(sizePolicy1);
         groupBox_2->setMinimumSize(QSize(260, 190));
         groupBox_2->setMaximumSize(QSize(300, 190));
         verticalLayout_2 = new QVBoxLayout(groupBox_2);
@@ -265,11 +277,8 @@ public:
 
         tabWidget = new QTabWidget(centralWidget);
         tabWidget->setObjectName(QStringLiteral("tabWidget"));
-        QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(tabWidget->sizePolicy().hasHeightForWidth());
-        tabWidget->setSizePolicy(sizePolicy1);
+        sizePolicy.setHeightForWidth(tabWidget->sizePolicy().hasHeightForWidth());
+        tabWidget->setSizePolicy(sizePolicy);
         tabWidget->setMinimumSize(QSize(260, 0));
         tabWidget->setMaximumSize(QSize(300, 16777215));
         tab = new QWidget();
@@ -280,8 +289,8 @@ public:
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         groupBox_3 = new QGroupBox(tab);
         groupBox_3->setObjectName(QStringLiteral("groupBox_3"));
-        sizePolicy.setHeightForWidth(groupBox_3->sizePolicy().hasHeightForWidth());
-        groupBox_3->setSizePolicy(sizePolicy);
+        sizePolicy1.setHeightForWidth(groupBox_3->sizePolicy().hasHeightForWidth());
+        groupBox_3->setSizePolicy(sizePolicy1);
         groupBox_3->setMinimumSize(QSize(260, 400));
         groupBox_3->setMaximumSize(QSize(260, 1200));
         verticalLayout_7 = new QVBoxLayout(groupBox_3);
@@ -422,8 +431,8 @@ public:
 
         textBrowser = new QTextBrowser(groupBox_3);
         textBrowser->setObjectName(QStringLiteral("textBrowser"));
-        sizePolicy.setHeightForWidth(textBrowser->sizePolicy().hasHeightForWidth());
-        textBrowser->setSizePolicy(sizePolicy);
+        sizePolicy1.setHeightForWidth(textBrowser->sizePolicy().hasHeightForWidth());
+        textBrowser->setSizePolicy(sizePolicy1);
 
         verticalLayout_7->addWidget(textBrowser);
 
@@ -548,13 +557,6 @@ public:
 
         verticalLayout_4->addLayout(horizontalLayout_10);
 
-        qwt_ch = new QwtPlot(groupBox);
-        qwt_ch->setObjectName(QStringLiteral("qwt_ch"));
-        sizePolicy3.setHeightForWidth(qwt_ch->sizePolicy().hasHeightForWidth());
-        qwt_ch->setSizePolicy(sizePolicy3);
-
-        verticalLayout_4->addWidget(qwt_ch);
-
         horizontalLayout_11 = new QHBoxLayout();
         horizontalLayout_11->setSpacing(6);
         horizontalLayout_11->setObjectName(QStringLiteral("horizontalLayout_11"));
@@ -591,8 +593,47 @@ public:
 
         qwt_fft = new QwtPlot(groupBox);
         qwt_fft->setObjectName(QStringLiteral("qwt_fft"));
+        qwt_fft->setEnabled(true);
         sizePolicy3.setHeightForWidth(qwt_fft->sizePolicy().hasHeightForWidth());
         qwt_fft->setSizePolicy(sizePolicy3);
+        qwt_ch = new QwtPlot(qwt_fft);
+        qwt_ch->setObjectName(QStringLiteral("qwt_ch"));
+        qwt_ch->setGeometry(QRect(20, -30, 651, 261));
+        sizePolicy3.setHeightForWidth(qwt_ch->sizePolicy().hasHeightForWidth());
+        qwt_ch->setSizePolicy(sizePolicy3);
+        groupBox_5 = new QGroupBox(qwt_ch);
+        groupBox_5->setObjectName(QStringLiteral("groupBox_5"));
+        groupBox_5->setGeometry(QRect(370, 60, 240, 101));
+        sizePolicy.setHeightForWidth(groupBox_5->sizePolicy().hasHeightForWidth());
+        groupBox_5->setSizePolicy(sizePolicy);
+        groupBox_5->setMinimumSize(QSize(0, 13));
+        storge_size = new QLineEdit(groupBox_5);
+        storge_size->setObjectName(QStringLiteral("storge_size"));
+        storge_size->setGeometry(QRect(10, 20, 71, 21));
+        storge_confirm = new QPushButton(groupBox_5);
+        storge_confirm->setObjectName(QStringLiteral("storge_confirm"));
+        storge_confirm->setEnabled(true);
+        storge_confirm->setGeometry(QRect(170, 19, 51, 25));
+        QSizePolicy sizePolicy4(QSizePolicy::Minimum, QSizePolicy::Fixed);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(0);
+        sizePolicy4.setHeightForWidth(storge_confirm->sizePolicy().hasHeightForWidth());
+        storge_confirm->setSizePolicy(sizePolicy4);
+        label_9 = new QLabel(groupBox_5);
+        label_9->setObjectName(QStringLiteral("label_9"));
+        label_9->setGeometry(QRect(10, 46, 91, 21));
+        label_10 = new QLabel(groupBox_5);
+        label_10->setObjectName(QStringLiteral("label_10"));
+        label_10->setGeometry(QRect(10, 0, 91, 21));
+        storge_unit = new QComboBox(groupBox_5);
+        storge_unit->addItem(QString());
+        storge_unit->addItem(QString());
+        storge_unit->addItem(QString());
+        storge_unit->setObjectName(QStringLiteral("storge_unit"));
+        storge_unit->setGeometry(QRect(110, 20, 41, 22));
+        display_storge_size = new QLineEdit(groupBox_5);
+        display_storge_size->setObjectName(QStringLiteral("display_storge_size"));
+        display_storge_size->setGeometry(QRect(10, 70, 113, 21));
 
         verticalLayout_4->addWidget(qwt_fft);
 
@@ -622,6 +663,11 @@ public:
 
         groupBox_4 = new QGroupBox(centralWidget);
         groupBox_4->setObjectName(QStringLiteral("groupBox_4"));
+        QSizePolicy sizePolicy5(QSizePolicy::Fixed, QSizePolicy::Preferred);
+        sizePolicy5.setHorizontalStretch(0);
+        sizePolicy5.setVerticalStretch(0);
+        sizePolicy5.setHeightForWidth(groupBox_4->sizePolicy().hasHeightForWidth());
+        groupBox_4->setSizePolicy(sizePolicy5);
         groupBox_4->setMinimumSize(QSize(260, 0));
         groupBox_4->setMaximumSize(QSize(200, 16777215));
         verticalLayout_6 = new QVBoxLayout(groupBox_4);
@@ -754,6 +800,14 @@ public:
         checkBox_ch2_fft->setText(QApplication::translate("MainWindow", "CH2 FFT", nullptr));
         checkBox_ch3_fft->setText(QApplication::translate("MainWindow", "CH3 FFT", nullptr));
         checkBox_ch4_fft->setText(QApplication::translate("MainWindow", "CH4 FFT", nullptr));
+        groupBox_5->setTitle(QString());
+        storge_confirm->setText(QApplication::translate("MainWindow", "Ok", nullptr));
+        label_9->setText(QApplication::translate("MainWindow", "Current Size", nullptr));
+        label_10->setText(QApplication::translate("MainWindow", "Setting Size", nullptr));
+        storge_unit->setItemText(0, QApplication::translate("MainWindow", "GB", nullptr));
+        storge_unit->setItemText(1, QApplication::translate("MainWindow", "MB", nullptr));
+        storge_unit->setItemText(2, QApplication::translate("MainWindow", "KB", nullptr));
+
         groupBox_4->setTitle(QApplication::translate("MainWindow", "\346\226\207\344\273\266\345\210\227\350\241\250", nullptr));
         label_8->setText(QApplication::translate("MainWindow", "\345\255\230\345\202\250\350\267\257\345\276\204\357\274\232/usr/data", nullptr));
         menu->setTitle(QApplication::translate("MainWindow", "\346\226\207\344\273\266", nullptr));

@@ -5,6 +5,7 @@ INPUT(
 ./release\ringbuffer.o
 ./release\filemanager.o
 ./release\da_dialog.o
+./release\storge.o
 ./release\moc_mainwindow.o
 ./release\moc_netclientthread.o
 ./release\moc_filemanager.o

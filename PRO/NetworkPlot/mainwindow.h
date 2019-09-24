@@ -115,6 +115,8 @@ private slots:
 
     void on_tabWidget_currentChanged(int index);
 
+    void on_storge_confirm_clicked();
+
 signals:
 
     void net_close_file();
@@ -160,6 +162,7 @@ private:
     bool is_start_read_socket;
 
     QString current_daback_file_name;
+
 
     bool lic_state;
 
