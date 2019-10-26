@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1249</width>
-    <height>729</height>
+    <height>751</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -568,268 +568,140 @@
       <property name="title">
        <string>图像绘制</string>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_5">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_4">
+        <layout class="QHBoxLayout" name="horizontalLayout_10">
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_10">
-           <item>
-            <widget class="QCheckBox" name="checkBox_ch1_time">
-             <property name="text">
-              <string>CH1</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="checkBox_ch2_time">
-             <property name="text">
-              <string>CH2</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="checkBox_ch3_time">
-             <property name="text">
-              <string>CH3</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="checkBox_ch4_time">
-             <property name="text">
-              <string>CH4</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_11">
-           <item>
-            <widget class="QCheckBox" name="checkBox_ch1_fft">
-             <property name="text">
-              <string>CH1 FFT</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="checkBox_ch2_fft">
-             <property name="text">
-              <string>CH2 FFT</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="checkBox_ch3_fft">
-             <property name="text">
-              <string>CH3 FFT</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="checkBox_ch4_fft">
-             <property name="text">
-              <string>CH4 FFT</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <widget class="QwtPlot" name="qwt_fft">
-           <property name="enabled">
-            <bool>true</bool>
+          <widget class="QCheckBox" name="checkBox_ch1_time">
+           <property name="text">
+            <string>CH1</string>
            </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <widget class="QwtPlot" name="qwt_ch">
-            <property name="geometry">
-             <rect>
-              <x>20</x>
-              <y>-30</y>
-              <width>651</width>
-              <height>261</height>
-             </rect>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <widget class="QGroupBox" name="groupBox_5">
-             <property name="geometry">
-              <rect>
-               <x>370</x>
-               <y>60</y>
-               <width>240</width>
-               <height>101</height>
-              </rect>
-             </property>
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>13</height>
-              </size>
-             </property>
-             <property name="title">
-              <string/>
-             </property>
-             <widget class="QLineEdit" name="storge_size">
-              <property name="geometry">
-               <rect>
-                <x>10</x>
-                <y>23</y>
-                <width>91</width>
-                <height>21</height>
-               </rect>
-              </property>
-             </widget>
-             <widget class="QPushButton" name="storge_confirm">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="geometry">
-               <rect>
-                <x>160</x>
-                <y>22</y>
-                <width>61</width>
-                <height>25</height>
-               </rect>
-              </property>
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>Ok</string>
-              </property>
-             </widget>
-             <widget class="QLabel" name="label_9">
-              <property name="geometry">
-               <rect>
-                <x>10</x>
-                <y>46</y>
-                <width>91</width>
-                <height>21</height>
-               </rect>
-              </property>
-              <property name="text">
-               <string>Current Size</string>
-              </property>
-             </widget>
-             <widget class="QLabel" name="label_10">
-              <property name="geometry">
-               <rect>
-                <x>10</x>
-                <y>1</y>
-                <width>91</width>
-                <height>21</height>
-               </rect>
-              </property>
-              <property name="text">
-               <string>Setting Size</string>
-              </property>
-             </widget>
-             <widget class="QComboBox" name="storge_unit">
-              <property name="geometry">
-               <rect>
-                <x>110</x>
-                <y>23</y>
-                <width>41</width>
-                <height>22</height>
-               </rect>
-              </property>
-              <item>
-               <property name="text">
-                <string>GB</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>MB</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>KB</string>
-               </property>
-              </item>
-             </widget>
-             <widget class="QLineEdit" name="display_storge_size">
-              <property name="geometry">
-               <rect>
-                <x>10</x>
-                <y>70</y>
-                <width>113</width>
-                <height>21</height>
-               </rect>
-              </property>
-             </widget>
-            </widget>
-           </widget>
           </widget>
          </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_ch2_time">
+           <property name="text">
+            <string>CH2</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_ch3_time">
+           <property name="text">
+            <string>CH3</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_ch4_time">
+           <property name="text">
+            <string>CH4</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
         </layout>
+       </item>
+       <item>
+        <widget class="QwtPlot" name="qwt_ch">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_11">
+         <item>
+          <widget class="QCheckBox" name="checkBox_ch1_fft">
+           <property name="text">
+            <string>CH1 FFT</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_ch2_fft">
+           <property name="text">
+            <string>CH2 FFT</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_ch3_fft">
+           <property name="text">
+            <string>CH3 FFT</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_ch4_fft">
+           <property name="text">
+            <string>CH4 FFT</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QwtPlot" name="qwt_fft">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_13">
@@ -889,6 +761,86 @@
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="groupBox_5">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>13</height>
+          </size>
+         </property>
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_10">
+          <item>
+           <widget class="QLabel" name="label_10">
+            <property name="text">
+             <string>Setting Size</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_15">
+            <item>
+             <widget class="QLineEdit" name="storge_size"/>
+            </item>
+            <item>
+             <widget class="QComboBox" name="storge_unit">
+              <item>
+               <property name="text">
+                <string>GB</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>MB</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>KB</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="storge_confirm">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Ok</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>Current Size</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="display_storge_size"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <layout class="QGridLayout" name="gridLayout"/>
        </item>
        <item>
@@ -909,7 +861,7 @@
      <x>0</x>
      <y>0</y>
      <width>1249</width>
-     <height>25</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
