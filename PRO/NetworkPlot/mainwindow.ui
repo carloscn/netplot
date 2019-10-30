@@ -568,7 +568,7 @@
       <property name="title">
        <string>图像绘制</string>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
+      <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_10">
          <item>
@@ -746,7 +746,7 @@
       <property name="title">
        <string>文件列表</string>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_6">
+      <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
         <widget class="QLabel" name="label_8">
          <property name="sizePolicy">
@@ -777,7 +777,7 @@
          <property name="title">
           <string/>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_10">
+         <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
            <widget class="QLabel" name="label_10">
             <property name="text">
@@ -805,6 +805,20 @@
               <item>
                <property name="text">
                 <string>KB</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="storge_type">
+              <item>
+               <property name="text">
+                <string>Def</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Split</string>
                </property>
               </item>
              </widget>
@@ -861,7 +875,7 @@
      <x>0</x>
      <y>0</y>
      <width>1249</width>
-     <height>23</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

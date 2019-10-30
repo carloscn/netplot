@@ -1,0 +1,12 @@
+INPUT(
+./release\main.o
+./release\mainwindow.o
+./release\netclientthread.o
+./release\ringbuffer.o
+./release\filemanager.o
+./release\da_dialog.o
+./release\moc_mainwindow.o
+./release\moc_netclientthread.o
+./release\moc_filemanager.o
+./release\moc_da_dialog.o
+);

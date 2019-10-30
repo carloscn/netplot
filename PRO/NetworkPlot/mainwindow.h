@@ -117,6 +117,8 @@ private slots:
 
     void on_storge_confirm_clicked();
 
+    void on_storge_type_currentIndexChanged(int index);
+
 signals:
 
     void net_close_file();

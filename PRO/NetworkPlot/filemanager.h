@@ -81,6 +81,9 @@ public:
     QString qFilePath;
     bool prewriteexame;
     quint64 storge_size;
+    quint64 storge_size_current;
+    QString dispaly_store_value_def;
+    QString dispaly_store_value_splite;
 
 private slots:
     void on_save_data_to_disk(quint8*, quint64);

@@ -83,6 +83,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->byte_nums = 0;
     //this->net_socket->file_ctr->storge_size = 100*MB;
     ui->storge_unit->setCurrentIndex(1);//默认显示MB
+    ui->storge_type->setCurrentIndex(0);//默认存储类型
     ui->display_storge_size->setEnabled(false);
     /*
      *  init network
@@ -90,7 +91,23 @@ MainWindow::MainWindow(QWidget *parent) :
     this->net_socket = new NetClientThread( ui->lineEdit_server_ip->text(), ui->lineEdit_port_num->text().toInt() );
 
     this->net_socket->file_ctr->storge_size = 100*MB;
-    ui->display_storge_size->setText( "100 MB");
+    this->net_socket->file_ctr_1->storge_size = 10*MB;
+    this->net_socket->file_ctr_2->storge_size = 10*MB;
+    this->net_socket->file_ctr_3->storge_size = 10*MB;
+    this->net_socket->file_ctr_4->storge_size = 10*MB;
+
+    this->net_socket->file_ctr->storge_size_current = 100*MB;
+    this->net_socket->file_ctr_1->storge_size_current = 10*MB;
+    this->net_socket->file_ctr_2->storge_size_current = 10*MB;
+    this->net_socket->file_ctr_3->storge_size_current = 10*MB;
+    this->net_socket->file_ctr_4->storge_size_current = 10*MB;
+
+
+    ui->display_storge_size->setText( "def: 100 MB");
+    this->net_socket->file_ctr->dispaly_store_value_def = "def: 100 MB";
+    this->net_socket->file_ctr->dispaly_store_value_splite = "splite: 10 MB";
+
+
     is_start_read_socket = false;
     on_pushButton_close_remote_clicked();
     net_socket->enable_socket_read(is_start_read_socket);
@@ -894,10 +911,10 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 
 void MainWindow::on_storge_confirm_clicked()
 {
-    qint64 storge_size_tmp;
+    float storge_size_tmp;
     QString storge_size_unit;
     quint64 storge_available_size;
-    storge_size_tmp = ui->storge_size->text().toInt();
+    storge_size_tmp = ui->storge_size->text().toFloat();
     storge_size_unit = ui->storge_unit->currentText();
 
     QStorageInfo storage = QStorageInfo::root();
@@ -907,10 +924,10 @@ void MainWindow::on_storge_confirm_clicked()
     if (storage.isReadOnly())
         qDebug() << "isReadOnly:" << storage.isReadOnly();
 
-//    qDebug() << "name:" << storage.name();
-//    qDebug() << "fileSystemType:" << storage.fileSystemType();
-//    qDebug() << "size:" << storage.bytesTotal()/1000/1000 << "MB";
-//    qDebug() << "availableSize:" << storage.bytesAvailable()/1000/1000 << " MB";
+    //    qDebug() << "name:" << storage.name();
+    //    qDebug() << "fileSystemType:" << storage.fileSystemType();
+    //    qDebug() << "size:" << storage.bytesTotal()/1000/1000 << "MB";
+    //    qDebug() << "availableSize:" << storage.bytesAvailable()/1000/1000 << " MB";
 
     storge_available_size = storage.bytesAvailable();//Byte
 
@@ -921,47 +938,155 @@ void MainWindow::on_storge_confirm_clicked()
         return;
     }
 
-    if(storge_size_unit=="GB")
-    {
-        if( (storge_size_tmp * GB) > storge_available_size)
+    //默认存储
+    if(ui->storge_type->currentIndex()==0) {
+
+        if(storge_size_unit=="GB")
         {
-            //弹窗提示
-            qDebug() << "storge_available_size" << storge_available_size << "B";
-            qDebug() << "storge_setting_size " << (storge_size_tmp * GB) << "B";
-            qDebug() << "此剩余磁盘空间，不足以存储该容量的单个文件！";
-            return;
+            if( (storge_size_tmp * GB) > storge_available_size)
+            {
+                //弹窗提示
+                qDebug() << "storge_available_size" << storge_available_size << "B";
+                qDebug() << "storge_setting_size " << (storge_size_tmp * GB) << "B";
+                qDebug() << "此剩余磁盘空间，不足以存储该容量的单个文件！";
+                return;
+            }
+            if( (storge_size_tmp * GB) < 5 * MB)
+            {
+                //弹窗提示
+                qDebug() << "当个文件不得小于5M";
+                return;
+            }
+
+            this->net_socket->file_ctr->storge_size = storge_size_tmp * GB;
+            ui->display_storge_size->setText( "def: " + ui->storge_size->text() + " GB");
+            this->net_socket->file_ctr->dispaly_store_value_def = "def: " + ui->storge_size->text() + " GB";
+        }
+        else if(storge_size_unit=="MB")
+        {
+            if( (storge_size_tmp * MB) > storge_available_size)
+            {
+                //弹窗提示
+                qDebug() << "storge_available_size" << storge_available_size << "B";
+                qDebug() << "storge_setting_size " << (storge_size_tmp * GB) << "B";
+                qDebug() << "此剩余磁盘空间，不足以存储该容量的单个文件！";
+                return;
+            }
+            if( (storge_size_tmp * MB) < 5 * MB)
+            {
+                //弹窗提示
+                qDebug() << "当个文件不得小于5M";
+                return;
+            }
+
+            this->net_socket->file_ctr->storge_size = storge_size_tmp * MB;
+            ui->display_storge_size->setText( "def: " + ui->storge_size->text() + " MB");
+            this->net_socket->file_ctr->dispaly_store_value_def = "def: " + ui->storge_size->text() + " MB";
+        }
+        else if(storge_size_unit=="KB")
+        {
+            if( (storge_size_tmp * KB) > storge_available_size)
+            {
+                //弹窗提示
+                qDebug() << "storge_available_size" << storge_available_size << "B";
+                qDebug() << "storge_setting_size " << (storge_size_tmp * GB) << "B";
+                qDebug() << "此剩余磁盘空间，不足以存储该容量的单个文件！";
+                return;
+            }
+            if( (storge_size_tmp * KB) < 5 * MB)
+            {
+                //弹窗提示
+                qDebug() << "当个文件不得小于5M";
+                return;
+            }
+
+            this->net_socket->file_ctr->storge_size = storge_size_tmp * KB;
+            ui->display_storge_size->setText( "def: " + ui->storge_size->text() + "KB");
+            this->net_socket->file_ctr->dispaly_store_value_def = "def: " + ui->storge_size->text() + " KB";
         }
 
-        this->net_socket->file_ctr->storge_size = storge_size_tmp * GB;
-        ui->display_storge_size->setText( ui->storge_size->text() + " GB");
-    }
-    else if(storge_size_unit=="MB")
-    {
-        if( (storge_size_tmp * MB) > storge_available_size)
+
+        //分割存储
+    } else if(ui->storge_type->currentIndex()==1) {
+        if(storge_size_unit=="GB")
         {
-            //弹窗提示
-            qDebug() << "storge_available_size" << storge_available_size << "B";
-            qDebug() << "storge_setting_size " << (storge_size_tmp * GB) << "B";
-            qDebug() << "此剩余磁盘空间，不足以存储该容量的单个文件！";
-            return;
-        }
+            if( (storge_size_tmp * GB) > storge_available_size)
+            {
+                //弹窗提示
+                qDebug() << "storge_available_size" << storge_available_size << "B";
+                qDebug() << "storge_setting_size " << (storge_size_tmp * GB) << "B";
+                qDebug() << "此剩余磁盘空间，不足以存储该容量的单个文件！";
+                return;
+            }
+            if( (storge_size_tmp * GB) < 1 * MB)
+            {
+                //弹窗提示
+                qDebug() << "当个文件不得小于1M";
+                return;
+            }
 
-        this->net_socket->file_ctr->storge_size = storge_size_tmp * MB;
-        ui->display_storge_size->setText( ui->storge_size->text() + " MB");
-    }
-    else if(storge_size_unit=="KB")
-    {
-        if( (storge_size_tmp * KB) > storge_available_size)
+            this->net_socket->file_ctr_1->storge_size = storge_size_tmp * GB;
+            this->net_socket->file_ctr_2->storge_size = storge_size_tmp * GB;
+            this->net_socket->file_ctr_3->storge_size = storge_size_tmp * GB;
+            this->net_socket->file_ctr_4->storge_size = storge_size_tmp * GB;
+            ui->display_storge_size->setText( "Splite: " + ui->storge_size->text() + " GB");
+            this->net_socket->file_ctr->dispaly_store_value_splite = "Splite: " + ui->storge_size->text() + " GB";
+        }
+        else if(storge_size_unit=="MB")
         {
-            //弹窗提示
-            qDebug() << "storge_available_size" << storge_available_size << "B";
-            qDebug() << "storge_setting_size " << (storge_size_tmp * GB) << "B";
-            qDebug() << "此剩余磁盘空间，不足以存储该容量的单个文件！";
-            return;
+            if( (storge_size_tmp * MB) > storge_available_size)
+            {
+                //弹窗提示
+                qDebug() << "storge_available_size" << storge_available_size << "B";
+                qDebug() << "storge_setting_size " << (storge_size_tmp * GB) << "B";
+                qDebug() << "此剩余磁盘空间，不足以存储该容量的单个文件！";
+                return;
+            }
+            if( (storge_size_tmp * MB) < 1 * MB)
+            {
+                //弹窗提示
+                qDebug() << "当个文件不得小于1M";
+                return;
+            }
+
+            this->net_socket->file_ctr_1->storge_size = storge_size_tmp * MB;
+            this->net_socket->file_ctr_2->storge_size = storge_size_tmp * MB;
+            this->net_socket->file_ctr_3->storge_size = storge_size_tmp * MB;
+            this->net_socket->file_ctr_4->storge_size = storge_size_tmp * MB;
+            ui->display_storge_size->setText( "Splite: " + ui->storge_size->text() + " MB");
+            this->net_socket->file_ctr->dispaly_store_value_splite = "Splite: " + ui->storge_size->text() + " MB";
         }
+        else if(storge_size_unit=="KB")
+        {
+            if( (storge_size_tmp * KB) > storge_available_size)
+            {
+                //弹窗提示
+                qDebug() << "storge_available_size" << storge_available_size << "B";
+                qDebug() << "storge_setting_size " << (storge_size_tmp * GB) << "B";
+                qDebug() << "此剩余磁盘空间，不足以存储该容量的单个文件！";
+                return;
+            }
+            if( (storge_size_tmp * KB) < 1 * MB)
+            {
+                //弹窗提示
+                qDebug() << "当个文件不得小于1M";
+                return;
+            }
 
-        this->net_socket->file_ctr->storge_size = storge_size_tmp * KB;
-        ui->display_storge_size->setText( ui->storge_size->text() + "KB");
+            this->net_socket->file_ctr_1->storge_size = storge_size_tmp * KB;
+            this->net_socket->file_ctr_2->storge_size = storge_size_tmp * KB;
+            this->net_socket->file_ctr_3->storge_size = storge_size_tmp * KB;
+            this->net_socket->file_ctr_4->storge_size = storge_size_tmp * KB;
+            ui->display_storge_size->setText( "Splite: " + ui->storge_size->text() + " KB");
+            this->net_socket->file_ctr->dispaly_store_value_splite = "Splite: " + ui->storge_size->text() + " KB";
+        }
     }
+}
 
+void MainWindow::on_storge_type_currentIndexChanged(int index)
+{
+    if(ui->storge_type->currentIndex()==0)
+        ui->display_storge_size->setText(this->net_socket->file_ctr->dispaly_store_value_def);
+    else if(ui->storge_type->currentIndex()==1)
+        ui->display_storge_size->setText(this->net_socket->file_ctr->dispaly_store_value_splite);
 }

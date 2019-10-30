@@ -61,21 +61,21 @@ NetClientThread::NetClientThread( QString server_ip, int server_port )
 #endif
     connect( this, SIGNAL(net_data_save_to_disk(quint8*,quint64) ),(QObject*)this->file_ctr ,SLOT(on_save_data_to_disk(quint8*,quint64)));
     connect( this, SIGNAL(net_data_save_to_disk(QByteArray) ),(QObject*)this->file_ctr ,SLOT(on_save_data_to_disk(QByteArray)));
-//    connect( this->file_ctr, SIGNAL(file_manager_add_file_name(QString)), this, SLOT(on_file_manager_add_doc_list(QString)) );
-//    connect( this->file_ctr, SIGNAL(file_manager_file_size(double)), this, SLOT(on_file_manager_file_size(double)));
+    connect( this->file_ctr, SIGNAL(file_manager_add_file_name(QString)), this, SLOT(on_file_manager_add_doc_list(QString)) );
+    connect( this->file_ctr, SIGNAL(file_manager_file_size(double)), this, SLOT(on_file_manager_file_size(double)));
     
 
-//    connect( this->file_ctr_1, SIGNAL(file_manager_add_file_name(QString)), this, SLOT(on_file_manager_add_doc_list(QString)) );
-//    connect( this->file_ctr_1, SIGNAL(file_manager_file_size(double)), this, SLOT(on_file_manager_file_size(double)));
+    connect( this->file_ctr_1, SIGNAL(file_manager_add_file_name(QString)), this, SLOT(on_file_manager_add_doc_list(QString)) );
+    connect( this->file_ctr_1, SIGNAL(file_manager_file_size(double)), this, SLOT(on_file_manager_file_size(double)));
 
-//    connect( this->file_ctr_2, SIGNAL(file_manager_add_file_name(QString)), this, SLOT(on_file_manager_add_doc_list(QString)) );
-//    connect( this->file_ctr_2, SIGNAL(file_manager_file_size(double)), this, SLOT(on_file_manager_file_size(double)));
+    connect( this->file_ctr_2, SIGNAL(file_manager_add_file_name(QString)), this, SLOT(on_file_manager_add_doc_list(QString)) );
+    connect( this->file_ctr_2, SIGNAL(file_manager_file_size(double)), this, SLOT(on_file_manager_file_size(double)));
 
-//    connect( this->file_ctr_3, SIGNAL(file_manager_add_file_name(QString)), this, SLOT(on_file_manager_add_doc_list(QString)) );
-//    connect( this->file_ctr_3, SIGNAL(file_manager_file_size(double)), this, SLOT(on_file_manager_file_size(double)));
+    connect( this->file_ctr_3, SIGNAL(file_manager_add_file_name(QString)), this, SLOT(on_file_manager_add_doc_list(QString)) );
+    connect( this->file_ctr_3, SIGNAL(file_manager_file_size(double)), this, SLOT(on_file_manager_file_size(double)));
 
-//    connect( this->file_ctr_4, SIGNAL(file_manager_add_file_name(QString)), this, SLOT(on_file_manager_add_doc_list(QString)) );
-//    connect( this->file_ctr_4, SIGNAL(file_manager_file_size(double)), this, SLOT(on_file_manager_file_size(double)));
+    connect( this->file_ctr_4, SIGNAL(file_manager_add_file_name(QString)), this, SLOT(on_file_manager_add_doc_list(QString)) );
+    connect( this->file_ctr_4, SIGNAL(file_manager_file_size(double)), this, SLOT(on_file_manager_file_size(double)));
     //delete key_file;
     //delete key_str;
 
@@ -255,7 +255,7 @@ void NetClientThread::on_read_message()
             qDebug() << "write data len:" << array_length;
 #else
             emit net_data_save_to_disk(array_rom);
-            qDebug() << "write data len:" << array_rom.length();
+            //qDebug() << "write data len:" << array_rom.length();
 #endif
         }
         check_packet(array_rom);

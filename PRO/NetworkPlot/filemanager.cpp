@@ -72,10 +72,10 @@ FileManager::FileManager(quint8 index): file(new QFile),datetime(new QDateTime)
     prewriteexame = false;
     currenttime = "20181019220522";
 #ifdef Q_OS_LINUX
-        qFileDirPath = "/usr/data/";
+        qFileDirPath = "/usr/data/" + QString::number(index) + "/";
 #endif
 #ifdef Q_OS_WIN32
-       qFileDirPath = "D:/data/";
+       qFileDirPath = "D:/data/" + QString::number(index) + "/";
 #endif
 }
 
@@ -100,10 +100,11 @@ void FileManager::write(quint8* buffer, quint64 length) {
             file->close();
             fileopen = false;
         }
+        storge_size_current = storge_size;
         currenttime = datetime->currentDateTime().toString("yyyyMMddHHmmss");
         qFilePath = qFileDirPath + currenttime + "_" + QString::number(index) + ".hex";
         emit file_manager_add_file_name(currenttime+ "_" + QString::number(index) + ".hex");
-        qDebug() << "Create another hex file ....................";
+        qDebug() << "Create another hex file ...................." + storge_size;
     }
 
     if(file->isOpen() == false) {
@@ -115,7 +116,7 @@ void FileManager::write(quint8* buffer, quint64 length) {
     QFileInfo fileInfo(qFilePath);
     filesize = fileInfo.size();
 
-    percent = ((double)filesize)/(double)storge_size;
+    percent = ((double)filesize)/(double)storge_size_current;
 
     file->write((char*)buffer, length);
 
@@ -139,9 +140,11 @@ void FileManager::write(float *ch_data, quint64 data_len)
             file->close();
             fileopen = false;
         }
+        storge_size_current = storge_size;
         currenttime = datetime->currentDateTime().toString("yyyyMMddHHmmss");
         qFilePath = qFileDirPath + currenttime + "_" + QString::number(index) + ".hex";
-        emit file_manager_add_file_name(currenttime + "_" + QString::number(index) + ".hex");
+        qDebug() << "Splite data: Create another hex file " + qFilePath;
+        //emit file_manager_add_file_name(currenttime + "_" + QString::number(index) + ".hex");
     }
 
     if(file->isOpen() == false) {
@@ -153,14 +156,14 @@ void FileManager::write(float *ch_data, quint64 data_len)
     QFileInfo fileInfo(qFilePath);
     filesize = fileInfo.size();
 
-    percent = ((double)filesize)/(double)storge_size;
+    percent = ((double)filesize)/(double)storge_size_current;
 
     QTextStream out(file);
     for (quint32 i = 0; i < data_len; i ++) {
         QString temp_str = QString::number( *(ch_data + i) );
         out << temp_str << ",";
     }
-    emit file_manager_file_size(percent);
+    //emit file_manager_file_size(percent);
 }
 void FileManager::write(QByteArray array) {
     double percent;
@@ -178,6 +181,7 @@ void FileManager::write(QByteArray array) {
             file->close();
             fileopen = false;
         }
+        storge_size_current = storge_size;
         currenttime = datetime->currentDateTime().toString("yyyyMMddHHmmss");
         qFilePath = qFileDirPath + currenttime + "_" + QString::number(index) + ".hex";
         emit file_manager_add_file_name(currenttime+ "_" + QString::number(index) + ".hex");
@@ -193,7 +197,7 @@ void FileManager::write(QByteArray array) {
     QFileInfo fileInfo(qFilePath);
     filesize = fileInfo.size();
 
-    percent = ((double)filesize)/(double)storge_size;
+    percent = ((double)filesize)/(double)storge_size_current;
 
     file->write(array);
 
@@ -228,7 +232,7 @@ bool FileManager::isFileFull(QString filePath) {
 
     QFileInfo fileInfo(filePath);
     filesize = fileInfo.size();
-    if(filesize >= storge_size) {
+    if(filesize >= storge_size_current) {
         fileclose = true;
         return true;//The hex file is full with 1GB
     }
