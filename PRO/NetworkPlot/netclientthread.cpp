@@ -443,41 +443,11 @@ void NetClientThread::case_1(quint8 *buffer,  quint64 length)
             //qDebug() << "sample: " << channel_a_d[i];
         }
 
-//        file_ctr_1->write(channel_a_d, 500);
-//        file_ctr_2->write(channel_b_d, 500);
-//        file_ctr_3->write(channel_c_d, 500);
-//        file_ctr_4->write(channel_d_d, 500);
-        QFile *file = new QFile;
-        QString currenttime;
-        QString qFilePath;
-        QString qFileDirPath = "D:/data/";
-        QDateTime *datetime = new QDateTime();
-        currenttime = datetime->currentDateTime().toString("yyyyMMddHHmmss");
-        qFilePath = qFileDirPath + currenttime + "_" + QString::number(index) + ".hex";
+        file_ctr_1->write(channel_a_d, 500);
+        file_ctr_2->write(channel_b_d, 500);
+        file_ctr_3->write(channel_c_d, 500);
+        file_ctr_4->write(channel_d_d, 500);
 
-
-
-        QTextStream out(file);
-        for (quint32 i = 0; i < data_len; i ++) {
-            QString temp_str = QString::number( *(ch_data + i) );
-            out << temp_str << ",";
-        }
-
-        QTextStream out(file);
-        for (quint32 i = 0; i < data_len; i ++) {
-            QString temp_str = QString::number( *(ch_data + i) );
-            out << temp_str << ",";
-        }
-        QTextStream out(file);
-        for (quint32 i = 0; i < data_len; i ++) {
-            QString temp_str = QString::number( *(ch_data + i) );
-            out << temp_str << ",";
-        }
-        QTextStream out(file);
-        for (quint32 i = 0; i < data_len; i ++) {
-            QString temp_str = QString::number( *(ch_data + i) );
-            out << temp_str << ",";
-        }
         emit net_data_plot(channel_data, 2000);
     }
 }
