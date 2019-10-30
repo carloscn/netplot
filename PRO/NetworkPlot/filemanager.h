@@ -65,15 +65,18 @@ class FileManager : public QThread{
     Q_OBJECT
 public:
     explicit FileManager();
+    FileManager(quint8 index);
     ~FileManager();
 
     void write(QByteArray);
     void write(quint8* buffer, quint64 length);
+    void write(float *ch_data, quint64 data_len);
     void preWriteExam();
     bool isDirExist(QString);
     bool isFileExist(QString);
     bool isFileFull(QString);
     void fileClose();
+
     QFile *file;
     QString qFilePath;
     bool prewriteexame;
@@ -99,6 +102,7 @@ private:
     void file_size();
     QDateTime *datetime;
     QString currenttime;
+    quint8  index;
 //    QMutex *mutex;
 
 };

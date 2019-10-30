@@ -40,6 +40,11 @@ NetClientThread::NetClientThread( QString server_ip, int server_port )
     server = new QTcpServer();
     data_packet = (struct data_packet_t*)malloc(sizeof(struct data_packet_t));
     file_ctr = new FileManager();
+
+    file_ctr_1 = new FileManager(1);
+    file_ctr_2 = new FileManager(2);
+    file_ctr_3 = new FileManager(3);
+    file_ctr_4 = new FileManager(4);
     array_length = 0;
     mutex = new QMutex();
     count = 0;
@@ -56,9 +61,21 @@ NetClientThread::NetClientThread( QString server_ip, int server_port )
 #endif
     connect( this, SIGNAL(net_data_save_to_disk(quint8*,quint64) ),(QObject*)this->file_ctr ,SLOT(on_save_data_to_disk(quint8*,quint64)));
     connect( this, SIGNAL(net_data_save_to_disk(QByteArray) ),(QObject*)this->file_ctr ,SLOT(on_save_data_to_disk(QByteArray)));
-    connect( (QObject*)this->file_ctr, SIGNAL(file_manager_add_file_name(QString)), this, SLOT(on_file_manager_add_doc_list(QString)) );
-    connect( (QObject*)this->file_ctr, SIGNAL(file_manager_file_size(double)), this, SLOT(on_file_manager_file_size(double)));
+//    connect( this->file_ctr, SIGNAL(file_manager_add_file_name(QString)), this, SLOT(on_file_manager_add_doc_list(QString)) );
+//    connect( this->file_ctr, SIGNAL(file_manager_file_size(double)), this, SLOT(on_file_manager_file_size(double)));
     
+
+//    connect( this->file_ctr_1, SIGNAL(file_manager_add_file_name(QString)), this, SLOT(on_file_manager_add_doc_list(QString)) );
+//    connect( this->file_ctr_1, SIGNAL(file_manager_file_size(double)), this, SLOT(on_file_manager_file_size(double)));
+
+//    connect( this->file_ctr_2, SIGNAL(file_manager_add_file_name(QString)), this, SLOT(on_file_manager_add_doc_list(QString)) );
+//    connect( this->file_ctr_2, SIGNAL(file_manager_file_size(double)), this, SLOT(on_file_manager_file_size(double)));
+
+//    connect( this->file_ctr_3, SIGNAL(file_manager_add_file_name(QString)), this, SLOT(on_file_manager_add_doc_list(QString)) );
+//    connect( this->file_ctr_3, SIGNAL(file_manager_file_size(double)), this, SLOT(on_file_manager_file_size(double)));
+
+//    connect( this->file_ctr_4, SIGNAL(file_manager_add_file_name(QString)), this, SLOT(on_file_manager_add_doc_list(QString)) );
+//    connect( this->file_ctr_4, SIGNAL(file_manager_file_size(double)), this, SLOT(on_file_manager_file_size(double)));
     //delete key_file;
     //delete key_str;
 
@@ -218,13 +235,13 @@ void NetClientThread::on_read_message()
         }
         */
         qint8 ret = 7;
-
-        array_rom.append(socket->readAll());
-        array_length = array_rom.length();
-        if (array_length < 4*ONE_PACKET_LENGTH)
+        if ( socket->bytesAvailable() < ONE_PACKET_LENGTH )
             return;
-        if (array_length > 10*8010)
-            vector_counter = 0;
+        array_rom.append(socket->read(ONE_PACKET_LENGTH));
+        array_length = array_rom.length();
+        //qDebug() <<" read onetime : "  << array_length;
+//        if (array_length < 2*ONE_PACKET_LENGTH)
+//            return;
 #if UINT_FORMAT_SAVE
         socket_buffer = (quint8*)malloc(sizeof(quint8*) * (array_length + 1) );
 #endif
@@ -292,12 +309,16 @@ void NetClientThread::check_packet(QByteArray array)
     adc_header.append(0xAD);
     adc_header.append(0xAC);
 
-    if (array.contains(adc_header) && ( array.length() -  array.indexOf(adc_header) > ONE_PACKET_LENGTH) ) {
+//    if (array.contains(adc_header) && ( array.length() -  array.indexOf(adc_header) > ONE_PACKET_LENGTH) ) {
+//        true_packet = array.mid(array.indexOf(adc_header), ONE_PACKET_LENGTH);
+//        deal_true_packet(true_packet);
+//        qDebug() << "one true packet checked.";
+//    }
+    if (array.contains(adc_header) ) {
         true_packet = array.mid(array.indexOf(adc_header), ONE_PACKET_LENGTH);
         deal_true_packet(true_packet);
         //qDebug() << "one true packet checked.";
     }
-
 }
 
 bool NetClientThread::deal_true_packet(QByteArray array)
@@ -408,6 +429,54 @@ void NetClientThread::case_1(quint8 *buffer,  quint64 length)
             channel_data[500 + i] = db;
             channel_data[1000 + i] = dc;
             channel_data[1500 + i] = dd;
+        }
+        float channel_a_d[500];
+        float channel_b_d[500];
+        float channel_c_d[500];
+        float channel_d_d[500];
+        //qDebug() << "slot plot!";
+        for (quint32 i = 0; i < 500; i ++) {
+            channel_a_d[i] = channel_data[i] / 256 / 1000000000.0 * 488.0;
+            channel_b_d[i] = channel_data[500 + i]  / 256 / 1000000000.0 * 488.0;
+            channel_c_d[i] = channel_data[1000 + i]/ 256 / 1000000000.0 * 488.0;
+            channel_d_d[i] = channel_data[1500 + i] / 256 / 1000000000.0 * 488.0;
+            //qDebug() << "sample: " << channel_a_d[i];
+        }
+
+//        file_ctr_1->write(channel_a_d, 500);
+//        file_ctr_2->write(channel_b_d, 500);
+//        file_ctr_3->write(channel_c_d, 500);
+//        file_ctr_4->write(channel_d_d, 500);
+        QFile *file = new QFile;
+        QString currenttime;
+        QString qFilePath;
+        QString qFileDirPath = "D:/data/";
+        QDateTime *datetime = new QDateTime();
+        currenttime = datetime->currentDateTime().toString("yyyyMMddHHmmss");
+        qFilePath = qFileDirPath + currenttime + "_" + QString::number(index) + ".hex";
+
+
+
+        QTextStream out(file);
+        for (quint32 i = 0; i < data_len; i ++) {
+            QString temp_str = QString::number( *(ch_data + i) );
+            out << temp_str << ",";
+        }
+
+        QTextStream out(file);
+        for (quint32 i = 0; i < data_len; i ++) {
+            QString temp_str = QString::number( *(ch_data + i) );
+            out << temp_str << ",";
+        }
+        QTextStream out(file);
+        for (quint32 i = 0; i < data_len; i ++) {
+            QString temp_str = QString::number( *(ch_data + i) );
+            out << temp_str << ",";
+        }
+        QTextStream out(file);
+        for (quint32 i = 0; i < data_len; i ++) {
+            QString temp_str = QString::number( *(ch_data + i) );
+            out << temp_str << ",";
         }
         emit net_data_plot(channel_data, 2000);
     }

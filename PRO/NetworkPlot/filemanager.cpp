@@ -44,6 +44,7 @@
 
 
 FileManager::FileManager(): file(new QFile),datetime(new QDateTime){
+        this->index = 0;
         qFilePath = "123";
         filesize = 0;
         fileopen = false;
@@ -60,43 +61,29 @@ FileManager::FileManager(): file(new QFile),datetime(new QDateTime){
 
 }
 
+FileManager::FileManager(quint8 index): file(new QFile),datetime(new QDateTime)
+{
+    this->index = index;
+    qFilePath = "123";
+    filesize = 0;
+    fileopen = false;
+    fileclose = false;
+    dir_flag = false;
+    prewriteexame = false;
+    currenttime = "20181019220522";
+#ifdef Q_OS_LINUX
+        qFileDirPath = "/usr/data/";
+#endif
+#ifdef Q_OS_WIN32
+       qFileDirPath = "D:/data/";
+#endif
+}
+
 
 FileManager::~FileManager() {
 
 }
-/*
-void FileManager::write(QByteArray data) {
 
-    if(prewriteexame == false) {
-        // preWriteExam only run once!
-        this->preWriteExam();
-        prewriteexame = true;
-        qDebug() << "pre write eamm";
-    }
-
-    // Determine if the hex file full with FILE_SIZE_MAX, if true, then, create another file
-    if(isFileFull(qFilePath)==true) {
-
-        if(fileclose == true) {
-            file->close();
-            fileopen = false;
-        }
-        currenttime = datetime->currentDateTime().toString("yyyyMMddHHmmss");
-        qFilePath = qFileDirPath + currenttime + ".hex";
-        emit file_manager_add_file_name(currenttime+".hex");
-        qDebug() << "Create another hex file";
-    }
-
-    if(fileopen == false) {
-        file->setFileName(qFilePath);
-        file->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text);
-        fileclose = false;
-        fileopen = true;
-    }
-    QDataStream out(file);
-    out << data;
-}
-*/
 void FileManager::write(quint8* buffer, quint64 length) {
     double percent;
 
@@ -114,8 +101,8 @@ void FileManager::write(quint8* buffer, quint64 length) {
             fileopen = false;
         }
         currenttime = datetime->currentDateTime().toString("yyyyMMddHHmmss");
-        qFilePath = qFileDirPath + currenttime + ".hex";
-        emit file_manager_add_file_name(currenttime+".hex");
+        qFilePath = qFileDirPath + currenttime + "_" + QString::number(index) + ".hex";
+        emit file_manager_add_file_name(currenttime+ "_" + QString::number(index) + ".hex");
         qDebug() << "Create another hex file ....................";
     }
 
@@ -135,7 +122,46 @@ void FileManager::write(quint8* buffer, quint64 length) {
     emit file_manager_file_size(percent);
     //qDebug() << "Writing data to hex file ... ...";
 }
+void FileManager::write(float *ch_data, quint64 data_len)
+{
+    double percent;
 
+    if(prewriteexame == false) {
+        // preWriteExam only run once!
+        preWriteExam();
+        prewriteexame = true;
+
+    }
+    // Determine if the hex file full with FILE_SIZE_MAX, if true, then, create another file
+    if(isFileFull(qFilePath)==true) {
+
+        if(fileclose == true) {
+            file->close();
+            fileopen = false;
+        }
+        currenttime = datetime->currentDateTime().toString("yyyyMMddHHmmss");
+        qFilePath = qFileDirPath + currenttime + "_" + QString::number(index) + ".hex";
+        emit file_manager_add_file_name(currenttime + "_" + QString::number(index) + ".hex");
+    }
+
+    if(file->isOpen() == false) {
+        file->setFileName(qFilePath);
+        file->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text);
+        fileclose = false;
+        fileopen = true;
+    }
+    QFileInfo fileInfo(qFilePath);
+    filesize = fileInfo.size();
+
+    percent = ((double)filesize)/(double)storge_size;
+
+    QTextStream out(file);
+    for (quint32 i = 0; i < data_len; i ++) {
+        QString temp_str = QString::number( *(ch_data + i) );
+        out << temp_str << ",";
+    }
+    emit file_manager_file_size(percent);
+}
 void FileManager::write(QByteArray array) {
     double percent;
 
@@ -153,8 +179,8 @@ void FileManager::write(QByteArray array) {
             fileopen = false;
         }
         currenttime = datetime->currentDateTime().toString("yyyyMMddHHmmss");
-        qFilePath = qFileDirPath + currenttime + ".hex";
-        emit file_manager_add_file_name(currenttime+".hex");
+        qFilePath = qFileDirPath + currenttime + "_" + QString::number(index) + ".hex";
+        emit file_manager_add_file_name(currenttime+ "_" + QString::number(index) + ".hex");
         qDebug() << "Create another hex file ....................";
     }
 
@@ -220,10 +246,10 @@ void FileManager::preWriteExam() {
         qDebug() << "Create the file dir";
     }
     // Give file a name
-    qFilePath = qFileDirPath + currenttime + ".hex";
-    qDebug() << "Create the data file";
+    qFilePath = qFileDirPath + currenttime + "_" + QString::number(index) + ".hex";
+    qDebug() << "Create the data file : " << qFilePath;
     prewriteexame = true;
-    emit file_manager_add_file_name(currenttime+".hex");
+    emit file_manager_add_file_name(currenttime+ "_" + QString::number(index) + ".hex");
 
 }
 

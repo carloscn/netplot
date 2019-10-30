@@ -129,6 +129,10 @@ private :
 
 public:
     FileManager *file_ctr;
+    FileManager *file_ctr_1;
+    FileManager *file_ctr_2;
+    FileManager *file_ctr_3;
+    FileManager *file_ctr_4;
 
 private:
 
