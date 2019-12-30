@@ -446,7 +446,9 @@ void NetClientThread::case_1(quint8 *buffer,  quint64 length)
         file_ctr_3->write(channel_c_d, store_data_len);
         file_ctr_4->write(channel_d_d, store_data_len);
         displat_counter = ++ displat_counter % 5;
+#if noplot
         if(displat_counter==1){
+
 
             if(sample_level == 8){
                 for (quint16 i =0;i<display_data_len-5;i++) {
@@ -463,7 +465,9 @@ void NetClientThread::case_1(quint8 *buffer,  quint64 length)
 
             emit net_data_plot(channel_data_display, display_data_len);
         }
+#endif
     }
+
 }
 void NetClientThread::on_adc_dac_mode_set(int index)
 {
