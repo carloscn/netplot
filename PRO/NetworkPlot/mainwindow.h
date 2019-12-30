@@ -165,7 +165,6 @@ private:
 
     QString current_daback_file_name;
 
-
     bool lic_state;
 
 

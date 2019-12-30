@@ -1,48 +1,6 @@
 #ifndef FILEMANAGER_H
 #define FILEMANAGER_H
 
-/**
- * \brief   This project about FileManager.
- *
- * \License  THIS FILE IS PART OF MULTIBEANS PROJECT ;
- *           all of the files  - The core part of the project;
- *           THIS PROGRAM IS FREE SOFTWARE, JUST NEED GPL 3.0 LICENSE;
- *           YOU SHOULD HAVE RECEIVED A COPY OF WTFPL LICENSE UTIL 5/1/2021, IF NOT,
- *           MULTIBEANS WILL TAKE APPROPRIATE MEASURES.
- *
- *                ________________     ___           _________________
- *               |    __    __    |   |   |         |______     ______|
- *               |   |  |  |  |   |   |   |                |   |
- *               |   |  |__|  |   |   |   |________        |   |
- *               |___|        |___|   |____________|       |___|
- *
- *                               MULTIBEANS ORG.
- *                     Homepage: http://www.mltbns.com/
- *
- *           * You can download the license on our Github. ->
- *           * -> https://github.com/multibeans  <-
- *           * Copyright (c) 2013-2018 MULTIBEANS ORG. http://www.mltbns.com/
- *           * Copyright (c) 2018 Tian Zhiying(Davis Tian).
- *
- *  \note    void.
- ****************************************************************************/
-/*                                                                          */
-/*  @File       : main.c                                                    */
-/*  @Revision   : Ver 1.0.                                                  */
-/*  @Date       : 2018.10.21 Realse.                                        */
-/*  @Belong     : PROJECT.                                                  */
-/*  @GitHub     :                                                           */
-/*  @ASCII : (UTF-8) in Linux amd64. Qt Creator5.12                         */
-/****************************************************************************/
-/*  @Attention:                                                             */
-/*  ---------------------------------------------------------------------   */
-/*  |    Data    |  Behavior |     Offer     |          Content         |   */
-/*  |------------|-----------|---------------|--------------------------|   */
-/*  | 2018.10.21 |   creat   |Tian Zhiying   | add file offer&debug     |   */
-/*  ---------------------------------------------------------------------   */
-/*                                                            MULTIBEANS.   */
-/****************************************************************************/
-
 #include <QString>
 #include <QByteArray>
 #include <QDateTime>
@@ -84,6 +42,7 @@ public:
     quint64 storge_size_current;
     QString dispaly_store_value_def;
     QString dispaly_store_value_splite;
+    bool show_file_name;
 
 private slots:
     void on_save_data_to_disk(quint8*, quint64);

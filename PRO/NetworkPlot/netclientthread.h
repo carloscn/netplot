@@ -117,12 +117,16 @@ private :
     quint8 right_rom[8010];
     quint64 left_length;
     quint64 right_length;
+    quint64 displat_counter=0;
 //    FileManager *file_ctr;
     quint64 kcount;
     bool isEnableSave;
     quint8 plot_buffer[ONE_PACKET_LENGTH];
     quint32 channel_data[2000];
+    quint32 channel_data_display[2000];
+
     bool is_enable_socket_read;
+
 
     bool key_check;
     int adc_dac_mode;
@@ -133,6 +137,7 @@ public:
     FileManager *file_ctr_2;
     FileManager *file_ctr_3;
     FileManager *file_ctr_4;
+    quint16 sample_level;
 
 private:
 

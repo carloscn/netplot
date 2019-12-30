@@ -1,29 +1,3 @@
-/**
- * \brief   This project about NETPLOT.
- *
- * \License  THIS FILE IS PART OF MULTIBEANS PROJECT;
- *           all of the files  - The core part of the project;
- *           THIS PROGRAM IS NOT FREE SOFTWARE, NEED MULTIBEANS ORG LIC;
- *           YOU SHOULD HAVE RECEIVED A COPY OF WTFPL LICENSE UTIL 5/1/2021
- *           OVER THE DATE, ALL FUNCTIONS WILL BE CLOSED. IF NOT, MULTIBEANS
- *           WILL TAKE APPROPRIATE MEASURES.
- *
- *                ________________     ___           _________________
- *               |    __    __    |   |   |         |______     ______|
- *               |   |  |  |  |   |   |   |                |   |
- *               |   |  |__|  |   |   |   |________        |   |
- *               |___|        |___|   |____________|       |___|
- *
- *                               MULTIBEANS ORG.
- *                     Homepage: http://www.mltbns.com/
- *
- *           * You can download the license on our Github. ->
- *           * -> https://github.com/lifimlt  <-
- *           * Copyright (c) 2018 Wei Haochen(Carlos Wei: # whc.mlt@qq.com).
- *           * Copyright (c) 2013-2018 MULTIBEANS ORG. http://www.mltbns.com/
- *
- *  \note    void.
- ****************************************************************************/
 #include "ringbuffer.h"
 #include "QDebug"
 ringbuffer::ringbuffer(uint32_t capacity)
