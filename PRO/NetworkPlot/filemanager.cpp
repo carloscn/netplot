@@ -1,62 +1,21 @@
-/**
- * \brief   This project about FileManager.
- *
- * \License  THIS FILE IS PART OF MULTIBEANS PROJECT ;
- *           all of the files  - The core part of the project;
- *           THIS PROGRAM IS FREE SOFTWARE, JUST NEED GPL 3.0 LICENSE;
- *           YOU SHOULD HAVE RECEIVED A COPY OF WTFPL LICENSE UTIL 5/1/2021, IF NOT,
- *           MULTIBEANS WILL TAKE APPROPRIATE MEASURES.
- *
- *                ________________     ___           _________________
- *               |    __    __    |   |   |         |______     ______|
- *               |   |  |  |  |   |   |   |                |   |
- *               |   |  |__|  |   |   |   |________        |   |
- *               |___|        |___|   |____________|       |___|
- *
- *                               MULTIBEANS ORG.
- *                     Homepage: http://www.mltbns.com/
- *
- *           * You can download the license on our Github. ->
- *           * -> https://github.com/multibeans  <-
- *           * Copyright (c) 2013-2018 MULTIBEANS ORG. http://www.mltbns.com/
- *           * Copyright (c) 2018 Tian Zhiying(Davis Tian).
- *
- *  \note    void.
- ****************************************************************************/
-/*                                                                          */
-/*  @File       : main.c                                                    */
-/*  @Revision   : Ver 1.0.                                                  */
-/*  @Date       : 2018.10.21 Realse.                                        */
-/*  @Belong     : PROJECT.                                                  */
-/*  @GitHub     :                                                           */
-/*  @ASCII : (UTF-8) in Linux amd64. Qt Creator5.12                         */
-/****************************************************************************/
-/*  @Attention:                                                             */
-/*  ---------------------------------------------------------------------   */
-/*  |    Data    |  Behavior |     Offer     |          Content         |   */
-/*  |------------|-----------|---------------|--------------------------|   */
-/*  | 2018.10.21 |   creat   |Tian Zhiying   | add file offer&debug     |   */
-/*  ---------------------------------------------------------------------   */
-/*                                                            MULTIBEANS.   */
-/****************************************************************************/
-
 #include "filemanager.h"
 
 
 FileManager::FileManager(): file(new QFile),datetime(new QDateTime){
-        this->index = 0;
-        qFilePath = "123";
-        filesize = 0;
-        fileopen = false;
-        fileclose = false;
-        dir_flag = false;
-        prewriteexame = false;
-        currenttime = "20181019220522";
+    this->index = 0;
+    qFilePath = "123";
+    filesize = 0;
+    fileopen = false;
+    fileclose = false;
+    dir_flag = false;
+    prewriteexame = false;
+    currenttime = "20181019220522";
+    show_file_name = false;
 #ifdef Q_OS_LINUX
-        qFileDirPath = "/usr/data/";
+    qFileDirPath = "/usr/data/";
 #endif
 #ifdef Q_OS_WIN32
-       qFileDirPath = "D:/data/";
+    qFileDirPath = "D:/data/";
 #endif
 
 }
@@ -71,11 +30,12 @@ FileManager::FileManager(quint8 index): file(new QFile),datetime(new QDateTime)
     dir_flag = false;
     prewriteexame = false;
     currenttime = "20181019220522";
+    show_file_name = false;
 #ifdef Q_OS_LINUX
-        qFileDirPath = "/usr/data/" + QString::number(index) + "/";
+    qFileDirPath = "/usr/data/" + QString::number(index) + "/";
 #endif
 #ifdef Q_OS_WIN32
-       qFileDirPath = "D:/data/" + QString::number(index) + "/";
+    qFileDirPath = "D:/data/" + QString::number(index) + "/";
 #endif
 }
 
@@ -102,8 +62,8 @@ void FileManager::write(quint8* buffer, quint64 length) {
         }
         storge_size_current = storge_size;
         currenttime = datetime->currentDateTime().toString("yyyyMMddHHmmss");
-        qFilePath = qFileDirPath + currenttime + "_" + QString::number(index) + ".hex";
-        emit file_manager_add_file_name(currenttime+ "_" + QString::number(index) + ".hex");
+        qFilePath = qFileDirPath + currenttime + "_" + QString::number(index) + ".txt";
+        emit file_manager_add_file_name(currenttime+ "_" + QString::number(index) + ".txt");
         qDebug() << "Create another hex file ...................." + storge_size;
     }
 
@@ -142,9 +102,14 @@ void FileManager::write(float *ch_data, quint64 data_len)
         }
         storge_size_current = storge_size;
         currenttime = datetime->currentDateTime().toString("yyyyMMddHHmmss");
-        qFilePath = qFileDirPath + currenttime + "_" + QString::number(index) + ".hex";
-        qDebug() << "Splite data: Create another hex file " + qFilePath;
-        //emit file_manager_add_file_name(currenttime + "_" + QString::number(index) + ".hex");
+        if(show_file_name==true){
+            qFilePath = qFileDirPath + currenttime + ".hex";
+            emit file_manager_add_file_name(currenttime + ".hex");
+            qDebug() << "Create another hex file ....................";
+        } else {
+            qFilePath = qFileDirPath + currenttime + "_" + QString::number(index) + ".txt";
+            qDebug() << "Create another txt file ********************";
+        }
     }
 
     if(file->isOpen() == false) {
@@ -170,8 +135,10 @@ void FileManager::write(QByteArray array) {
 
     if(prewriteexame == false) {
         // preWriteExam only run once!
+        qDebug() << "prewrite..............";
         preWriteExam();
         prewriteexame = true;
+        qDebug() << "prewrite+++++++++++++++";
 
     }
     // Determine if the hex file full with FILE_SIZE_MAX, if true, then, create another file
@@ -183,9 +150,14 @@ void FileManager::write(QByteArray array) {
         }
         storge_size_current = storge_size;
         currenttime = datetime->currentDateTime().toString("yyyyMMddHHmmss");
-        qFilePath = qFileDirPath + currenttime + "_" + QString::number(index) + ".hex";
-        emit file_manager_add_file_name(currenttime+ "_" + QString::number(index) + ".hex");
-        qDebug() << "Create another hex file ....................";
+        if(show_file_name==true){
+            qFilePath = qFileDirPath + currenttime + ".hex";
+            emit file_manager_add_file_name(currenttime+ ".hex");
+            qDebug() << "Create another hex file ....................";
+        } else {
+            qFilePath = qFileDirPath + currenttime + "_" + QString::number(index) + ".txt";
+            qDebug() << "Create another txt file ********************";
+        }
     }
 
     if(file->isOpen() == false) {
@@ -218,7 +190,7 @@ bool FileManager::isFileExist(QString fileDirPath) {
 
     QDir dir(fileDirPath);
     QStringList nameFilters;
-    nameFilters << QString("*.hex");//determine wether the hex file exist
+    nameFilters << QString("*.txt");//determine wether the hex file exist
     dir.setFilter(QDir::Files | QDir::NoSymLinks);
     dir.setNameFilters(nameFilters);
     if(dir.count()!=0) {
@@ -249,12 +221,14 @@ void FileManager::preWriteExam() {
         dir.mkdir(qFileDirPath );//create the file dir
         qDebug() << "Create the file dir";
     }
-    // Give file a name
-    qFilePath = qFileDirPath + currenttime + "_" + QString::number(index) + ".hex";
-    qDebug() << "Create the data file : " << qFilePath;
-    prewriteexame = true;
-    emit file_manager_add_file_name(currenttime+ "_" + QString::number(index) + ".hex");
-
+    if(show_file_name==true){
+        // Give file a name
+        qFilePath = qFileDirPath + currenttime + ".hex";
+        qDebug() << "Create the data file : " << qFilePath;
+        emit file_manager_add_file_name(currenttime + ".hex");
+    } else {
+        qFilePath = qFileDirPath + currenttime + "_" + QString::number(index) + ".txt";
+    }
 }
 
 void FileManager::run()

@@ -1,29 +1,3 @@
-/**
- * \brief   This project about NETPLOT.
- *
- * \License  THIS FILE IS PART OF MULTIBEANS PROJECT;
- *           all of the files  - The core part of the project;
- *           THIS PROGRAM IS NOT FREE SOFTWARE, NEED MULTIBEANS ORG LIC;
- *           YOU SHOULD HAVE RECEIVED A COPY OF WTFPL LICENSE UTIL 5/1/2021
- *           OVER THE DATE, ALL FUNCTIONS WILL BE CLOSED. IF NOT, MULTIBEANS
- *           WILL TAKE APPROPRIATE MEASURES.
- *
- *                ________________     ___           _________________
- *               |    __    __    |   |   |         |______     ______|
- *               |   |  |  |  |   |   |   |                |   |
- *               |   |  |__|  |   |   |   |________        |   |
- *               |___|        |___|   |____________|       |___|
- *
- *                               MULTIBEANS ORG.
- *                     Homepage: http://www.mltbns.com/
- *
- *           * You can download the license on our Github. ->
- *           * -> https://github.com/lifimlt  <-
- *           * Copyright (c) 2018 Wei Haochen(Carlos Wei: # whc.mlt@qq.com).
- *           * Copyright (c) 2013-2018 MULTIBEANS ORG. http://www.mltbns.com/
- *
- *  \note    void.
- ****************************************************************************/
 #include "netclientthread.h"
 
 #define             RING_BUFFER_SIZE    19200ul
@@ -40,11 +14,13 @@ NetClientThread::NetClientThread( QString server_ip, int server_port )
     server = new QTcpServer();
     data_packet = (struct data_packet_t*)malloc(sizeof(struct data_packet_t));
     file_ctr = new FileManager();
+    file_ctr->show_file_name=true;//Display file name in the software right side
 
     file_ctr_1 = new FileManager(1);
     file_ctr_2 = new FileManager(2);
     file_ctr_3 = new FileManager(3);
     file_ctr_4 = new FileManager(4);
+    sample_level = 1;
     array_length = 0;
     mutex = new QMutex();
     count = 0;
@@ -240,8 +216,8 @@ void NetClientThread::on_read_message()
         array_rom.append(socket->read(ONE_PACKET_LENGTH));
         array_length = array_rom.length();
         //qDebug() <<" read onetime : "  << array_length;
-//        if (array_length < 2*ONE_PACKET_LENGTH)
-//            return;
+        //        if (array_length < 2*ONE_PACKET_LENGTH)
+        //            return;
 #if UINT_FORMAT_SAVE
         socket_buffer = (quint8*)malloc(sizeof(quint8*) * (array_length + 1) );
 #endif
@@ -309,11 +285,11 @@ void NetClientThread::check_packet(QByteArray array)
     adc_header.append(0xAD);
     adc_header.append(0xAC);
 
-//    if (array.contains(adc_header) && ( array.length() -  array.indexOf(adc_header) > ONE_PACKET_LENGTH) ) {
-//        true_packet = array.mid(array.indexOf(adc_header), ONE_PACKET_LENGTH);
-//        deal_true_packet(true_packet);
-//        qDebug() << "one true packet checked.";
-//    }
+    //    if (array.contains(adc_header) && ( array.length() -  array.indexOf(adc_header) > ONE_PACKET_LENGTH) ) {
+    //        true_packet = array.mid(array.indexOf(adc_header), ONE_PACKET_LENGTH);
+    //        deal_true_packet(true_packet);
+    //        qDebug() << "one true packet checked.";
+    //    }
     if (array.contains(adc_header) ) {
         true_packet = array.mid(array.indexOf(adc_header), ONE_PACKET_LENGTH);
         deal_true_packet(true_packet);
@@ -394,6 +370,7 @@ void NetClientThread::case_1(quint8 *buffer,  quint64 length)
     if (kcount % 12 == 0) {
         kcount = 0;
         memset(channel_data,0,2000);
+        memset(channel_data_display,0,sizeof(channel_data_display));
         quint32 uh = 0, h = 0, l = 0, ul = 0;
 
         for (quint64 i = 0 ; i < 500*16; i ++)
@@ -430,26 +407,67 @@ void NetClientThread::case_1(quint8 *buffer,  quint64 length)
             channel_data[1000 + i] = dc;
             channel_data[1500 + i] = dd;
         }
+
+        quint32 channel_data_display[2000]={0};
+        quint32 data_display_index=0;
+        for (quint32 i =0;i<2000;i += sample_level,data_display_index++) {
+            channel_data_display[data_display_index]=channel_data[i];
+        }
+
         float channel_a_d[500];
         float channel_b_d[500];
         float channel_c_d[500];
         float channel_d_d[500];
         //qDebug() << "slot plot!";
-        for (quint32 i = 0; i < 500; i ++) {
-            channel_a_d[i] = channel_data[i] / 256 / 1000000000.0 * 488.0;
-            channel_b_d[i] = channel_data[500 + i]  / 256 / 1000000000.0 * 488.0;
-            channel_c_d[i] = channel_data[1000 + i]/ 256 / 1000000000.0 * 488.0;
-            channel_d_d[i] = channel_data[1500 + i] / 256 / 1000000000.0 * 488.0;
+
+        quint32 display_data_index=0,display_data_len=0;
+
+        for (quint32 i = 0;i < 2000; i += sample_level, display_data_index++) {
+            channel_data_display[display_data_index] = channel_data[i];
+        }
+        display_data_len = display_data_index;
+
+
+        qDebug() << "display data len: " << display_data_len;
+
+        quint32 store_data_index=0,store_data_len=0;
+        for (quint32 i = 0; i < 500; i += sample_level, store_data_index ++) {
+            channel_a_d[store_data_index] = channel_data[i] / 256 / 1000000000.0 * 488.0;
+            channel_b_d[store_data_index] = channel_data[500 + i]  / 256 / 1000000000.0 * 488.0;
+            channel_c_d[store_data_index] = channel_data[1000 + i]/ 256 / 1000000000.0 * 488.0;
+            channel_d_d[store_data_index] = channel_data[1500 + i] / 256 / 1000000000.0 * 488.0;
             //qDebug() << "sample: " << channel_a_d[i];
         }
 
-        file_ctr_1->write(channel_a_d, 500);
-        file_ctr_2->write(channel_b_d, 500);
-        file_ctr_3->write(channel_c_d, 500);
-        file_ctr_4->write(channel_d_d, 500);
+        store_data_len = store_data_index;
+        qDebug() << "store data len:    " << store_data_len;
+        file_ctr_1->write(channel_a_d, store_data_len);
+        file_ctr_2->write(channel_b_d, store_data_len);
+        file_ctr_3->write(channel_c_d, store_data_len);
+        file_ctr_4->write(channel_d_d, store_data_len);
+        displat_counter = ++ displat_counter % 5;
+#if noplot
+        if(displat_counter==1){
 
-        emit net_data_plot(channel_data, 2000);
+
+            if(sample_level == 8){
+                for (quint16 i =0;i<display_data_len-5;i++) {
+                    channel_data_display[i]=channel_data_display[i+5];
+                }
+                display_data_len = display_data_len -5;
+            }
+            if(sample_level == 4){
+                for (quint16 i =0;i<display_data_len-20;i++) {
+                    channel_data_display[i]=channel_data_display[i+20];
+                }
+                display_data_len = display_data_len - 20;
+            }
+
+            emit net_data_plot(channel_data_display, display_data_len);
+        }
+#endif
     }
+
 }
 void NetClientThread::on_adc_dac_mode_set(int index)
 {

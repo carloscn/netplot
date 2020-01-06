@@ -1,46 +1,3 @@
-/**
- * \brief   This project about NETPLOT.
- *
- * \License  THIS FILE IS PART OF MULTIBEANS PROJECT;
- *           all of the files  - The core part of the project;
- *           THIS PROGRAM IS NOT FREE SOFTWARE, NEED MULTIBEANS ORG LIC;
- *           YOU SHOULD HAVE RECEIVED A COPY OF WTFPL LICENSE UTIL 5/1/2021
- *           OVER THE DATE, ALL FUNCTIONS WILL BE CLOSED. IF NOT, MULTIBEANS
- *           WILL TAKE APPROPRIATE MEASURES.
- *
- *                ________________     ___           _________________
- *               |    __    __    |   |   |         |______     ______|
- *               |   |  |  |  |   |   |   |                |   |
- *               |   |  |__|  |   |   |   |________        |   |
- *               |___|        |___|   |____________|       |___|
- *
- *                               MULTIBEANS ORG.
- *                     Homepage: http://www.mltbns.com/
- *
- *           * You can download the license on our Github. ->
- *           * -> https://github.com/lifimlt  <-
- *           * Copyright (c) 2018 Wei Haochen(Carlos Wei: # whc.mlt@qq.com).
- *           * Copyright (c) 2013-2018 MULTIBEANS ORG. http://www.mltbns.com/
- *
- *  \note    void.
- ****************************************************************************/
-/*                                                                          */
-/*  @File       : main.c                                                    */
-/*  @Revision   : Ver 1.0.                                                  */
-/*  @Date       : 2018.09.xx Realse.                                        */
-/*  @Belong     : PROJECT.                                                  */
-/*  @GitHub     :                                                           */
-/*  @ASCII : (GBK/GB2312) in Linux amd64. AC6                               */
-/****************************************************************************/
-/*  @Attention:                                                             */
-/*  ---------------------------------------------------------------------   */
-/*  |    Data    |  Behavior |     Offer     |          Content         |   */
-/*  |------------|-----------|---------------|--------------------------|   */
-/*  | 2018.08.09 |   create  |Carlos Wei(M)  | add all device driver.   |   */
-/*  ---------------------------------------------------------------------   */
-/*                                                            MULTIBEANS.   */
-/****************************************************************************/
-
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QDataStream>
@@ -83,7 +40,8 @@ MainWindow::MainWindow(QWidget *parent) :
     this->byte_nums = 0;
     //this->net_socket->file_ctr->storge_size = 100*MB;
     ui->storge_unit->setCurrentIndex(1);//默认显示MB
-    ui->storge_type->setCurrentIndex(0);//默认存储类型
+    //    ui->storge_type->setCurrentIndex(1);//默认存储类型
+    ui->storge_type->setCurrentIndex(0);
     ui->display_storge_size->setEnabled(false);
     /*
      *  init network
@@ -103,9 +61,9 @@ MainWindow::MainWindow(QWidget *parent) :
     this->net_socket->file_ctr_4->storge_size_current = 10*MB;
 
 
-    ui->display_storge_size->setText( "def: 100 MB");
-    this->net_socket->file_ctr->dispaly_store_value_def = "def: 100 MB";
-    this->net_socket->file_ctr->dispaly_store_value_splite = "splite: 10 MB";
+    ui->display_storge_size->setText( "Splite: 10 MB");
+    this->net_socket->file_ctr->dispaly_store_value_def = "Def: 100 MB";
+    this->net_socket->file_ctr->dispaly_store_value_splite = "Splite: 10 MB";
 
 
     is_start_read_socket = false;
@@ -478,8 +436,22 @@ void MainWindow::on_pushButton_fs_set_clicked()
         uint16_t data;
     } kHzFreq;
 
-    lineStr = ui->lineEdit_fs->text();
-    kHzFreq.data = lineStr.toUInt();
+    kHzFreq.data = 250000ul;
+    if (ui->sample_rate->currentText()=="250K") {
+        this->net_socket->sample_level = 1;
+        //        kHzFreq.data = 250000ul;
+    } else if (ui->sample_rate->currentText()=="125K") {
+        this->net_socket->sample_level = 2;
+        //        kHzFreq.data = 125000ul;
+    } else if (ui->sample_rate->currentText()=="62.5K") {
+        this->net_socket->sample_level = 4;
+        //        kHzFreq.data = 62500ul;
+    } else if (ui->sample_rate->currentText()=="31.25K") {
+        this->net_socket->sample_level = 8;
+        //        kHzFreq.data = 31250ul;
+    }
+    //    lineStr = ui->lineEdit_fs->text();
+    //    kHzFreq.data = lineStr.toUInt();
     cmd[0] = CMD_SET_FS;
     cmd[1] = kHzFreq.serper.bit8_16;
     cmd[2] = kHzFreq.serper.bit0_8;
@@ -506,7 +478,12 @@ void MainWindow::on_pushButton_close_sample_clicked()
     ui->statusBar->clearMessage();
     ui->statusBar->showMessage("Closed sample...",0);
     ui->textBrowser->append("@System: Stop Sample..");
+    net_socket->file_ctr_1->fileClose();
+    net_socket->file_ctr_2->fileClose();
+    net_socket->file_ctr_3->fileClose();
+    net_socket->file_ctr_4->fileClose();
     emit net_close_file();
+
 }
 
 void MainWindow::on_net_plot_read(quint32 *block, quint32 length)
@@ -522,7 +499,7 @@ void MainWindow::on_net_plot_read(quint32 *block, quint32 length)
     double channel_d_d[500];
     //qDebug() << "slot plot!";
 
-    for (quint32 i = 0; i < 500; i ++) {
+    for (quint32 i = 0; i < length/4; i ++) {
 
 #if 0
         channel_a[i] = ((qint32)(~block[i] + 1) & (0xFFFFFF)) * (((block[i] & 0x800000) >> 23)?1:-1);
@@ -530,9 +507,9 @@ void MainWindow::on_net_plot_read(quint32 *block, quint32 length)
         channel_c[i] = ((qint32)(~block[2*500+i] + 1) & (0xFFFFFF))* (((block[2*500+i] & 0x800000) >> 23)?1:-1);
 #elif 1
         channel_a[i] = (qint32) block[i] << 8;
-        channel_b[i] = (qint32) block[500+i] << 8;// & (0xFFFFFF)) * (((block[500+i] & 0x800000) >> 23)?1:-1);
-        channel_c[i] = (qint32) block[2*500+i] << 8;// & (0xFFFFFF))* (((block[2*500+i] & 0x800000) >> 23)?1:-1);
-        channel_d[i] = (qint32) block[3*500+i] << 8;// & (0xFFFFFF))* (((block[3*500+i] & 0x800000) >> 23)?1:-1);
+        channel_b[i] = (qint32) block[(length/4)+i] << 8;// & (0xFFFFFF)) * (((block[500+i] & 0x800000) >> 23)?1:-1);
+        channel_c[i] = (qint32) block[2*(length/4)+i] << 8;// & (0xFFFFFF))* (((block[2*500+i] & 0x800000) >> 23)?1:-1);
+        channel_d[i] = (qint32) block[3*(length/4)+i] << 8;// & (0xFFFFFF))* (((block[3*500+i] & 0x800000) >> 23)?1:-1);
 #elif 0
 
         // 23 22 21 20    19 18 17 16    15 14 13 12    11  10  9   8   7  6  5   4   3   2   1   0
@@ -568,7 +545,7 @@ void MainWindow::on_net_plot_read(quint32 *block, quint32 length)
 #endif
     }
 
-    for (quint32 i = 0; i < 500; i ++) {
+    for (quint32 i = 0; i < (length/4); i ++) {
         channel_a_d[i] = channel_d[i] / 256 / 1000000000.0 * 488.0;
         channel_b_d[i] = channel_c[i] / 256 / 1000000000.0 * 488.0;
         channel_c_d[i] = channel_b[i] / 256 / 1000000000.0 * 488.0;
@@ -578,26 +555,26 @@ void MainWindow::on_net_plot_read(quint32 *block, quint32 length)
 
     if (ui->checkBox_ch1_time->isChecked()) {
         this->qwt_curve1_ch1->attach(ui->qwt_ch);
-        qwt_plot_wave(CHANNEL_0, channel_a_d, 500);
+        qwt_plot_wave(CHANNEL_0, channel_a_d, (length/4));
     }else{
         this->qwt_curve1_ch1->detach();
     }
     if (ui->checkBox_ch2_time->isChecked()) {
         this->qwt_curve1_ch2->attach(ui->qwt_ch);
-        qwt_plot_wave(CHANNEL_1, channel_b_d, 500);
+        qwt_plot_wave(CHANNEL_1, channel_b_d, (length/4));
     }else{
         this->qwt_curve1_ch2->detach();
     }
 
     if (ui->checkBox_ch3_time->isChecked()) {
         this->qwt_curve1_ch3->attach(ui->qwt_ch);
-        qwt_plot_wave(CHANNEL_2, channel_c_d, 500);
+        qwt_plot_wave(CHANNEL_2, channel_c_d, (length/4));
     }else{
         this->qwt_curve1_ch3->detach();
     }
     if (ui->checkBox_ch4_time->isChecked()) {
         this->qwt_curve1_ch4->attach(ui->qwt_ch);
-        qwt_plot_wave(CHANNEL_3, channel_d_d, 500);
+        qwt_plot_wave(CHANNEL_3, channel_d_d, (length/4));
     }else{
         this->qwt_curve1_ch4->detach();
     }
@@ -605,28 +582,28 @@ void MainWindow::on_net_plot_read(quint32 *block, quint32 length)
 
     if (ui->checkBox_ch1_fft->isChecked()) {
         this->qwt_curve1_ch1_fft->attach(ui->qwt_fft);
-        qwt_plot_fft(CHANNEL_0, channel_a_d, 500);
+        qwt_plot_fft(CHANNEL_0, channel_a_d, (length/4));
     }else{
         this->qwt_curve1_ch1_fft->detach();
     }
 
     if (ui->checkBox_ch2_fft->isChecked()) {
         this->qwt_curve1_ch2_fft->attach(ui->qwt_fft);
-        qwt_plot_fft(CHANNEL_1, channel_b_d, 500);
+        qwt_plot_fft(CHANNEL_1, channel_b_d, (length/4));
     }else{
         this->qwt_curve1_ch2_fft->detach();
     }
 
     if (ui->checkBox_ch3_fft->isChecked()) {
         this->qwt_curve1_ch3_fft->attach(ui->qwt_fft);
-        qwt_plot_fft(CHANNEL_2, channel_c_d, 500);
+        qwt_plot_fft(CHANNEL_2, channel_c_d, (length/4));
     }else{
         this->qwt_curve1_ch3_fft->detach();
     }
 
     if (ui->checkBox_ch4_fft->isChecked()) {
         this->qwt_curve1_ch4_fft->attach(ui->qwt_fft);
-        qwt_plot_fft(CHANNEL_3, channel_d_d, 500);
+        qwt_plot_fft(CHANNEL_3, channel_d_d, (length/4));
     }else{
         this->qwt_curve1_ch4_fft->detach();
     }
@@ -648,7 +625,17 @@ void MainWindow::qwt_plot_fft(int channel, double *rom, int NP)
     }
     p = fftwf_plan_dft_1d(NP, in1_c, out1_c, FFTW_FORWARD, FFTW_ESTIMATE);
     fftwf_execute(p);
-    for( quint64 i = 0; i < 120 ; i++ ){
+    int step=120;
+    if(net_socket->sample_level==1){
+        step = 120;
+    }else if(net_socket->sample_level==2) {
+        step = 100;
+    }else if(net_socket->sample_level==4) {
+        step = 65;
+    }else if(net_socket->sample_level==8) {
+        step = 30;
+    }
+    for( quint64 i = 0; i < step ; i++ ){
         QPointF point;
         current_fft_value = sqrt(out1_c[i][0] * out1_c[i][0] + out1_c[i][1] * out1_c[i][1]);
         point.setX((ui_sample_freq/500)*i);
@@ -939,7 +926,7 @@ void MainWindow::on_storge_confirm_clicked()
     }
 
     //默认存储
-    if(ui->storge_type->currentIndex()==0) {
+    if(ui->storge_type->currentIndex()==1) {
 
         if(storge_size_unit=="GB")
         {
@@ -1007,7 +994,7 @@ void MainWindow::on_storge_confirm_clicked()
 
 
         //分割存储
-    } else if(ui->storge_type->currentIndex()==1) {
+    } else if(ui->storge_type->currentIndex()==0) {
         if(storge_size_unit=="GB")
         {
             if( (storge_size_tmp * GB) > storge_available_size)
@@ -1085,8 +1072,8 @@ void MainWindow::on_storge_confirm_clicked()
 
 void MainWindow::on_storge_type_currentIndexChanged(int index)
 {
-    if(ui->storge_type->currentIndex()==0)
+    if(ui->storge_type->currentIndex()==1)
         ui->display_storge_size->setText(this->net_socket->file_ctr->dispaly_store_value_def);
-    else if(ui->storge_type->currentIndex()==1)
+    else if(ui->storge_type->currentIndex()==0)
         ui->display_storge_size->setText(this->net_socket->file_ctr->dispaly_store_value_splite);
 }
