@@ -211,9 +211,11 @@ void NetClientThread::on_read_message()
         }
         */
         qint8 ret = 7;
+        socket->flush();
         if ( socket->bytesAvailable() < ONE_PACKET_LENGTH )
             return;
         array_rom.append(socket->read(ONE_PACKET_LENGTH));
+
         array_length = array_rom.length();
         //qDebug() <<" read onetime : "  << array_length;
         //        if (array_length < 2*ONE_PACKET_LENGTH)
@@ -271,7 +273,7 @@ void NetClientThread::on_read_message()
 #endif
         vector_counter = 0;
 
-        //socket->flush();
+        socket->flush();
     }
 
 }
@@ -438,17 +440,16 @@ void NetClientThread::case_1(quint8 *buffer,  quint64 length)
             channel_d_d[store_data_index] = channel_data[1500 + i] / 256 / 1000000000.0 * 488.0;
             //qDebug() << "sample: " << channel_a_d[i];
         }
-
-        store_data_len = store_data_index;
-        qDebug() << "store data len:    " << store_data_len;
-        file_ctr_1->write(channel_a_d, store_data_len);
-        file_ctr_2->write(channel_b_d, store_data_len);
-        file_ctr_3->write(channel_c_d, store_data_len);
-        file_ctr_4->write(channel_d_d, store_data_len);
-        displat_counter = ++ displat_counter % 5;
-#if noplot
-        if(displat_counter==1){
-
+        if (isEnableSave == true) {
+            store_data_len = store_data_index;
+            qDebug() << "store data len:    " << store_data_len;
+            file_ctr_1->write(channel_a_d, store_data_len);
+            file_ctr_2->write(channel_b_d, store_data_len);
+            file_ctr_3->write(channel_c_d, store_data_len);
+            file_ctr_4->write(channel_d_d, store_data_len);
+        }
+        displat_counter = ++ displat_counter % 3;
+        if(displat_counter == 1){
 
             if(sample_level == 8){
                 for (quint16 i =0;i<display_data_len-5;i++) {
@@ -465,7 +466,7 @@ void NetClientThread::case_1(quint8 *buffer,  quint64 length)
 
             emit net_data_plot(channel_data_display, display_data_len);
         }
-#endif
+
     }
 
 }

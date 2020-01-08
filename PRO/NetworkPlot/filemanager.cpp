@@ -12,7 +12,7 @@ FileManager::FileManager(): file(new QFile),datetime(new QDateTime){
     currenttime = "20181019220522";
     show_file_name = false;
 #ifdef Q_OS_LINUX
-    qFileDirPath = "/usr/data/";
+    qFileDirPath = "/run/media/nvme0n1p2/sample-data/";
 #endif
 #ifdef Q_OS_WIN32
     qFileDirPath = "D:/data/";
@@ -32,7 +32,7 @@ FileManager::FileManager(quint8 index): file(new QFile),datetime(new QDateTime)
     currenttime = "20181019220522";
     show_file_name = false;
 #ifdef Q_OS_LINUX
-    qFileDirPath = "/usr/data/" + QString::number(index) + "/";
+    qFileDirPath = "/run/media/nvme0n1p2/sample-data/" + QString::number(index) + "/";
 #endif
 #ifdef Q_OS_WIN32
     qFileDirPath = "D:/data/" + QString::number(index) + "/";
