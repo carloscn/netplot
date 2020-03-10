@@ -53,6 +53,12 @@ public:
     ~MainWindow();
     bool get_lic_state();
     void set_lic_state(bool e);
+    uint8_t get_ip_array_form_QString(QString in,unsigned char *out);
+    char convertHexChar(char ch);
+    void stringToHex(QString str, QByteArray &senddata);
+    quint8 hexstrToInt(QString str);
+    QString arrayToHex(QByteArray array);
+    quint8 hexstrToInt(QByteArray array);
 
 private slots:
     void on_pushButton_set_clicked();
@@ -118,6 +124,12 @@ private slots:
     void on_storge_confirm_clicked();
 
     void on_storge_type_currentIndexChanged(int index);
+
+    void on_pushButton_set_to_server_clicked();
+
+    void on_pushButton_reboot_clicked();
+
+    void on_pushButton_set_to_time_clicked();
 
 signals:
 

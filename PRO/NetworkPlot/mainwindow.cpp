@@ -426,64 +426,53 @@ void MainWindow::on_pushButton_gain_set_clicked()
 
 void MainWindow::on_pushButton_fs_set_clicked()
 {
-    QString lineStr;
-    uint8_t   cmd[5];
-    union {
-        struct {
-            uint8_t bit0_8;
-            uint8_t bit8_16;
-        } serper;
-        uint16_t data;
-    } kHzFreq;
+    QByteArray cmd;
 
-    kHzFreq.data = 250000ul;
-    if (ui->sample_rate->currentText()=="250K") {
-        this->net_socket->sample_level = 1;
-        //        kHzFreq.data = 250000ul;
-    } else if (ui->sample_rate->currentText()=="125K") {
-        this->net_socket->sample_level = 2;
-        //        kHzFreq.data = 125000ul;
-    } else if (ui->sample_rate->currentText()=="62.5K") {
-        this->net_socket->sample_level = 4;
-        //        kHzFreq.data = 62500ul;
-    } else if (ui->sample_rate->currentText()=="31.25K") {
-        this->net_socket->sample_level = 8;
-        //        kHzFreq.data = 31250ul;
+    cmd.append( (char)0x54 );
+
+    switch( ui->comboBox_sample_rate->currentIndex() ) {
+    case 0:
+        cmd.append( (char)10 );
+        break;
+    case 1:
+        cmd.append( (char)50 );
+        break;
+    case 2:
+        cmd.append( (char)100 );
+        break;
+    case 3:
+        cmd.append( (char)150 );
+        break;
+    case 4:
+        cmd.append( (char)200 );
+        break;
     }
-    //    lineStr = ui->lineEdit_fs->text();
-    //    kHzFreq.data = lineStr.toUInt();
-    cmd[0] = CMD_SET_FS;
-    cmd[1] = kHzFreq.serper.bit8_16;
-    cmd[2] = kHzFreq.serper.bit0_8;
-    this->net_socket->send_cmd_to_remote( cmd , 3);
+    for (quint8 i = 0; i < 11; i ++) {
+        cmd.append((char)0);
+    }
+    this->net_socket->send_cmd_to_remote( (uint8_t*)cmd.data() , cmd.length());
 }
 
 void MainWindow::on_pushButton_sample_clicked()
 {
-    uint8_t   cmd[5];
+    QByteArray cmd;
 
-    cmd[0] = CMD_ALL_START;
-    this->net_socket->send_cmd_to_remote( cmd , 1);
-    ui->statusBar->clearMessage();
-    ui->statusBar->showMessage("Write speed : 3.3MB/s...",0);
-    ui->textBrowser->append("@System: Start Sample..");
-
+    cmd.append( (char)0x55 );
+    for (quint8 i = 0; i < 12; i ++) {
+        cmd.append((char)0);
+    }
+    this->net_socket->send_cmd_to_remote( (uint8_t*)cmd.data() , cmd.length());
 }
 
 void MainWindow::on_pushButton_close_sample_clicked()
 {
-    uint8_t   cmd[5];
-    cmd[0] = CMD_ALL_STOP;
-    this->net_socket->send_cmd_to_remote( cmd , 1);
-    ui->statusBar->clearMessage();
-    ui->statusBar->showMessage("Closed sample...",0);
-    ui->textBrowser->append("@System: Stop Sample..");
-    net_socket->file_ctr_1->fileClose();
-    net_socket->file_ctr_2->fileClose();
-    net_socket->file_ctr_3->fileClose();
-    net_socket->file_ctr_4->fileClose();
-    emit net_close_file();
+    QByteArray cmd;
 
+    cmd.append( (char)0x56 );
+    for (quint8 i = 0; i < 12; i ++) {
+        cmd.append((char)0);
+    }
+    this->net_socket->send_cmd_to_remote( (uint8_t*)cmd.data() , cmd.length());
 }
 
 void MainWindow::on_net_plot_read(quint32 *block, quint32 length)
@@ -839,7 +828,6 @@ void MainWindow::on_pushButton_da_start_clicked()
 
     cmd[0] = CMD_DA_START;
     this->net_socket->send_cmd_to_remote( cmd , 1);
-    ui->textBrowser_da->append("@System: DA START..");
 }
 
 void MainWindow::on_pushButton_da_clear_buffer_clicked()
@@ -848,7 +836,6 @@ void MainWindow::on_pushButton_da_clear_buffer_clicked()
 
     cmd[0] = CMD_DA_CLR_BUFFER;
     this->net_socket->send_cmd_to_remote( cmd , 1);
-    ui->textBrowser_da->append("@System: DA clear buffer..");
 }
 
 void MainWindow::on_pushButton_da_stop_clicked()
@@ -857,7 +844,6 @@ void MainWindow::on_pushButton_da_stop_clicked()
 
     cmd[0] = CMD_DA_PAUSE;
     this->net_socket->send_cmd_to_remote( cmd , 1);
-    ui->textBrowser_da->append("@System: DA STOP..");
 }
 
 void MainWindow::on_pushButton_da_reback_clicked()
@@ -865,11 +851,10 @@ void MainWindow::on_pushButton_da_reback_clicked()
     QString lineStr;
     uint8_t   cmd[5];
 
-    lineStr = ui->lineEdit_da_times->text();
+    //lineStr = ui->lineEdit_da_times->text();
     cmd[0] = CMD_DA_RECALL;
     cmd[1] = lineStr.toInt();
     this->net_socket->send_cmd_to_remote( cmd , 2);
-    ui->textBrowser_da->append("@System: DA recall " + QString::number(cmd[1]) +" times.");
 }
 
 void MainWindow::set_lic_state(bool e)
@@ -1077,3 +1062,222 @@ void MainWindow::on_storge_type_currentIndexChanged(int index)
     else if(ui->storge_type->currentIndex()==0)
         ui->display_storge_size->setText(this->net_socket->file_ctr->dispaly_store_value_splite);
 }
+
+void MainWindow::on_pushButton_set_to_server_clicked()
+{
+    QByteArray ip;
+    QByteArray mask;
+    QByteArray gate;
+    QStringList list;
+    uint8_t temp[4];
+
+    this->get_ip_array_form_QString( ui->lineEdit_set_ip->text(), temp);
+    for (quint8 i = 0; i < 4; i ++) {
+        ip.append(temp[i]);
+    }
+
+    this->get_ip_array_form_QString( ui->lineEdit_set_mask->text(), temp);
+    for (quint8 i = 0; i < 4; i ++) {
+        mask.append(temp[i]);
+    }
+
+    this->get_ip_array_form_QString( ui->lineEdit_set_gate->text(), temp);
+    for (quint8 i = 0; i < 4; i ++) {
+        gate.append(temp[i]);
+    }
+    qDebug() << "ip :" << ip;
+    qDebug() << "mask :" << mask;
+    qDebug() << "gate :" << gate;
+
+    QByteArray cmd;
+    cmd.append( 0x51 );
+    cmd.append( ip );
+    cmd.append( mask );
+    cmd.append( gate );
+
+    this->net_socket->send_cmd_to_remote( (uint8_t*)cmd.data() , cmd.length());
+    ui->statusBar->clearMessage();
+    ui->textBrowser_server->append("@System: set ip information to server.");
+
+
+}
+
+uint8_t MainWindow::get_ip_array_form_QString(QString in,unsigned char *out){
+    uint8_t next_ip_separate_symbol_index = 0;
+    uint8_t now_ip_separate_symbol_index = 0;
+
+    for(uint8_t i=0;i<4;i++){
+        next_ip_separate_symbol_index = (i!=3)? (in.indexOf(".",next_ip_separate_symbol_index+1)):(in.length());
+        if((next_ip_separate_symbol_index-now_ip_separate_symbol_index>0)&&(next_ip_separate_symbol_index-now_ip_separate_symbol_index<= 4)){
+            *(out+i) = in.mid((i==0)? now_ip_separate_symbol_index:(now_ip_separate_symbol_index+1), \
+                 (i==0)? next_ip_separate_symbol_index: \
+                 (next_ip_separate_symbol_index-now_ip_separate_symbol_index-1)).toInt(0,10);
+            now_ip_separate_symbol_index = next_ip_separate_symbol_index;
+        }else{
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+void MainWindow::on_pushButton_reboot_clicked()
+{
+    QByteArray cmd;
+    cmd.append( 0x53 );
+    for (quint8 i = 0; i < 8; i ++) {
+        cmd.append( (char)0x00 );
+    }
+    this->net_socket->send_cmd_to_remote( (uint8_t*)cmd.data(), cmd.length() );
+}
+
+void MainWindow::on_pushButton_set_to_time_clicked()
+{
+    QByteArray cmd;
+
+    // 20/04/05/ 12:20:50
+    cmd.append( (char)0x53 );
+    cmd.append( hexstrToInt( ui->dateTimeEdit->sectionText(QDateTimeEdit::YearSection) ) );
+    cmd.append( hexstrToInt( ui->dateTimeEdit->sectionText(QDateTimeEdit::MonthSection) ) );
+    cmd.append( hexstrToInt( ui->dateTimeEdit->sectionText(QDateTimeEdit::DaySection) ) );
+    cmd.append( hexstrToInt( ui->dateTimeEdit->sectionText(QDateTimeEdit::HourSection) ) );
+    cmd.append( hexstrToInt( ui->dateTimeEdit->sectionText(QDateTimeEdit::MinuteSection ) ) );
+    cmd.append( hexstrToInt( ui->dateTimeEdit->sectionText(QDateTimeEdit::SecondSection ) ) );
+    qDebug() << "time : " << this->arrayToHex( cmd );
+    this->net_socket->send_cmd_to_remote( (uint8_t*)cmd.data(), cmd.length() );
+}
+
+
+/**
+ * @ingroup sec_soft
+ * @brief	private function: hex(ASCII) to value
+ * @param[out]  value
+ * @param[in]	hex(ASCII)
+ */
+
+quint8 MainWindow::hexstrToInt(QByteArray array)
+{
+    quint8 i;
+    quint8 n = 0;
+    quint8 len = 2;
+
+    for ( i = 0; i < len; ++ i) {
+        if (array.at(i) > '9') {
+            n = 16 * n + (10 + array.at(i) - 'A');
+        }
+        else {
+            n = 16 * n +( array.at(i) - '0');
+        }
+    }
+    return n;
+}
+
+/**
+ * @ingroup sec_soft
+ * @brief	private function: array to hex
+ * @param[out]  QString: Hex string
+ * @param[in]	QByteArray: array
+ */
+
+QString MainWindow::arrayToHex(QByteArray array)
+{
+    QByteArray temp1, temp2;
+    QString str;
+    temp1 = array.toHex().toUpper();
+
+    for(int i = 0; i < temp1.length()/2;i++) {
+        temp2 += temp1.mid(i*2,2) + " ";
+    }
+    str.append(temp2);
+
+    return str;
+}
+
+/**
+ * @ingroup sec_soft
+ * @brief	private function: hex string to int
+ * @param[out]  quint8: int value
+ * @param[in]	QString: str hex(ascii)
+ */
+
+quint8 MainWindow::hexstrToInt(QString str)
+{
+    quint8 i;
+    quint8 n = 0;
+    quint8 len = 2;
+
+    for ( i = 0; i < len; ++ i) {
+        if (str.at(i).toLatin1() > '9') {
+            n = 16 * n + (10 + str.at(i).toLatin1() - 'A');
+        }
+        else {
+            n = 16 * n +( str.at(i).toLatin1() - '0');
+        }
+    }
+    return n;
+}
+
+/**
+ * @ingroup sec_soft
+ * @brief	private function: hex string to int
+ * @param[out]  quint8: int value
+ * @param[in]	QString: str hex(ascii)
+ */
+
+void MainWindow::stringToHex(QString str, QByteArray &senddata)
+{
+    senddata.clear();
+    int     hexdata,lowhexdata;
+    int     hexdatalen = 0;
+    int     len = str.length();
+    char    lstr, hstr;
+    senddata.resize(len/2);
+    for( int i = 0; i < len ; ) {
+        //char lstr,
+        hstr    = str[i].toLatin1();
+        if( hstr == ' ' ) {
+            i ++;
+            continue;
+        }
+        i ++ ;
+        if( i >= len )
+            break;
+        lstr    = str[i].toLatin1();
+        hexdata = convertHexChar(hstr);
+        lowhexdata  = convertHexChar(lstr);
+        if((hexdata == 16) || (lowhexdata == 16))
+            break;
+        else
+            hexdata     = hexdata*16 + lowhexdata;
+        i++;
+        senddata[hexdatalen] = (char)hexdata;
+        hexdatalen++;
+    }
+    senddata.resize(hexdatalen);
+}
+
+/**
+ * @ingroup sec_soft
+ * @brief	private function: hex to char
+ * @param[out]  char '9'
+ * @param[in]	char 0x9
+ */
+char MainWindow::convertHexChar(char ch)
+{
+    if((ch >= '0') && (ch <= '9'))
+        return ch-0x30;
+    else if((ch >= 'A') && (ch <= 'F'))
+        return ch-'A'+10;
+    else if((ch >= 'a') && (ch <= 'f'))
+        return ch-'a'+10;
+    else return (-1);
+}
+
+
+
+
+
+
+
+
+

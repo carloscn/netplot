@@ -135,26 +135,16 @@ void NetClientThread::send_cmd_to_remote(uint8_t *users, quint16 length)
 {
     QByteArray cmd;
     quint8  checkSum = 0;
-    union {
-        struct {
-            uint8_t bit0_8;
-            uint8_t bit8_16;
-        } bits;
-        uint16_t all;
-    } lengthCmd;
 
     cmd.clear();
     cmd.append(CMD_HEADER_1);
-    cmd.append(CMD_HEADER_2);
-    /* cmd length not contains cmd headers(0xAA 0xBB) and length byte. */
-    lengthCmd.all = length - 1;
-    cmd.append( lengthCmd.bits.bit8_16);
-    cmd.append( lengthCmd.bits.bit0_8);
     for (int i = 0; i < length; i ++)
         cmd.append(users[i]);
     qDebug() << "send :" << cmd;
+    cmd.append(0xE9);
     socket->write(cmd);
     socket->flush();
+    qDebug() << "cmd socket series number: ( " << cmd << " )";
     //1//xqDebug() << "netclientread@send_cmd_close_app() >: send to remote...." ;
 }
 // socket ascii stream.
@@ -183,10 +173,8 @@ void NetClientThread::socket_write_byte_array(QByteArray array)
 
 void NetClientThread::on_read_message()
 {
-    if (key_check == false) {
-        socket->readAll();
-        return;
-    }
+    qDebug() << "read message: {" << socket->readAll() << " }";
+    return;
     if (adc_dac_mode == DAC_MODE) {
         QByteArray dac_cmd_array;
         dac_cmd_array.clear();
@@ -218,7 +206,7 @@ void NetClientThread::on_read_message()
 
         array_length = array_rom.length();
         //qDebug() <<" read onetime : "  << array_length;
-        //        if (array_length < 2*ONE_PACKET_LENGTH)
+        //        if (aray_length < 2*ONE_PACKET_LENGTH)
         //            return;
 #if UINT_FORMAT_SAVE
         socket_buffer = (quint8*)malloc(sizeof(quint8*) * (array_length + 1) );

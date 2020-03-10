@@ -52,7 +52,7 @@ for example:
 
 */
 
-#define         CMD_HEADER_1            0xAA
+#define         CMD_HEADER_1            0xA5
 #define         CMD_HEADER_2            0xBB
 #define         CMD_SET_FREQ            0x01
 #define         CMD_SET_GAIN            0x03
