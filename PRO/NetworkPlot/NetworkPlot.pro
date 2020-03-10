@@ -26,7 +26,7 @@ LINUX_QWT_DIR=../NetworkPlot/lib/qwt-gcc-6.1.3
 LINUX_FFTW_DIR=../NetworkPlot/lib/fftw-gcc
 
 
-WIN_QWT_DIR=..\NetworkPlot\lib\qwt-mingw32
+WIN_QWT_DIR=..\NetworkPlot\lib\qwt-mingw32\qwt-6.1.3
 WIN_FFTW_DIR=..\NetworkPlot\lib\fftw-mingw32
 
 ARM_QWT_DIR=../NetworkPlot/lib/qwt-arch64-6.1.3
