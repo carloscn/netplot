@@ -329,21 +329,34 @@ void MainWindow::on_plot_picture(double *array_datas)
 
 QString MainWindow::get_local_ip()
 {
-    QString host_ip;
-    QList<QHostAddress> AddressList = QNetworkInterface::allAddresses();
-    foreach(QHostAddress address, AddressList){
-        if(address.protocol() == QAbstractSocket::IPv4Protocol &&
-                address != QHostAddress::Null &&
-                address != QHostAddress::LocalHost){
-            if (address.toString().contains("127.0.")){
-                continue;
-            }
-            host_ip = address.toString();
-            break;
-        }
-    }
+    QString ip = "";
+    QProcess cmd_pro ;
+    QString cmd_str = QString("ipconfig");
+    cmd_pro.start("cmd.exe", QStringList() << "/c" << cmd_str);
+    cmd_pro.waitForStarted();
+    cmd_pro.waitForFinished();
+    QString result = cmd_pro.readAll();
+    QString pattern("[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}");
+    QRegExp rx(pattern);
 
-    return host_ip;
+    int pos = 0;
+    bool found = false;
+    while((pos = rx.indexIn(result, pos)) != -1){
+        QString tmp = rx.cap(0);
+        //qDebug() << tmp << "-*-*" << ip;
+        //跳过子网掩码 eg:255.255.255.0
+        if(-1 == tmp.indexOf("255")){
+            //qDebug() << ip.lastIndexOf(".") << "--" << ip.mid(0,ip.lastIndexOf(".")) << "**" << tmp.indexOf(ip.mid(0,ip.lastIndexOf(".")));
+            if(ip != "" && -1 != tmp.indexOf(ip.mid(0,ip.lastIndexOf(".")))){
+                found = true;
+                break;
+            }
+            ip = tmp;
+        }
+        pos += rx.matchedLength();
+    }
+    qDebug()<<"local ip: " << ip;
+    return ip;
 }
 
 void MainWindow::on_pushButton_close_test_clicked()
@@ -1110,8 +1123,8 @@ uint8_t MainWindow::get_ip_array_form_QString(QString in,unsigned char *out){
         next_ip_separate_symbol_index = (i!=3)? (in.indexOf(".",next_ip_separate_symbol_index+1)):(in.length());
         if((next_ip_separate_symbol_index-now_ip_separate_symbol_index>0)&&(next_ip_separate_symbol_index-now_ip_separate_symbol_index<= 4)){
             *(out+i) = in.mid((i==0)? now_ip_separate_symbol_index:(now_ip_separate_symbol_index+1), \
-                 (i==0)? next_ip_separate_symbol_index: \
-                 (next_ip_separate_symbol_index-now_ip_separate_symbol_index-1)).toInt(0,10);
+                              (i==0)? next_ip_separate_symbol_index: \
+                                      (next_ip_separate_symbol_index-now_ip_separate_symbol_index-1)).toInt(0,10);
             now_ip_separate_symbol_index = next_ip_separate_symbol_index;
         }else{
             return 0;
