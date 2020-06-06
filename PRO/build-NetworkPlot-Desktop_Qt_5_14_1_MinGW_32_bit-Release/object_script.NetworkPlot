@@ -1,0 +1,10 @@
+main.o
+mainwindow.o
+netclientthread.o
+ringbuffer.o
+filemanager.o
+da_dialog.o
+moc_mainwindow.o
+moc_netclientthread.o
+moc_filemanager.o
+moc_da_dialog.o
